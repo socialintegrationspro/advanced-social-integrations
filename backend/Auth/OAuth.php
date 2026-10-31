@@ -1,0 +1,475 @@
+<?php
+/**
+ * Sign-in flows for OAuth networks.
+ *
+ * @package SocialIntegrations
+ */
+
+namespace SocialIntegrations\Auth;
+
+use SocialIntegrations\Admin\Menu;
+use SocialIntegrations\Hooks;
+use SocialIntegrations\Support\Capabilities;
+use SocialIntegrations\Support\Errors;
+use SocialIntegrations\Networks\Accounts;
+use SocialIntegrations\Networks\AbstractNetwork;
+use SocialIntegrations\Networks\NetworkException;
+use SocialIntegrations\Networks\Registry;
+use SocialIntegrations\Support\Encryption;
+
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * Runs "Connect with…" for networks whose auth_type() is 'oauth2'.
+ *
+ * 1. The admin app calls POST /oauth/{network}/start and sends the user to the URL it returns.
+ * 2. The network sends the user back to /social-integrations/oauth/callback
+ *    (or /?sint_oauth_callback=1 without pretty permalinks). The callback URL is the
+ *    same for every network, so the user can register it exactly in the network app;
+ *    the state holds the network key. The logged-in cookie identifies the user.
+ *    admin-post.php?action=sint_oauth_callback still works for apps that use it.
+ * 3. When the sign-in can post as several things (Facebook Pages), the plugin keeps
+ *    the choices for a short time and the admin app lets the user select one through
+ *    GET/POST /oauth/{network}/entities. Otherwise the plugin saves the account immediately.
+ *
+ * ConnectSession keeps the state. A session that the admin app did not start goes to the
+ * `sint/oauth_callback` filter.
+ */
+final class OAuth {
+
+	const REST_NAMESPACE  = 'sint/v1';
+	const ACTION          = 'sint_oauth_callback';
+	const QUERY_VAR       = 'sint_oauth_callback';
+	const CALLBACK_PATH   = 'social-integrations/oauth/callback';
+	const PENDING_PREFIX  = 'sint_oauth_pending_';
+	const ERROR_PREFIX    = 'sint_oauth_error_';
+	const PENDING_TTL     = 15 * MINUTE_IN_SECONDS;
+	const NETWORK_PATTERN = '(?P<network>[a-z0-9_-]+)';
+
+	/**
+	 * Network registry.
+	 *
+	 * @var Registry
+	 */
+	private $registry;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param Registry $registry Network registry.
+	 */
+	public function __construct( Registry $registry ) {
+		$this->registry = $registry;
+	}
+
+	/**
+	 * Hooks the REST routes and the callback.
+	 */
+	public function register(): void {
+		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
+		add_action( 'admin_post_' . self::ACTION, array( $this, 'handle_callback' ) );
+		add_action( 'init', array( self::class, 'add_rewrite_rule' ) );
+		add_filter( 'query_vars', array( $this, 'add_query_var' ) );
+		add_action( 'parse_request', array( $this, 'maybe_handle_callback' ) );
+	}
+
+	/**
+	 * Callback URL to register in the network app.
+	 */
+	public static function redirect_uri(): string {
+		global $wp_rewrite;
+		if ( get_option( 'permalink_structure' ) ) {
+			// "/index.php/%postname%/" structures are for servers without URL rewriting.
+			$prefix = $wp_rewrite instanceof \WP_Rewrite && $wp_rewrite->using_index_permalinks() ? '/' . $wp_rewrite->index : '';
+			return home_url( $prefix . '/' . self::CALLBACK_PATH );
+		}
+		return add_query_arg( self::QUERY_VAR, '1', home_url( '/' ) );
+	}
+
+	/**
+	 * Maps /social-integrations/oauth/callback to the callback. Flushes the rules once
+	 * when they do not hold it yet, for example immediately after an update.
+	 */
+	public static function add_rewrite_rule(): void {
+		$regex = '^' . self::CALLBACK_PATH . '/?$';
+		add_rewrite_rule( $regex, 'index.php?' . self::QUERY_VAR . '=1', 'top' );
+
+		$rules = get_option( 'rewrite_rules' );
+		if ( get_option( 'permalink_structure' ) && is_array( $rules ) && ! isset( $rules[ $regex ] ) ) {
+			flush_rewrite_rules( false );
+		}
+	}
+
+	/**
+	 * Lets WordPress read the callback query var.
+	 *
+	 * @param string[] $vars Public query vars.
+	 */
+	public function add_query_var( array $vars ): array {
+		$vars[] = self::QUERY_VAR;
+		return $vars;
+	}
+
+	/**
+	 * Runs the callback before WordPress loads a template.
+	 *
+	 * @param \WP $wp Current request.
+	 */
+	public function maybe_handle_callback( \WP $wp ): void {
+		if ( ! empty( $wp->query_vars[ self::QUERY_VAR ] ) ) {
+			$this->handle_callback();
+		}
+	}
+
+	/**
+	 * Registers the REST routes.
+	 */
+	public function register_routes(): void {
+		$network_arg = array(
+			'network' => array(
+				'type'              => 'string',
+				'required'          => true,
+				'sanitize_callback' => 'sanitize_key',
+			),
+		);
+
+		register_rest_route(
+			self::REST_NAMESPACE,
+			'/oauth/' . self::NETWORK_PATTERN . '/start',
+			array(
+				'methods'             => \WP_REST_Server::CREATABLE,
+				'callback'            => array( $this, 'start' ),
+				'permission_callback' => array( $this, 'can_manage' ),
+				'args'                => $network_arg + array(
+					'method' => array(
+						'type'    => 'string',
+						'enum'    => ConnectSession::METHODS,
+						'default' => 'app',
+					),
+				),
+			)
+		);
+
+		register_rest_route(
+			self::REST_NAMESPACE,
+			'/oauth/' . self::NETWORK_PATTERN . '/entities',
+			array(
+				array(
+					'methods'             => \WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'list_entities' ),
+					'permission_callback' => array( $this, 'can_manage' ),
+					'args'                => $network_arg,
+				),
+				array(
+					'methods'             => \WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'pick_entity' ),
+					'permission_callback' => array( $this, 'can_manage' ),
+					'args'                => $network_arg + array(
+						'remote_id' => array(
+							'type'              => 'string',
+							'required'          => true,
+							'sanitize_callback' => 'sanitize_text_field',
+						),
+					),
+				),
+			)
+		);
+	}
+
+	/**
+	 * Whether the current user can connect accounts.
+	 */
+	public function can_manage(): bool {
+		return current_user_can( Capabilities::MANAGE_ACCOUNTS );
+	}
+
+	/**
+	 * POST /oauth/{network}/start — returns the network's sign-in URL.
+	 *
+	 * @param \WP_REST_Request $request Request.
+	 * @return \WP_REST_Response|\WP_Error
+	 */
+	public function start( \WP_REST_Request $request ) {
+		$network = $this->oauth_network( (string) $request['network'] );
+		if ( is_wp_error( $network ) ) {
+			return $network;
+		}
+		$url = ConnectSession::begin(
+			$network,
+			(string) $request['method'],
+			array(
+				'type'    => 'admin',
+				'user_id' => get_current_user_id(),
+			)
+		);
+		if ( is_wp_error( $url ) ) {
+			return $url;
+		}
+
+		return rest_ensure_response( array( 'url' => $url ) );
+	}
+
+	/**
+	 * GET /oauth/{network}/entities — choices that the user did not select yet, without credentials.
+	 *
+	 * @param \WP_REST_Request $request Request.
+	 * @return \WP_REST_Response|\WP_Error
+	 */
+	public function list_entities( \WP_REST_Request $request ) {
+		$key     = sanitize_key( (string) $request['network'] );
+		$pending = $this->pending( $key );
+		if ( null === $pending ) {
+			return new \WP_Error( 'sint_no_pending', __( 'The sign-in expired. Connect again.', 'social-integrations' ), array( 'status' => 404 ) );
+		}
+
+		$entities = array();
+		foreach ( $pending as $entity ) {
+			$entities[] = array(
+				'remote_id' => (string) $entity['remote_id'],
+				'name'      => (string) $entity['name'],
+				'avatar'    => (string) $entity['avatar'],
+			);
+		}
+		return rest_ensure_response( $entities );
+	}
+
+	/**
+	 * POST /oauth/{network}/entities — saves the selected choice as the account.
+	 *
+	 * @param \WP_REST_Request $request Request.
+	 * @return \WP_REST_Response|\WP_Error
+	 */
+	public function pick_entity( \WP_REST_Request $request ) {
+		$key       = sanitize_key( (string) $request['network'] );
+		$remote_id = (string) $request['remote_id'];
+		$pending   = $this->pending( $key );
+		if ( null === $pending ) {
+			return new \WP_Error( 'sint_no_pending', __( 'The sign-in expired. Connect again.', 'social-integrations' ), array( 'status' => 404 ) );
+		}
+
+		foreach ( $pending as $entity ) {
+			if ( (string) $entity['remote_id'] !== $remote_id ) {
+				continue;
+			}
+			$credentials = json_decode( Encryption::decrypt( (string) $entity['credentials'] ), true );
+			if ( ! is_array( $credentials ) || empty( $credentials ) ) {
+				return new \WP_Error( 'sint_bad_pending', __( 'The plugin cannot read the sign-in. Connect again.', 'social-integrations' ), array( 'status' => 400 ) );
+			}
+
+			$account = Accounts::save(
+				$key,
+				array(
+					'remote_id'   => $entity['remote_id'],
+					'name'        => $entity['name'],
+					'username'    => $entity['username'],
+					'avatar'      => $entity['avatar'],
+					'profile_url' => $entity['profile_url'],
+				),
+				$credentials,
+				(string) ( $entity['via'] ?? 'app' )
+			);
+			delete_transient( $this->pending_key( $key ) );
+			return rest_ensure_response( $account );
+		}
+
+		return new \WP_Error( 'sint_unknown_entity', __( 'That choice is not part of this sign-in.', 'social-integrations' ), array( 'status' => 400 ) );
+	}
+
+	/**
+	 * The sign-in callback — finishes the sign-in and returns to the admin app.
+	 * Always ends with a redirect and exit.
+	 */
+	public function handle_callback(): void {
+		list( $state, $code, $error, $handoff ) = $this->callback_params();
+
+		$session = ConnectSession::take( $state );
+		if ( null !== $session && 'broker' === $session['method'] ) {
+			$code = $handoff;
+		}
+		$type = (string) ( $session['context']['type'] ?? '' );
+		if ( null !== $session && 'admin' !== $type ) {
+			$this->external_callback( $session, $code, $error );
+		}
+
+		if ( ! current_user_can( Capabilities::MANAGE_ACCOUNTS ) ) {
+			$this->finish( 'error', __( 'You are not allowed to connect accounts.', 'social-integrations' ) );
+		}
+		if ( null === $session || (int) ( $session['context']['user_id'] ?? 0 ) !== get_current_user_id() ) {
+			$this->finish( 'error', __( 'The plugin cannot verify the sign-in, or the sign-in took too long. Connect again.', 'social-integrations' ) );
+		}
+
+		$network = $this->oauth_network( (string) $session['network'] );
+		if ( is_wp_error( $network ) ) {
+			$this->finish( 'error', $network->get_error_message() );
+		}
+		$key = $network->key();
+
+		if ( '' !== $error || '' === $code ) {
+			$message = '' !== $error
+				/* translators: 1: network name, 2: reason from the network */
+				? sprintf( __( 'The %1$s sign-in did not complete: %2$s', 'social-integrations' ), $network->label(), $error )
+				/* translators: %s: network name */
+				: sprintf( __( '%s did not return a sign-in code. Connect again.', 'social-integrations' ), $network->label() );
+			$this->finish( 'error', $message );
+		}
+
+		try {
+			$credentials = ConnectSession::exchange( $network, $session, $code );
+			$entities    = $network->connectable_entities( $credentials );
+
+			if ( is_array( $entities ) ) {
+				$this->store_entities( $network, $entities, $session['method'] );
+			}
+
+			$profile = $network->fetch_profile( $credentials );
+			if ( empty( $profile['remote_id'] ) ) {
+				/* translators: %s: network name */
+				$this->finish( 'error', sprintf( __( '%s did not return the account profile. Connect again.', 'social-integrations' ), $network->label() ) );
+			}
+			Accounts::save( $key, $profile, $credentials, $session['method'] );
+		} catch ( NetworkException $e ) {
+			$this->finish( 'error', Errors::text( $e ) );
+		}
+
+		$this->finish( 'connected', $key );
+	}
+
+	/**
+	 * Gives a session that the admin app did not start to the plugin that started it, then stops.
+	 *
+	 * @param array  $session From ConnectSession::take().
+	 * @param string $code    Code from the callback URL.
+	 * @param string $error   Error from the callback URL.
+	 */
+	private function external_callback( array $session, string $code, string $error ): void {
+		/** This filter is documented in backend/Hooks.php */
+		$handled = apply_filters( Hooks::OAUTH_CALLBACK, false, $session, $code, $error );
+		if ( ! $handled ) {
+			wp_die(
+				esc_html__( 'This sign-in link is not valid.', 'social-integrations' ),
+				esc_html__( 'Sign-in', 'social-integrations' ),
+				array( 'response' => 400 )
+			);
+		}
+		exit;
+	}
+
+	/**
+	 * State, code and error from the callback URL.
+	 *
+	 * @return string[] [ $state, $code, $error, $handoff ]. The Social Integrations app sends a handoff code.
+	 */
+	private function callback_params(): array {
+		// The state checked in ConnectSession::take() protects this request, not a nonce.
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		$state   = isset( $_GET['state'] ) ? sanitize_text_field( wp_unslash( $_GET['state'] ) ) : '';
+		$code    = isset( $_GET['code'] ) ? sanitize_text_field( wp_unslash( $_GET['code'] ) ) : '';
+		$handoff = isset( $_GET['handoff'] ) ? sanitize_text_field( wp_unslash( $_GET['handoff'] ) ) : '';
+		$error   = '';
+		if ( isset( $_GET['error_description'] ) ) {
+			$error = sanitize_text_field( wp_unslash( $_GET['error_description'] ) );
+		} else {
+			// WordPress removes `error` from $_GET because it is a reserved query var; read the URL.
+			wp_parse_str( isset( $_SERVER['QUERY_STRING'] ) ? wp_unslash( $_SERVER['QUERY_STRING'] ) : '', $query ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- The value is sanitized below.
+			$error = isset( $query['error'] ) && is_string( $query['error'] ) ? sanitize_text_field( $query['error'] ) : '';
+		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+		return array( $state, $code, $error, $handoff );
+	}
+
+	/**
+	 * Keeps the things a sign-in can post as, for the user to select from, then stops.
+	 *
+	 * @param AbstractNetwork $network  Network.
+	 * @param array[]         $entities From connectable_entities().
+	 * @param string          $via      Sign-in method of the session.
+	 */
+	private function store_entities( AbstractNetwork $network, array $entities, string $via ): void {
+		$stored = array();
+		foreach ( $entities as $entity ) {
+			if ( empty( $entity['remote_id'] ) || empty( $entity['credentials'] ) || ! is_array( $entity['credentials'] ) ) {
+				continue;
+			}
+			$stored[] = array(
+				'remote_id'   => sanitize_text_field( (string) $entity['remote_id'] ),
+				'name'        => sanitize_text_field( (string) ( $entity['name'] ?? '' ) ),
+				'username'    => sanitize_text_field( (string) ( $entity['username'] ?? '' ) ),
+				'avatar'      => esc_url_raw( (string) ( $entity['avatar'] ?? '' ) ),
+				'profile_url' => esc_url_raw( (string) ( $entity['profile_url'] ?? '' ) ),
+				'credentials' => Encryption::encrypt( (string) wp_json_encode( $entity['credentials'] ) ),
+				'via'         => $via,
+			);
+		}
+		if ( empty( $stored ) ) {
+			/* translators: %s: network name */
+			$this->finish( 'error', sprintf( __( 'This %s sign-in has no Page to post to. Make sure that you manage a Page. Then give access to the Page when you sign in.', 'social-integrations' ), $network->label() ) );
+		}
+		set_transient( $this->pending_key( $network->key() ), $stored, self::PENDING_TTL );
+		$this->finish( 'pick', $network->key() );
+	}
+
+	/**
+	 * Redirects to the accounts screen of the admin app and stops.
+	 *
+	 * An error message stays on the server for the current user, and the URL only says that
+	 * there is one. A link from someone else cannot put its own text on the screen.
+	 *
+	 * @param string $param 'connected', 'pick' or 'error'.
+	 * @param string $value Network key, or the error message.
+	 */
+	private function finish( string $param, string $value ): void {
+		if ( 'error' === $param ) {
+			set_transient( self::ERROR_PREFIX . get_current_user_id(), $value, 5 * MINUTE_IN_SECONDS );
+			$value = '1';
+		}
+		wp_safe_redirect( Menu::url( '#/accounts?' . $param . '=' . rawurlencode( $value ) ) );
+		exit;
+	}
+
+	/**
+	 * The sign-in error for the current user, once. Empty when there is none.
+	 */
+	public static function take_error(): string {
+		$key     = self::ERROR_PREFIX . get_current_user_id();
+		$message = get_transient( $key );
+		if ( false === $message ) {
+			return '';
+		}
+		delete_transient( $key );
+		return (string) $message;
+	}
+
+	/**
+	 * The OAuth network for a key, or an error.
+	 *
+	 * @param string $key Network key.
+	 * @return AbstractNetwork|\WP_Error
+	 */
+	private function oauth_network( string $key ) {
+		$network = $this->registry->get( sanitize_key( $key ) );
+		if ( null === $network || 'oauth2' !== $network->auth_type() ) {
+			return new \WP_Error( 'sint_unknown_network', __( 'This network does not connect with sign-in.', 'social-integrations' ), array( 'status' => 404 ) );
+		}
+		return $network;
+	}
+
+	/**
+	 * Pending choices for the current user, or null.
+	 *
+	 * @param string $key Network key.
+	 * @return array[]|null
+	 */
+	private function pending( string $key ): ?array {
+		$pending = get_transient( $this->pending_key( $key ) );
+		return is_array( $pending ) && ! empty( $pending ) ? $pending : null;
+	}
+
+	/**
+	 * Transient key for pending choices, bound to the current user.
+	 *
+	 * @param string $key Network key.
+	 */
+	private function pending_key( string $key ): string {
+		return self::PENDING_PREFIX . get_current_user_id() . '_' . sanitize_key( $key );
+	}
+}
