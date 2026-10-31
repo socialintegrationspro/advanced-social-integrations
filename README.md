@@ -1,4 +1,4 @@
-# Advance Social Integrations
+# Advanced Social Integrations
 
 WordPress plugin that shares posts, pages, products and custom post types to social networks, with caption templates, a calendar and a share log.
 
