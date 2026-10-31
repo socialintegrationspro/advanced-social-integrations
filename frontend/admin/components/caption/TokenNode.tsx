@@ -103,11 +103,11 @@ export function $isTokenNode(node: LexicalNode | null | undefined): node is Toke
 /** The name of a text style, for a screen reader. */
 function styleName(style: TextFormatType): string {
   const names: Partial<Record<TextFormatType, string>> = {
-    bold: __('bold', 'social-integrations'),
-    italic: __('italic', 'social-integrations'),
-    underline: __('underline', 'social-integrations'),
-    strikethrough: __('strikethrough', 'social-integrations'),
-    code: __('monospace', 'social-integrations'),
+    bold: __('bold', 'advance-social-integrations'),
+    italic: __('italic', 'advance-social-integrations'),
+    underline: __('underline', 'advance-social-integrations'),
+    strikethrough: __('strikethrough', 'advance-social-integrations'),
+    code: __('monospace', 'advance-social-integrations'),
   }
   return names[style] ?? style
 }
@@ -116,17 +116,17 @@ function styleName(style: TextFormatType): string {
 const STYLE_CLASS: Partial<Record<TextFormatType, string>> = { bold: 'b', italic: 'i', underline: 'u', strikethrough: 's', code: 'm' }
 
 const CASES: [string, () => string][] = [
-  ['', () => __('As written', 'social-integrations')],
-  ['upper', () => __('UPPERCASE', 'social-integrations')],
-  ['lower', () => __('lowercase', 'social-integrations')],
-  ['title', () => __('Title Case', 'social-integrations')],
+  ['', () => __('As written', 'advance-social-integrations')],
+  ['upper', () => __('UPPERCASE', 'advance-social-integrations')],
+  ['lower', () => __('lowercase', 'advance-social-integrations')],
+  ['title', () => __('Title Case', 'advance-social-integrations')],
 ]
 
 const LENGTHS: [string, string, () => string][] = [
-  ['', '', () => __('No limit', 'social-integrations')],
-  ['words', '10', () => __('10 words', 'social-integrations')],
-  ['words', '20', () => __('20 words', 'social-integrations')],
-  ['chars', '100', () => __('100 characters', 'social-integrations')],
+  ['', '', () => __('No limit', 'advance-social-integrations')],
+  ['words', '10', () => __('10 words', 'advance-social-integrations')],
+  ['words', '20', () => __('20 words', 'advance-social-integrations')],
+  ['chars', '100', () => __('100 characters', 'advance-social-integrations')],
 ]
 
 /** The chip of a token, and its menu: letter case, a length limit, a text for an empty value, and Remove. */
@@ -172,7 +172,7 @@ function TokenChip({ nodeKey, name, mods, styles }: { nodeKey: NodeKey; name: st
         type="button"
         className={`sint-tokchip${missing ? ' missing' : ''}${open ? ' open' : ''}`}
         aria-expanded={open}
-        aria-label={sprintf(__('%s token. Select to change.', 'social-integrations'), [label, ...badges, ...styles.map(styleName)].join(', '))}
+        aria-label={sprintf(__('%s token. Select to change.', 'advance-social-integrations'), [label, ...badges, ...styles.map(styleName)].join(', '))}
         title={stringifyToken(name, list)}
         onClick={() => setOpen(!open)}
       >
@@ -182,24 +182,24 @@ function TokenChip({ nodeKey, name, mods, styles }: { nodeKey: NodeKey; name: st
       </button>
       {open && (
         <TokenMenu anchor={chip} label={label} code={stringifyToken(name, [])} missing={missing} onClose={() => { setOpen(false); chip.current?.focus() }}>
-          <span className="sint-tok-menu-h">{__('Letter case', 'social-integrations')}</span>
+          <span className="sint-tok-menu-h">{__('Letter case', 'advance-social-integrations')}</span>
           <span className="sint-tok-menu-row">
             {CASES.map(([value, text]) => (
               <button key={value || 'none'} type="button" className="sint-chip" aria-pressed={kase === value} onClick={() => save({ kase: value })}>{text()}</button>
             ))}
           </span>
-          <span className="sint-tok-menu-h">{__('Shorten', 'social-integrations')}</span>
+          <span className="sint-tok-menu-h">{__('Shorten', 'advance-social-integrations')}</span>
           <span className="sint-tok-menu-row">
             {LENGTHS.map(([n, arg, text]) => (
               <button key={n + arg} type="button" className="sint-chip" aria-pressed={length[0] === n && length[1] === arg} onClick={() => save({ length: [n, arg] as Modifier })}>{text()}</button>
             ))}
           </span>
           <label className="sint-tok-menu-field">
-            <span className="sint-tok-menu-h">{__('Text if empty', 'social-integrations')}</span>
-            <input className="sint-input" value={fallback} placeholder={__('For example: Ask us', 'social-integrations')} maxLength={200} onChange={(e) => save({ fallback: e.target.value.replace(/[{}|\n]/g, '') })} />
+            <span className="sint-tok-menu-h">{__('Text if empty', 'advance-social-integrations')}</span>
+            <input className="sint-input" value={fallback} placeholder={__('For example: Ask us', 'advance-social-integrations')} maxLength={200} onChange={(e) => save({ fallback: e.target.value.replace(/[{}|\n]/g, '') })} />
           </label>
           <span className="sint-tok-menu-foot">
-            <button type="button" className="sint-btn ghost sm" onClick={remove}>{__('Remove token', 'social-integrations')}</button>
+            <button type="button" className="sint-btn ghost sm" onClick={remove}>{__('Remove token', 'advance-social-integrations')}</button>
           </span>
         </TokenMenu>
       )}
@@ -262,12 +262,12 @@ function TokenMenu({ anchor, label, code, missing, onClose, children }: { anchor
   }, [])
 
   return createPortal(
-    <div ref={panel} className="sint-tok-menu" role="group" aria-label={sprintf(__('Change the %s token', 'social-integrations'), label)} style={{ top: pos.top, left: pos.left, maxHeight: pos.maxHeight || undefined }}>
+    <div ref={panel} className="sint-tok-menu" role="group" aria-label={sprintf(__('Change the %s token', 'advance-social-integrations'), label)} style={{ top: pos.top, left: pos.left, maxHeight: pos.maxHeight || undefined }}>
       <span className="sint-tok-menu-title">
         <strong>{label}</strong>
         <code>{code}</code>
       </span>
-      {missing && <span className="sint-tok-menu-warn">{__('No recent post of this type has this field. When a post does not have it, the share leaves it empty.', 'social-integrations')}</span>}
+      {missing && <span className="sint-tok-menu-warn">{__('No recent post of this type has this field. When a post does not have it, the share leaves it empty.', 'advance-social-integrations')}</span>}
       {children}
     </div>,
     // The app root has the colors of the theme, as for the other menus.

@@ -45,17 +45,17 @@ export function CaptionTools({ postId, caption, onChange }: { postId: number; ca
 
   return (
     <Fragment>
-      <div className="sint-ed-tokens" role="group" aria-label={__('Insert a token', 'social-integrations')}>
+      <div className="sint-ed-tokens" role="group" aria-label={__('Insert a token', 'advance-social-integrations')}>
         {tokens.map((t) => (
           <Button key={t} variant="secondary" size="small" className="sint-ed-token" onMouseDown={(e: MouseEvent) => e.preventDefault()} onClick={() => insert(t)}>{t}</Button>
         ))}
       </div>
       {issues.map((i) => (
         <Notice key={i.token} status="warning" isDismissible={false} className="sint-ed-issue">
-          {sprintf(__('%s is not a token. The share shows it as text.', 'social-integrations'), i.token)}
+          {sprintf(__('%s is not a token. The share shows it as text.', 'advance-social-integrations'), i.token)}
           {i.suggestion && (
             <Button variant="link" onClick={() => onChange(caption.split(i.token).join(i.suggestion!))}>
-              {sprintf(__('Use %s', 'social-integrations'), i.suggestion)}
+              {sprintf(__('Use %s', 'advance-social-integrations'), i.suggestion)}
             </Button>
           )}
         </Notice>
@@ -63,7 +63,7 @@ export function CaptionTools({ postId, caption, onChange }: { postId: number; ca
       {tools.map(({ key, component: Tool }) => <Tool key={key} postId={postId} caption={caption} onChange={onChange} tokens={tokens} />)}
       {caption !== '' && (
         <div className="sint-ed-row">
-          <Button variant="link" onClick={() => onChange('')}>{__('Use the campaign caption', 'social-integrations')}</Button>
+          <Button variant="link" onClick={() => onChange('')}>{__('Use the campaign caption', 'advance-social-integrations')}</Button>
         </div>
       )}
     </Fragment>

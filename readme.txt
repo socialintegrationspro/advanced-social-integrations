@@ -1,4 +1,4 @@
-=== Social Integrations – Auto Post & Social Media Scheduler ===
+=== Advance Social Integrations – Auto Post & Social Media Scheduler ===
 Contributors: socialintegrations
 Tags: auto post, social media, scheduler, facebook, linkedin
 Requires at least: 6.3
@@ -12,7 +12,7 @@ Share posts, pages, products and any custom post type to social networks when yo
 
 == Description ==
 
-Social Integrations shares your WordPress content to your social accounts.
+Advance Social Integrations shares your WordPress content to your social accounts.
 
 * Auto-post campaigns share a post on first publish. Each campaign selects the post types, the accounts, a delay and the caption. Campaigns also support custom post types from other plugins and your theme.
 * Networks: one Facebook Page and one LinkedIn profile.
@@ -23,7 +23,7 @@ Social Integrations shares your WordPress content to your social accounts.
 * A week calendar and a list of every share.
 * A share log that shows the result for each account, with Retry.
 
-The uncompiled source of the admin app is in the `frontend/` folder of the public repository: https://github.com/socialintegrationspro/social-integrations
+The uncompiled source of the admin app is in the `frontend/` folder of the public repository: https://github.com/socialintegrationspro/advance-social-integrations
 
 == External services ==
 
@@ -51,7 +51,7 @@ The admin screens use the Plus Jakarta Sans font, included in the plugin (SIL Op
 == Installation ==
 
 1. Install and activate the plugin.
-2. Open Social Integrations in the admin menu.
+2. Open Advance Social Integrations in the admin menu.
 3. Connect an account on the Accounts screen.
 4. On the Campaigns screen, select "New campaign". Then create an auto-post campaign.
 

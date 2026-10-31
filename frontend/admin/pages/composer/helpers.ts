@@ -6,11 +6,11 @@ import type { MediaSource, Network } from '../../lib/types'
 export type When = 'now' | 'pick'
 
 export const MEDIA_FROM: { value: MediaSource | ''; label: () => string }[] = [
-  { value: '', label: () => __('Post type setting', 'social-integrations') },
-  { value: 'auto', label: () => __('Featured image and post images', 'social-integrations') },
-  { value: 'featured', label: () => __('Featured image', 'social-integrations') },
-  { value: 'content', label: () => __('Images in the post', 'social-integrations') },
-  { value: 'none', label: () => __('No media', 'social-integrations') },
+  { value: '', label: () => __('Post type setting', 'advance-social-integrations') },
+  { value: 'auto', label: () => __('Featured image and post images', 'advance-social-integrations') },
+  { value: 'featured', label: () => __('Featured image', 'advance-social-integrations') },
+  { value: 'content', label: () => __('Images in the post', 'advance-social-integrations') },
+  { value: 'none', label: () => __('No media', 'advance-social-integrations') },
 ]
 
 export const TOKENS = ['{title}', '{excerpt}', '{url}', '{tags}', '{author}']
@@ -38,10 +38,10 @@ function toNextWeek(): number {
 /** Preset times for the share. `live` is the local time when the post is published, if it is scheduled. */
 export function timePresets(live: string): { label: string; value: string }[] {
   return [
-    { label: __('In an hour', 'social-integrations'), value: defaultLocal() },
-    { label: __('Tomorrow 9:00', 'social-integrations'), value: atLocal(1, 9) },
-    { label: __('Next week', 'social-integrations'), value: atLocal(toNextWeek(), 9) },
-    ...(live ? [{ label: __('When the post is published', 'social-integrations'), value: live }] : []),
+    { label: __('In an hour', 'advance-social-integrations'), value: defaultLocal() },
+    { label: __('Tomorrow 9:00', 'advance-social-integrations'), value: atLocal(1, 9) },
+    { label: __('Next week', 'advance-social-integrations'), value: atLocal(toNextWeek(), 9) },
+    ...(live ? [{ label: __('When the post is published', 'advance-social-integrations'), value: live }] : []),
   ]
 }
 

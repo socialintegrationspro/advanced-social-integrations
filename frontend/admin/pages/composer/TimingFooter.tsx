@@ -25,11 +25,11 @@ interface Props {
 export function TimingFooter({ when, setWhen, local, setLocal, live, optionControls, options, setOption, children }: Props) {
   return (
     <>
-      <Segmented<When> label={__('When', 'social-integrations')} value={when} onChange={setWhen} options={[{ value: 'now', label: __('Now', 'social-integrations') }, { value: 'pick', label: __('Select a time', 'social-integrations') }]} />
+      <Segmented<When> label={__('When', 'advance-social-integrations')} value={when} onChange={setWhen} options={[{ value: 'now', label: __('Now', 'advance-social-integrations') }, { value: 'pick', label: __('Select a time', 'advance-social-integrations') }]} />
       {when === 'pick' && (
         <>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span className="sint-sr">{__('Date and time', 'social-integrations')}</span>
+            <span className="sint-sr">{__('Date and time', 'advance-social-integrations')}</span>
             <input type="datetime-local" className="sint-input" style={{ width: 'auto', colorScheme: 'dark' }} value={local} onChange={(e) => setLocal(e.target.value)} />
           </label>
           {timePresets(live).map((p) => (

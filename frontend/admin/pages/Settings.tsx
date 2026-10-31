@@ -51,13 +51,13 @@ export function SettingsPage(props: PageProps) {
   if (!settings) {
     return (
       <>
-        <Header title={__('Settings', 'social-integrations')} />
+        <Header title={__('Settings', 'advance-social-integrations')} />
         <div className="sint-body" aria-busy={loading}>
           {loadError ? (
-            <LoadError message={sprintf(__('The settings did not load. %s', 'social-integrations'), loadError)} onRetry={load} busy={loading} />
+            <LoadError message={sprintf(__('The settings did not load. %s', 'advance-social-integrations'), loadError)} onRetry={load} busy={loading} />
           ) : (
             <>
-              <span className="sint-sr">{__('Loading', 'social-integrations')}</span>
+              <span className="sint-sr">{__('Loading', 'advance-social-integrations')}</span>
               <div className="sint-skeleton" style={{ height: 220, borderRadius: 'var(--r-card)' }} />
               <div className="sint-skeleton" style={{ height: 160, borderRadius: 'var(--r-card)' }} />
               <div className="sint-skeleton" style={{ height: 260, borderRadius: 'var(--r-card)' }} />
@@ -81,7 +81,7 @@ export function SettingsPage(props: PageProps) {
       const r = await api.post<Settings>('settings', settings)
       setSettings(r.data)
       setSaved(JSON.stringify(r.data))
-      toast(__('Settings saved.', 'social-integrations'))
+      toast(__('Settings saved.', 'advance-social-integrations'))
     } catch (e) {
       toast((e as Error).message, true)
     }
@@ -90,11 +90,11 @@ export function SettingsPage(props: PageProps) {
 
   // The label names the caption token that gets the text, so the user sees where it goes.
   const uses: { value: BlockUse; label: string; help: string }[] = [
-    { value: 'excerpt', label: __('Text: {excerpt}', 'social-integrations'), help: __('The text goes into {excerpt} when the post has no excerpt.', 'social-integrations') },
-    { value: 'text', label: __('Text: {text}', 'social-integrations'), help: __('The text goes into {text}.', 'social-integrations') },
-    { value: 'media', label: __('Media', 'social-integrations'), help: __('The image or video goes with the share.', 'social-integrations') },
-    { value: 'link', label: __('Link', 'social-integrations'), help: __('The URL of the block becomes the link of the share.', 'social-integrations') },
-    { value: 'skip', label: __('Leave out', 'social-integrations'), help: __('The plugin does not use the block.', 'social-integrations') },
+    { value: 'excerpt', label: __('Text: {excerpt}', 'advance-social-integrations'), help: __('The text goes into {excerpt} when the post has no excerpt.', 'advance-social-integrations') },
+    { value: 'text', label: __('Text: {text}', 'advance-social-integrations'), help: __('The text goes into {text}.', 'advance-social-integrations') },
+    { value: 'media', label: __('Media', 'advance-social-integrations'), help: __('The image or video goes with the share.', 'advance-social-integrations') },
+    { value: 'link', label: __('Link', 'advance-social-integrations'), help: __('The URL of the block becomes the link of the share.', 'advance-social-integrations') },
+    { value: 'skip', label: __('Leave out', 'advance-social-integrations'), help: __('The plugin does not use the block.', 'advance-social-integrations') },
   ]
   const fallbackLabel = uses.find((u) => u.value === settings.block_fallback)?.label ?? ''
   // A row stays while the user changes it to Default; it goes away after the save.
@@ -108,19 +108,19 @@ export function SettingsPage(props: PageProps) {
   const own: SettingsSection[] = [
     {
       key: 'blocks',
-      label: __('Block rules', 'social-integrations'),
-      description: __('Set how the plugin uses each block of a post in a share: as text, media or a link. Editors can change the rule for one block in the block toolbar.', 'social-integrations'),
+      label: __('Block rules', 'advance-social-integrations'),
+      description: __('Set how the plugin uses each block of a post in a share: as text, media or a link. Editors can change the rule for one block in the block toolbar.', 'advance-social-integrations'),
       changed: differs('blocks', 'block_fallback', 'allow_block_override'),
       aside: (
         <label style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 13, fontWeight: 600 }}>
-          <Toggle checked={settings.allow_block_override} onChange={(v) => setSettings({ ...settings, allow_block_override: v })} label={__('Let editors change the rule for one block', 'social-integrations')} />
-          {__('Let editors change the rule for one block', 'social-integrations')}
+          <Toggle checked={settings.allow_block_override} onChange={(v) => setSettings({ ...settings, allow_block_override: v })} label={__('Let editors change the rule for one block', 'advance-social-integrations')} />
+          {__('Let editors change the rule for one block', 'advance-social-integrations')}
         </label>
       ),
       body: (
         <div className="sint-card">
           <div className="sint-rules-bar">
-            {__('What each choice does', 'social-integrations')}
+            {__('What each choice does', 'advance-social-integrations')}
             <HelpTip id="sint-block-uses" side="bottom">
               {uses.map((u) => (
                 <span key={u.value} className="sint-tip-row">
@@ -137,8 +137,8 @@ export function SettingsPage(props: PageProps) {
                   <span className="t">{b.title}</span>
                   <span className="sint-code">{b.name}</span>
                 </span>
-                <select className="sint-select" value={settings.blocks[b.name] ?? ''} onChange={(e) => setBlock(b.name, e.target.value as BlockUse | '')} aria-label={sprintf(__('Use of %s', 'social-integrations'), b.title)}>
-                  <option value="">{sprintf(__('Default (%s)', 'social-integrations'), fallbackLabel)}</option>
+                <select className="sint-select" value={settings.blocks[b.name] ?? ''} onChange={(e) => setBlock(b.name, e.target.value as BlockUse | '')} aria-label={sprintf(__('Use of %s', 'advance-social-integrations'), b.title)}>
+                  <option value="">{sprintf(__('Default (%s)', 'advance-social-integrations'), fallbackLabel)}</option>
                   {uses.map((u) => <option key={u.value} value={u.value}>{u.label}</option>)}
                 </select>
               </li>
@@ -146,13 +146,13 @@ export function SettingsPage(props: PageProps) {
           </ul>
           <div className="sint-rules-foot">
             <label className="sint-rules-other">
-              <span>{__('Any other block', 'social-integrations')}</span>
+              <span>{__('Any other block', 'advance-social-integrations')}</span>
               <select className="sint-select" value={settings.block_fallback} onChange={(e) => setSettings({ ...settings, block_fallback: e.target.value as BlockUse })}>
                 {uses.filter((u) => ['text', 'excerpt', 'skip'].includes(u.value)).map((u) => <option key={u.value} value={u.value}>{u.label}</option>)}
               </select>
             </label>
             <button type="button" className="sint-btn ghost sm" onClick={() => setShowAll((v) => !v)}>
-              {showAll ? __('Show only blocks with a rule', 'social-integrations') : sprintf(__('Show all %d blocks', 'social-integrations'), blocks.length)}
+              {showAll ? __('Show only blocks with a rule', 'advance-social-integrations') : sprintf(__('Show all %d blocks', 'advance-social-integrations'), blocks.length)}
             </button>
           </div>
         </div>
@@ -160,15 +160,15 @@ export function SettingsPage(props: PageProps) {
     },
     {
       key: 'log',
-      label: __('Share log', 'social-integrations'),
-      description: __('Select how long the share log keeps its entries. The plugin deletes older entries one time each day. Campaigns and the calendar do not change.', 'social-integrations'),
+      label: __('Share log', 'advance-social-integrations'),
+      description: __('Select how long the share log keeps its entries. The plugin deletes older entries one time each day. Campaigns and the calendar do not change.', 'advance-social-integrations'),
       changed: differs('log_days'),
       body: (
         <div className="sint-card sint-settings-card">
           <label className="sint-field" style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-            <span>{__('Keep the share log', 'social-integrations')}</span>
+            <span>{__('Keep the share log', 'advance-social-integrations')}</span>
             <select className="sint-select" value={settings.log_days} onChange={(e) => setSettings({ ...settings, log_days: Number(e.target.value) })}>
-              {LOG_DAYS.map((d) => <option key={d} value={d}>{d ? sprintf(__('%d days', 'social-integrations'), d) : __('Always', 'social-integrations')}</option>)}
+              {LOG_DAYS.map((d) => <option key={d} value={d}>{d ? sprintf(__('%d days', 'advance-social-integrations'), d) : __('Always', 'advance-social-integrations')}</option>)}
             </select>
           </label>
         </div>
@@ -187,20 +187,20 @@ export function SettingsPage(props: PageProps) {
 
   return (
     <>
-      <Header title={__('Settings', 'social-integrations')}>
-        {dirty && !saving && <span className="sint-sub" role="status" style={{ fontSize: 13 }}>{__('Unsaved changes', 'social-integrations')}</span>}
-        {(!current.added || dirty) && <button type="button" className="sint-btn primary" onClick={save} disabled={saving}>{saving ? __('Saving…', 'social-integrations') : __('Save changes', 'social-integrations')}</button>}
+      <Header title={__('Settings', 'advance-social-integrations')}>
+        {dirty && !saving && <span className="sint-sub" role="status" style={{ fontSize: 13 }}>{__('Unsaved changes', 'advance-social-integrations')}</span>}
+        {(!current.added || dirty) && <button type="button" className="sint-btn primary" onClick={save} disabled={saving}>{saving ? __('Saving…', 'advance-social-integrations') : __('Save changes', 'advance-social-integrations')}</button>}
       </Header>
       <div className="sint-body">
         <div className="sint-settings">
-          <nav className="sint-settings-nav" aria-label={__('Settings sections', 'social-integrations')}>
+          <nav className="sint-settings-nav" aria-label={__('Settings sections', 'advance-social-integrations')}>
             {all.map((x) => (
               <a key={x.key} href={`#/settings?section=${encodeURIComponent(x.key)}`} aria-current={x.key === current.key ? 'page' : undefined} onClick={(e) => { e.preventDefault(); choose(x.key) }}>
                 {x.label}
                 {x.changed && (
                   <>
                     <span className="dot" aria-hidden="true" />
-                    <span className="sint-sr">{__('Unsaved changes', 'social-integrations')}</span>
+                    <span className="sint-sr">{__('Unsaved changes', 'advance-social-integrations')}</span>
                   </>
                 )}
               </a>

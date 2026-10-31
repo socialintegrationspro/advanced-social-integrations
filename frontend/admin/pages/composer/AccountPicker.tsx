@@ -57,8 +57,8 @@ export function AccountPicker({ accounts, connected, selected, setSelected, lock
   if (accounts.length === 0) {
     return (
       <div className="sint-share-to">
-        <span className="sint-label">{__('Share to', 'social-integrations')}</span>
-        {can(caps.manageAccounts) ? <a href="#/accounts" onClick={(e) => reconnect(e, 'accounts')}>{__('Connect an account first', 'social-integrations')}</a> : <span className="sint-sub">{__('No accounts are connected.', 'social-integrations')}</span>}
+        <span className="sint-label">{__('Share to', 'advance-social-integrations')}</span>
+        {can(caps.manageAccounts) ? <a href="#/accounts" onClick={(e) => reconnect(e, 'accounts')}>{__('Connect an account first', 'advance-social-integrations')}</a> : <span className="sint-sub">{__('No accounts are connected.', 'advance-social-integrations')}</span>}
       </div>
     )
   }
@@ -67,7 +67,7 @@ export function AccountPicker({ accounts, connected, selected, setSelected, lock
   if (locked) {
     return (
       <div className="sint-share-to">
-        <span className="sint-label">{__('Share to', 'social-integrations')}</span>
+        <span className="sint-label">{__('Share to', 'advance-social-integrations')}</span>
         {accounts.map((a) => (
           <span key={a.id} className="sint-acc-one">
             <AccountAvatar account={a} network={network(a.network)} />
@@ -81,38 +81,38 @@ export function AccountPicker({ accounts, connected, selected, setSelected, lock
   return (
     <div className="sint-share-to-box">
       <div className="sint-share-to">
-        <span className="sint-label">{__('Share to', 'social-integrations')}</span>
+        <span className="sint-label">{__('Share to', 'advance-social-integrations')}</span>
         <button type="button" className="sint-acc-summary" aria-haspopup="dialog" onClick={() => setOpen(true)}>
           <span className="sint-acc-stack" aria-hidden="true">
             {chosen.slice(0, 8).map((a) => <AccountAvatar key={a.id} account={a} network={network(a.network)} />)}
             {chosen.length > 8 && <span className="sint-acc-more">+{chosen.length - 8}</span>}
           </span>
           <span className="sint-acc-count">
-            <strong>{sprintf(__('%1$d of %2$d', 'social-integrations'), selected.length, connected.length)}</strong>
-            <span>{__('accounts', 'social-integrations')}</span>
+            <strong>{sprintf(__('%1$d of %2$d', 'advance-social-integrations'), selected.length, connected.length)}</strong>
+            <span>{__('accounts', 'advance-social-integrations')}</span>
           </span>
         </button>
         {expired.length > 0 && (
           <button type="button" className="sint-pill warn sint-acc-warn" onClick={() => { setFilter('expired'); setOpen(true) }}>
             <Icon name="alert" size={13} stroke={2.4} />
-            {sprintf(_n('%d needs a new sign-in', '%d need a new sign-in', expired.length, 'social-integrations'), expired.length)}
+            {sprintf(_n('%d needs a new sign-in', '%d need a new sign-in', expired.length, 'advance-social-integrations'), expired.length)}
           </button>
         )}
         <span style={{ flex: 1 }} />
         <button type="button" className="sint-btn ghost sm" aria-haspopup="dialog" onClick={() => setOpen(true)}>
-          {__('Change', 'social-integrations')}
+          {__('Change', 'advance-social-integrations')}
         </button>
       </div>
       {open && (
         <Modal
           drawer
-          title={__('Share to', 'social-integrations')}
+          title={__('Share to', 'advance-social-integrations')}
           onClose={close}
           footer={
             <>
-              <span className="sint-review-sum">{sprintf(__('%1$d of %2$d accounts', 'social-integrations'), selected.length, connected.length)}</span>
+              <span className="sint-review-sum">{sprintf(__('%1$d of %2$d accounts', 'advance-social-integrations'), selected.length, connected.length)}</span>
               <span style={{ flex: 1 }} />
-              <button type="button" className="sint-btn primary" onClick={close}>{__('Done', 'social-integrations')}</button>
+              <button type="button" className="sint-btn primary" onClick={close}>{__('Done', 'advance-social-integrations')}</button>
             </>
           }
         >
@@ -120,25 +120,25 @@ export function AccountPicker({ accounts, connected, selected, setSelected, lock
           <div className="sint-acc-tools">
             <label className="sint-acc-search">
               <Icon name="search" size={15} stroke={2} />
-              <input type="search" aria-label={__('Search accounts', 'social-integrations')} placeholder={__('Search accounts', 'social-integrations')} value={query} onChange={(e) => setQuery(e.target.value)} />
+              <input type="search" aria-label={__('Search accounts', 'advance-social-integrations')} placeholder={__('Search accounts', 'advance-social-integrations')} value={query} onChange={(e) => setQuery(e.target.value)} />
             </label>
             {/* A list, not chips: it only filters the cards, and the group chips select accounts. */}
             {(networks.length > 1 || expired.length > 0) && (
-              <select className="sint-select sm sint-acc-show" aria-label={__('Show accounts', 'social-integrations')} value={filter} onChange={(e) => setFilter(e.target.value)}>
-                <option value="all">{sprintf(__('All networks (%d)', 'social-integrations'), accounts.length)}</option>
+              <select className="sint-select sm sint-acc-show" aria-label={__('Show accounts', 'advance-social-integrations')} value={filter} onChange={(e) => setFilter(e.target.value)}>
+                <option value="all">{sprintf(__('All networks (%d)', 'advance-social-integrations'), accounts.length)}</option>
                 {networks.map((n) => <option key={n} value={n}>{`${network(n)?.label ?? n} (${accounts.filter((a) => a.network === n).length})`}</option>)}
-                {expired.length > 0 && <option value="expired">{sprintf(__('Needs a new sign-in (%d)', 'social-integrations'), expired.length)}</option>}
+                {expired.length > 0 && <option value="expired">{sprintf(__('Needs a new sign-in (%d)', 'advance-social-integrations'), expired.length)}</option>}
               </select>
             )}
             <button type="button" className="sint-btn ghost sm" onClick={() => setSelected(() => (all ? [] : connected.map((a) => a.id)))}>
-              {all ? __('Clear', 'social-integrations') : __('Select all', 'social-integrations')}
+              {all ? __('Clear', 'advance-social-integrations') : __('Select all', 'advance-social-integrations')}
             </button>
           </div>
           <AccountControls accounts={connected} selected={selected} setSelected={setSelected} locked={locked} />
           {expired.length > 0 && (
             <div className="sint-acc-banner" role="note">
               <Icon name="alert" size={16} stroke={2.2} />
-              <span>{sprintf(_n('%d account needs a new sign-in. It gets no shares until you reconnect it.', '%d accounts need a new sign-in. They get no shares until you reconnect them.', expired.length, 'social-integrations'), expired.length)}</span>
+              <span>{sprintf(_n('%d account needs a new sign-in. It gets no shares until you reconnect it.', '%d accounts need a new sign-in. They get no shares until you reconnect them.', expired.length, 'advance-social-integrations'), expired.length)}</span>
             </div>
           )}
           <div className="sint-acc-grid">
@@ -148,11 +148,11 @@ export function AccountPicker({ accounts, connected, selected, setSelected, lock
                 const to = `accounts?reconnect=${encodeURIComponent(a.id)}`
                 return (
                   <div key={a.id} className="sint-acc-card expired">
-                    <button type="button" disabled aria-label={sprintf(__('%1$s, %2$s: sign-in expired', 'social-integrations'), a.name, label)}>
+                    <button type="button" disabled aria-label={sprintf(__('%1$s, %2$s: sign-in expired', 'advance-social-integrations'), a.name, label)}>
                       <AccountAvatar account={a} network={network(a.network)} />
                       <span className="n"><strong>{a.name || a.username}</strong><span>{label}</span></span>
                     </button>
-                    {can(caps.manageAccounts) && <a href={`#/${to}`} onClick={(e) => reconnect(e, to)}>{__('Reconnect', 'social-integrations')}</a>}
+                    {can(caps.manageAccounts) && <a href={`#/${to}`} onClick={(e) => reconnect(e, to)}>{__('Reconnect', 'advance-social-integrations')}</a>}
                   </div>
                 )
               }
@@ -167,7 +167,7 @@ export function AccountPicker({ accounts, connected, selected, setSelected, lock
                 </div>
               )
             })}
-            {shown.length === 0 && <p className="sint-sub">{__('No account matches the search.', 'social-integrations')}</p>}
+            {shown.length === 0 && <p className="sint-sub">{__('No account matches the search.', 'advance-social-integrations')}</p>}
           </div>
         </div>
         </Modal>

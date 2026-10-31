@@ -30,7 +30,7 @@ function SocialControl({ name, clientId, attributes, setAttributes }: BlockEditP
   // inside passes the choice to them; else the default use.
   const inner = wp.data.useSelect((select) => select('core/block-editor').getBlockCount(clientId) as number, [clientId])
   const rule = config.blockRules[name] ?? (name === 'core/gallery' || inner > 0 ? '' : config.blockFallback)
-  const ruleText = rule ? ruleLabel(rule) : __('the blocks inside use their own rules', 'social-integrations')
+  const ruleText = rule ? ruleLabel(rule) : __('the blocks inside use their own rules', 'advance-social-integrations')
   const use = social.use ?? rule
   const changed = social.use !== undefined || !!social.first
 
@@ -51,18 +51,18 @@ function SocialControl({ name, clientId, attributes, setAttributes }: BlockEditP
         <Dropdown
           popoverProps={{ placement: 'bottom-start' }}
           renderToggle={({ isOpen, onToggle }: { isOpen: boolean; onToggle: () => void }) => (
-            <ToolbarButton icon={ShareIcon} label={__('Use in social posts', 'social-integrations')} onClick={onToggle} aria-expanded={isOpen} isPressed={changed}>
-              {__('Social', 'social-integrations')}
+            <ToolbarButton icon={ShareIcon} label={__('Use in social posts', 'advance-social-integrations')} onClick={onToggle} aria-expanded={isOpen} isPressed={changed}>
+              {__('Social', 'advance-social-integrations')}
             </ToolbarButton>
           )}
           renderContent={() => (
             <div className="sint-ed-block">
               <SelectControl
                 __nextHasNoMarginBottom
-                label={__('Use in social posts', 'social-integrations')}
+                label={__('Use in social posts', 'advance-social-integrations')}
                 value={social.use ?? ''}
                 options={[
-                  { value: '', label: sprintf(__('Rule from Settings: %s', 'social-integrations'), ruleText) },
+                  { value: '', label: sprintf(__('Rule from Settings: %s', 'advance-social-integrations'), ruleText) },
                   ...USES.map((u) => ({ value: u, label: ruleLabel(u) })),
                 ]}
                 onChange={(value: string) => save({ ...social, use: (value || undefined) as BlockUse | undefined })}
@@ -70,12 +70,12 @@ function SocialControl({ name, clientId, attributes, setAttributes }: BlockEditP
               {use === 'media' && (
                 <ToggleControl
                   __nextHasNoMarginBottom
-                  label={__('Show this media first', 'social-integrations')}
+                  label={__('Show this media first', 'advance-social-integrations')}
                   checked={!!social.first}
                   onChange={(first: boolean) => save({ ...social, first })}
                 />
               )}
-              <p className="sint-ed-help">{__('This choice is for this block only. Settings have the rules for all blocks.', 'social-integrations')}</p>
+              <p className="sint-ed-help">{__('This choice is for this block only. Settings have the rules for all blocks.', 'advance-social-integrations')}</p>
             </div>
           )}
         />

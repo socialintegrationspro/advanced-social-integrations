@@ -81,7 +81,7 @@ final class ContentController extends RestController {
 	public function fields( \WP_REST_Request $request ) {
 		$type = sanitize_key( (string) $request['type'] );
 		if ( ! in_array( $type, PostTypes::names(), true ) ) {
-			return new \WP_Error( 'sint_post_type', __( 'The plugin cannot share this post type.', 'social-integrations' ), array( 'status' => 404 ) );
+			return new \WP_Error( 'sint_post_type', __( 'The plugin cannot share this post type.', 'advance-social-integrations' ), array( 'status' => 404 ) );
 		}
 		return rest_ensure_response( CustomFields::of_type( $type ) );
 	}
@@ -162,7 +162,7 @@ final class ContentController extends RestController {
 	public function share( \WP_REST_Request $request ) {
 		$post = PostTypes::post( (int) $request['id'] );
 		if ( ! $post ) {
-			return $this->not_found( __( 'This item does not exist.', 'social-integrations' ) );
+			return $this->not_found( __( 'This item does not exist.', 'advance-social-integrations' ) );
 		}
 		// `media` selects another media source for this build only, as the composer asks for it.
 		$media = sanitize_key( (string) $request['media'] );
@@ -189,7 +189,7 @@ final class ContentController extends RestController {
 	public function share_with( \WP_REST_Request $request ) {
 		$post = PostTypes::post( (int) $request['id'] );
 		if ( ! $post ) {
-			return $this->not_found( __( 'This item does not exist.', 'social-integrations' ) );
+			return $this->not_found( __( 'This item does not exist.', 'advance-social-integrations' ) );
 		}
 		$draft = ShareBuilder::clean_template( (array) ( ( (array) $request->get_json_params() )['template'] ?? array() ) );
 		$use   = static function () use ( $draft ) {

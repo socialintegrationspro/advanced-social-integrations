@@ -34,7 +34,7 @@ export function DashboardPage({ openComposer, go }: PageProps) {
     )
   }
 
-  const title = config.user.name ? sprintf(__('Welcome, %s', 'social-integrations'), config.user.name) : __('Dashboard', 'social-integrations')
+  const title = config.user.name ? sprintf(__('Welcome, %s', 'advance-social-integrations'), config.user.name) : __('Dashboard', 'advance-social-integrations')
   const t = data?.totals
   const change = t ? t.published - t.previous_published : 0
 
@@ -42,18 +42,18 @@ export function DashboardPage({ openComposer, go }: PageProps) {
     <>
       <Header title={title}>
         <Segmented
-          label={__('Period', 'social-integrations')}
+          label={__('Period', 'advance-social-integrations')}
           value={period}
           onChange={setPeriod}
           options={[
-            { value: '7', label: __('7 days', 'social-integrations') },
-            { value: '30', label: __('30 days', 'social-integrations') },
+            { value: '7', label: __('7 days', 'advance-social-integrations') },
+            { value: '30', label: __('30 days', 'advance-social-integrations') },
           ]}
         />
-        <RefreshButton loading={fetched.loading} onClick={() => fetched.reload()} label={__('Refresh the dashboard', 'social-integrations')} />
+        <RefreshButton loading={fetched.loading} onClick={() => fetched.reload()} label={__('Refresh the dashboard', 'advance-social-integrations')} />
         <button type="button" className="sint-btn primary" onClick={() => openComposer()}>
           <Icon name="plus" size={16} stroke={2.2} />
-          {__('New campaign', 'social-integrations')}
+          {__('New campaign', 'advance-social-integrations')}
         </button>
       </Header>
       <div className="sint-body">
@@ -61,20 +61,20 @@ export function DashboardPage({ openComposer, go }: PageProps) {
           <div key={a.id} className="sint-banner warn" role="status">
             <Icon name="alert" size={20} />
             <span style={{ flex: 1 }}>
-              {sprintf(__('%1$s sign-in expired for %2$s. Reconnect the account.', 'social-integrations'), network(a.network)?.label ?? a.network, a.name)}
+              {sprintf(__('%1$s sign-in expired for %2$s. Reconnect the account.', 'advance-social-integrations'), network(a.network)?.label ?? a.network, a.name)}
             </span>
-            {can(caps.manageAccounts) && <button type="button" className="sint-btn warn sm" onClick={() => go(`accounts?reconnect=${encodeURIComponent(a.id)}`)}>{__('Reconnect', 'social-integrations')}</button>}
-            <button type="button" className="sint-icon-btn sm" style={{ border: 0, background: 'transparent', color: 'var(--warn-text)', flex: '0 0 auto' }} aria-label={__('Close the notice', 'social-integrations')} onClick={() => dismiss([a.id])}>
+            {can(caps.manageAccounts) && <button type="button" className="sint-btn warn sm" onClick={() => go(`accounts?reconnect=${encodeURIComponent(a.id)}`)}>{__('Reconnect', 'advance-social-integrations')}</button>}
+            <button type="button" className="sint-icon-btn sm" style={{ border: 0, background: 'transparent', color: 'var(--warn-text)', flex: '0 0 auto' }} aria-label={__('Close the notice', 'advance-social-integrations')} onClick={() => dismiss([a.id])}>
               <Icon name="close" size={16} stroke={2.2} />
             </button>
           </div>
         ))}
 
-        {error && <LoadError message={__('The dashboard did not load.', 'social-integrations')} onRetry={() => fetched.reload()} busy={fetched.loading} />}
+        {error && <LoadError message={__('The dashboard did not load.', 'advance-social-integrations')} onRetry={() => fetched.reload()} busy={fetched.loading} />}
 
         {!data && !error && (
           <div aria-busy="true" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-            <span className="sint-sr">{__('Loading', 'social-integrations')}</span>
+            <span className="sint-sr">{__('Loading', 'advance-social-integrations')}</span>
             <div className="sint-skeleton" style={{ height: 96 }} />
             <div className="sint-dash">
               {['wide', '', '', 'wide', ''].map((size, i) => <div key={i} className={`sint-skeleton ${size}`} />)}
@@ -88,15 +88,15 @@ export function DashboardPage({ openComposer, go }: PageProps) {
               <m.div variants={rise} className="sint-strip-wrap"><StatusStrip totals={t} /></m.div>
               <m.dl className="sint-stats" variants={rise}>
                 <div>
-                  <dt><Icon name="campaign" size={16} />{__('Active campaigns', 'social-integrations')}</dt>
+                  <dt><Icon name="campaign" size={16} />{__('Active campaigns', 'advance-social-integrations')}</dt>
                   <dd><CountUp value={data.campaigns.active} /></dd>
                 </div>
                 <div>
-                  <dt><Icon name="accounts" size={16} />{__('Accounts', 'social-integrations')}</dt>
+                  <dt><Icon name="accounts" size={16} />{__('Accounts', 'advance-social-integrations')}</dt>
                   <dd><CountUp value={accounts.length} /></dd>
                 </div>
                 <div>
-                  <dt><Icon name="share" size={16} />{__('Networks', 'social-integrations')}</dt>
+                  <dt><Icon name="share" size={16} />{__('Networks', 'advance-social-integrations')}</dt>
                   <dd><CountUp value={new Set(accounts.map((a) => a.network)).size} /></dd>
                 </div>
               </m.dl>
@@ -105,17 +105,17 @@ export function DashboardPage({ openComposer, go }: PageProps) {
             <m.div className="sint-dash" variants={stagger} initial="hidden" animate="show">
               <m.section className="sint-tile chart" variants={rise}>
                 <div className="sint-tile-head">
-                  <h2>{__('Shares', 'social-integrations')}</h2>
-                  <a className="sint-round" href="#/log" aria-label={__('Open the share log', 'social-integrations')}><Icon name="arrow" size={18} /></a>
+                  <h2>{__('Shares', 'advance-social-integrations')}</h2>
+                  <a className="sint-round" href="#/log" aria-label={__('Open the share log', 'advance-social-integrations')}><Icon name="arrow" size={18} /></a>
                 </div>
                 <p className="sint-hero">
                   <b><CountUp value={t.published + t.failed} /></b>
                   <span>
-                    {sprintf(__('sent in %d days', 'social-integrations'), data.days.length)}
+                    {sprintf(__('sent in %d days', 'advance-social-integrations'), data.days.length)}
                     <br />
                     {change === 0
-                      ? __('Same as the period before', 'social-integrations')
-                      : sprintf(change > 0 ? __('%d more than the period before', 'social-integrations') : __('%d less than the period before', 'social-integrations'), Math.abs(change))}
+                      ? __('Same as the period before', 'advance-social-integrations')
+                      : sprintf(change > 0 ? __('%d more than the period before', 'advance-social-integrations') : __('%d less than the period before', 'advance-social-integrations'), Math.abs(change))}
                   </span>
                 </p>
                 <DayBars key={period} days={data.days} />
@@ -123,18 +123,18 @@ export function DashboardPage({ openComposer, go }: PageProps) {
 
               <m.section className="sint-tile ring" variants={rise}>
                 <div className="sint-tile-head">
-                  <h2>{__('Results', 'social-integrations')}</h2>
+                  <h2>{__('Results', 'advance-social-integrations')}</h2>
                 </div>
                 <SuccessRing shared={t.published} failed={t.failed} />
                 <dl className="sint-kv-list">
-                  <div className="sint-kv"><span>{__('Shared', 'social-integrations')}</span><span>{t.published}</span></div>
-                  <div className="sint-kv"><span>{__('Failed', 'social-integrations')}</span><span>{t.failed}</span></div>
+                  <div className="sint-kv"><span>{__('Shared', 'advance-social-integrations')}</span><span>{t.published}</span></div>
+                  <div className="sint-kv"><span>{__('Failed', 'advance-social-integrations')}</span><span>{t.failed}</span></div>
                 </dl>
               </m.section>
 
               <m.section className="sint-tile feature" variants={rise}>
                 <div className="sint-tile-head">
-                  <h2>{__('Next shares', 'social-integrations')}</h2>
+                  <h2>{__('Next shares', 'advance-social-integrations')}</h2>
                   <span className="sint-count"><CountUp value={t.scheduled} /></span>
                 </div>
                 {data.upcoming.length ? (
@@ -143,7 +143,7 @@ export function DashboardPage({ openComposer, go }: PageProps) {
                       <m.li key={u.id} variants={rise}>
                         {who(u.account_id, u.network)}
                         <div className="b">
-                          <span className="n">{u.title || __('(no caption)', 'social-integrations')}</span>
+                          <span className="n">{u.title || __('(no caption)', 'advance-social-integrations')}</span>
                           <span className="m"><Icon name="clock" size={13} />{fmtStamp(u.scheduled_at)}</span>
                         </div>
                       </m.li>
@@ -151,17 +151,17 @@ export function DashboardPage({ openComposer, go }: PageProps) {
                   </m.ul>
                 ) : (
                   <div className="sint-next-empty">
-                    <p>{__('No shares are scheduled.', 'social-integrations')}</p>
-                    <button type="button" className="sint-btn primary sm" onClick={() => openComposer()}>{__('Schedule a post', 'social-integrations')}</button>
+                    <p>{__('No shares are scheduled.', 'advance-social-integrations')}</p>
+                    <button type="button" className="sint-btn primary sm" onClick={() => openComposer()}>{__('Schedule a post', 'advance-social-integrations')}</button>
                   </div>
                 )}
-                <a className="sint-next-all" href="#/calendar">{__('Open the calendar', 'social-integrations')}<Icon name="arrow" size={16} /></a>
+                <a className="sint-next-all" href="#/calendar">{__('Open the calendar', 'advance-social-integrations')}<Icon name="arrow" size={16} /></a>
               </m.section>
 
               <m.section className="sint-tile recent" variants={rise}>
                 <div className="sint-tile-head">
-                  <h2>{__('Recent activity', 'social-integrations')}</h2>
-                  <a className="sint-round" href="#/log" aria-label={__('Open the share log', 'social-integrations')}><Icon name="arrow" size={18} /></a>
+                  <h2>{__('Recent activity', 'advance-social-integrations')}</h2>
+                  <a className="sint-round" href="#/log" aria-label={__('Open the share log', 'advance-social-integrations')}><Icon name="arrow" size={18} /></a>
                 </div>
                 {data.recent.length ? (
                   <m.ul className="sint-recent" variants={stagger} initial="hidden" animate="show">
@@ -169,14 +169,14 @@ export function DashboardPage({ openComposer, go }: PageProps) {
                       <m.li key={r.id} variants={rise}>
                         {who(r.account_id, r.network)}
                         <div className="b">
-                          <span className="n">{r.title || __('(no caption)', 'social-integrations')}</span>
+                          <span className="n">{r.title || __('(no caption)', 'advance-social-integrations')}</span>
                           <span className="m">{account(r.account_id)?.name ?? network(r.network)?.label ?? r.network} · {fmtStamp(r.created_at)}</span>
                         </div>
                         <span className={`sint-log-result ${r.status === 'published' ? 'ok' : 'bad'}`}>
-                          {r.status === 'published' ? __('Shared', 'social-integrations') : __('Failed', 'social-integrations')}
+                          {r.status === 'published' ? __('Shared', 'advance-social-integrations') : __('Failed', 'advance-social-integrations')}
                         </span>
                         {r.remote_url ? (
-                          <a className="sint-pc-tool" href={r.remote_url} target="_blank" rel="noreferrer" aria-label={__('Open the post on the network', 'social-integrations')}><Icon name="external" size={14} /></a>
+                          <a className="sint-pc-tool" href={r.remote_url} target="_blank" rel="noreferrer" aria-label={__('Open the post on the network', 'advance-social-integrations')}><Icon name="external" size={14} /></a>
                         ) : (
                           <span className="sint-pc-tool-space" />
                         )}
@@ -184,15 +184,15 @@ export function DashboardPage({ openComposer, go }: PageProps) {
                     ))}
                   </m.ul>
                 ) : (
-                  <p className="sint-sub">{__('Shares show here after the plugin sends them.', 'social-integrations')}</p>
+                  <p className="sint-sub">{__('Shares show here after the plugin sends them.', 'advance-social-integrations')}</p>
                 )}
               </m.section>
 
               <m.section className="sint-tile nets" variants={rise}>
                 <div className="sint-tile-head">
-                  <h2>{__('Networks', 'social-integrations')}</h2>
+                  <h2>{__('Networks', 'advance-social-integrations')}</h2>
                 </div>
-                {data.networks.length ? <NetworkBars rows={data.networks} network={network} /> : <p className="sint-sub">{__('No shares in this period.', 'social-integrations')}</p>}
+                {data.networks.length ? <NetworkBars rows={data.networks} network={network} /> : <p className="sint-sub">{__('No shares in this period.', 'advance-social-integrations')}</p>}
               </m.section>
             </m.div>
           </div>

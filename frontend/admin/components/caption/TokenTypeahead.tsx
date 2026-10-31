@@ -63,8 +63,8 @@ export function TokenTypeahead({ tokens }: { tokens: string[] }) {
           ? createPortal(
               // The list is outside the app, so it takes the app's theme and colors.
               <div className="sint-root sint-typeahead" data-theme={document.getElementById('sint-app')?.getAttribute('data-theme') ?? undefined}>
-                <span className="sint-typeahead-h">{__('Insert a token', 'social-integrations')}</span>
-                <ul role="listbox" aria-label={__('Tokens', 'social-integrations')}>
+                <span className="sint-typeahead-h">{__('Insert a token', 'advance-social-integrations')}</span>
+                <ul role="listbox" aria-label={__('Tokens', 'advance-social-integrations')}>
                   {options.map((o, i) => (
                     <li
                       key={o.key}
@@ -84,7 +84,7 @@ export function TokenTypeahead({ tokens }: { tokens: string[] }) {
                     </li>
                   ))}
                 </ul>
-                <span className="sint-typeahead-foot">{sprintf(__('%s to select, Esc to close', 'social-integrations'), '↵')}</span>
+                <span className="sint-typeahead-foot">{sprintf(__('%s to select, Esc to close', 'advance-social-integrations'), '↵')}</span>
               </div>,
               anchor.current,
             )

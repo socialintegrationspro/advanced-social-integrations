@@ -15,12 +15,12 @@ export function TokenIssues({ issues, onFix }: { issues: TokenIssue[]; onFix: (f
           <Icon name="alert" size={14} stroke={2.2} />
           <span>
             {i.field
-              ? sprintf(__('%s: no recent post of this type has this field. When a post does not have it, the share leaves it empty.', 'social-integrations'), i.token)
-              : sprintf(__('%s is not a token. The share shows it as text.', 'social-integrations'), i.token)}
+              ? sprintf(__('%s: no recent post of this type has this field. When a post does not have it, the share leaves it empty.', 'advance-social-integrations'), i.token)
+              : sprintf(__('%s is not a token. The share shows it as text.', 'advance-social-integrations'), i.token)}
           </span>
           {i.suggestion && (
             <button type="button" className="sint-btn ghost sm" onClick={() => onFix(i.token, i.suggestion!)}>
-              {sprintf(__('Use %s', 'social-integrations'), i.suggestion)}
+              {sprintf(__('Use %s', 'advance-social-integrations'), i.suggestion)}
             </button>
           )}
         </li>

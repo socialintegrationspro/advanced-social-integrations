@@ -88,7 +88,7 @@ export function AutoPost({ campaign, onSaved, selected, setSelected }: { campaig
         kept.current = d.accounts.filter((id) => accounts.some((a) => a.id === id && a.status !== 'connected'))
         setIncludeNew(!d.accounts.length && !d.no_accounts)
         setSelected(d.no_accounts ? [] : d.accounts.length ? d.accounts.filter((id) => ids.includes(id)) : ids)
-        setC({ ...BLANK, ...d, captions: Array.isArray(d.captions) ? {} : d.captions, id: editing, active: campaign.copy ? publish : d.active, name: campaign.copy ? sprintf(__('%s (copy)', 'social-integrations'), d.name) : d.name })
+        setC({ ...BLANK, ...d, captions: Array.isArray(d.captions) ? {} : d.captions, id: editing, active: campaign.copy ? publish : d.active, name: campaign.copy ? sprintf(__('%s (copy)', 'advance-social-integrations'), d.name) : d.name })
       },
       (e) => setLoadError((e as Error).message),
     )
@@ -132,7 +132,7 @@ export function AutoPost({ campaign, onSaved, selected, setSelected }: { campaig
     return (
       <div style={{ padding: 22, display: 'flex', flexDirection: 'column', gap: 14 }} aria-busy={!loadError}>
         {loadError ? (
-          <LoadError message={sprintf(__('The campaign did not load. %s', 'social-integrations'), loadError)} onRetry={load} />
+          <LoadError message={sprintf(__('The campaign did not load. %s', 'advance-social-integrations'), loadError)} onRetry={load} />
         ) : (
           <>
             <div className="sint-skeleton" style={{ height: 48 }} />
@@ -155,12 +155,12 @@ export function AutoPost({ campaign, onSaved, selected, setSelected }: { campaig
   const current = nets.includes(tab) ? tab : 'all'
 
 
-  const delayText = c.delay.value === 0 ? __('Immediately after you publish', 'social-integrations') : sprintf(c.delay.unit === 'minutes' ? __('%d minutes after you publish', 'social-integrations') : c.delay.unit === 'hours' ? __('%d hours after you publish', 'social-integrations') : __('%d days after you publish', 'social-integrations'), c.delay.value)
+  const delayText = c.delay.value === 0 ? __('Immediately after you publish', 'advance-social-integrations') : sprintf(c.delay.unit === 'minutes' ? __('%d minutes after you publish', 'advance-social-integrations') : c.delay.unit === 'hours' ? __('%d hours after you publish', 'advance-social-integrations') : __('%d days after you publish', 'advance-social-integrations'), c.delay.value)
 
   // One line in the bar at the bottom, and the summary in the side panel.
-  const accountsText = everyAccount ? __('All accounts, and new ones', 'social-integrations') : sprintf(_n('%d account', '%d accounts', selected.length, 'social-integrations'), selected.length)
+  const accountsText = everyAccount ? __('All accounts, and new ones', 'advance-social-integrations') : sprintf(_n('%d account', '%d accounts', selected.length, 'advance-social-integrations'), selected.length)
   const typesText = c.post_types.map((t) => postTypes.find((p) => p.name === t)?.label ?? t).join(', ')
-  const captionText = c.caption.trim() ? __('Your caption', 'social-integrations') : __('Default caption', 'social-integrations')
+  const captionText = c.caption.trim() ? __('Your caption', 'advance-social-integrations') : __('Default caption', 'advance-social-integrations')
 
   const save = async () => {
     if (!selected.length) {
@@ -176,7 +176,7 @@ export function AutoPost({ campaign, onSaved, selected, setSelected }: { campaig
     try {
       const r = await api.post<AutoCampaign>(editing ? `campaigns/auto/${editing}` : 'campaigns/auto', { ...c, accounts: everyAccount ? [] : [...selected, ...kept.current], no_accounts: false })
       await Promise.all(Object.values(savers.current).map((fn) => fn(r.data.id)))
-      toast(editing ? __('Campaign saved.', 'social-integrations') : __('Campaign created. The plugin will share new posts that match.', 'social-integrations'))
+      toast(editing ? __('Campaign saved.', 'advance-social-integrations') : __('Campaign created. The plugin will share new posts that match.', 'advance-social-integrations'))
       onSaved()
     } catch (e) {
       toast((e as Error).message, true)
@@ -189,9 +189,9 @@ export function AutoPost({ campaign, onSaved, selected, setSelected }: { campaig
 
       <div className="sint-autopost">
         <aside className="col">
-          <div className="sint-label">{__('Which posts', 'social-integrations')}</div>
+          <div className="sint-label">{__('Which posts', 'advance-social-integrations')}</div>
           <label className="sint-field">
-            <span>{__('Post type', 'social-integrations')}</span>
+            <span>{__('Post type', 'advance-social-integrations')}</span>
             <select className="sint-select" value={c.post_types[0] ?? 'post'} onChange={(e) => set({ post_types: [e.target.value] })}>
               {postTypes.map((t) => <option key={t.name} value={t.name}>{t.label}</option>)}
             </select>
@@ -208,7 +208,7 @@ export function AutoPost({ campaign, onSaved, selected, setSelected }: { campaig
             tab={current}
             setTab={setTab}
             placeholder={DEFAULT_CAPTION}
-            hint={__('Leave empty to use the default caption. Custom field adds a value from the post, such as a date or a price.', 'social-integrations')}
+            hint={__('Leave empty to use the default caption. Custom field adds a value from the post, such as a date or a price.', 'advance-social-integrations')}
             postType={c.post_types[0]}
           />
         </section>
@@ -218,10 +218,10 @@ export function AutoPost({ campaign, onSaved, selected, setSelected }: { campaig
             share={preview}
             accounts={connected.filter((a) => selected.includes(a.id))}
             tab={current}
-            label={sample ? sprintf(__('Preview: %s', 'social-integrations'), sample.title || __('(no title)', 'social-integrations')) : undefined}
+            label={sample ? sprintf(__('Preview: %s', 'advance-social-integrations'), sample.title || __('(no title)', 'advance-social-integrations')) : undefined}
             notice={
-              sample === null ? <p className="sint-sub">{__('No published post is available for the preview.', 'social-integrations')}</p>
-              : previewFailed ? <p className="sint-sub">{__('The preview did not load. Change the caption to try again.', 'social-integrations')}</p>
+              sample === null ? <p className="sint-sub">{__('No published post is available for the preview.', 'advance-social-integrations')}</p>
+              : previewFailed ? <p className="sint-sub">{__('The preview did not load. Change the caption to try again.', 'advance-social-integrations')}</p>
               : undefined
             }
           />
@@ -231,53 +231,53 @@ export function AutoPost({ campaign, onSaved, selected, setSelected }: { campaig
       <div className="sint-review-bar">
         <span className="sint-review-sum">{[accountsText, typesText, captionText, delayText].join(' · ')}</span>
         <span style={{ flex: 1 }} />
-        <button type="button" className="sint-btn ghost" aria-pressed={showPreview} onClick={() => setShowPreview(!showPreview)}>{showPreview ? __('Hide preview', 'social-integrations') : __('Show preview', 'social-integrations')}</button>
+        <button type="button" className="sint-btn ghost" aria-pressed={showPreview} onClick={() => setShowPreview(!showPreview)}>{showPreview ? __('Hide preview', 'advance-social-integrations') : __('Show preview', 'advance-social-integrations')}</button>
         <button type="button" className="sint-btn primary" disabled={!connected.length} onClick={() => setReview(true)}>
-          {editing ? __('Review and save', 'social-integrations') : __('Review and create', 'social-integrations')}
+          {editing ? __('Review and save', 'advance-social-integrations') : __('Review and create', 'advance-social-integrations')}
         </button>
       </div>
 
       {review && (
         <Modal
           drawer
-          title={editing ? __('Review and save', 'social-integrations') : __('Review and create', 'social-integrations')}
+          title={editing ? __('Review and save', 'advance-social-integrations') : __('Review and create', 'advance-social-integrations')}
           onClose={closeReview}
           footer={
             <>
-              <button type="button" className="sint-btn ghost" onClick={() => setReview(false)}>{__('Back', 'social-integrations')}</button>
+              <button type="button" className="sint-btn ghost" onClick={() => setReview(false)}>{__('Back', 'advance-social-integrations')}</button>
               <span style={{ flex: 1 }} />
-              <button type="button" className="sint-btn primary" disabled={saving || !connected.length} onClick={save}>{saving ? __('Wait…', 'social-integrations') : editing ? __('Save campaign', 'social-integrations') : __('Create campaign', 'social-integrations')}</button>
+              <button type="button" className="sint-btn primary" disabled={saving || !connected.length} onClick={save}>{saving ? __('Wait…', 'advance-social-integrations') : editing ? __('Save campaign', 'advance-social-integrations') : __('Create campaign', 'advance-social-integrations')}</button>
             </>
           }
         >
           <div className="sint-review">
-            <div className="sint-label">{__('Summary', 'social-integrations')}</div>
-            <div className="sint-sum"><span className="l">{__('Accounts', 'social-integrations')}</span><span className="v">{accountsText}</span></div>
-            <div className="sint-sum"><span className="l">{__('Posts', 'social-integrations')}</span><span className="v">{typesText}</span><button type="button" className="sint-sum-change" aria-label={__('Change: Posts', 'social-integrations')} onClick={() => setReview(false)}>{__('Change', 'social-integrations')}</button></div>
-            <div className="sint-sum"><span className="l">{__('Caption', 'social-integrations')}</span><span className="v">{captionText}</span><button type="button" className="sint-sum-change" aria-label={__('Change: Caption', 'social-integrations')} onClick={() => setReview(false)}>{__('Change', 'social-integrations')}</button></div>
-            <div className="sint-label">{__('When', 'social-integrations')}</div>
+            <div className="sint-label">{__('Summary', 'advance-social-integrations')}</div>
+            <div className="sint-sum"><span className="l">{__('Accounts', 'advance-social-integrations')}</span><span className="v">{accountsText}</span></div>
+            <div className="sint-sum"><span className="l">{__('Posts', 'advance-social-integrations')}</span><span className="v">{typesText}</span><button type="button" className="sint-sum-change" aria-label={__('Change: Posts', 'advance-social-integrations')} onClick={() => setReview(false)}>{__('Change', 'advance-social-integrations')}</button></div>
+            <div className="sint-sum"><span className="l">{__('Caption', 'advance-social-integrations')}</span><span className="v">{captionText}</span><button type="button" className="sint-sum-change" aria-label={__('Change: Caption', 'advance-social-integrations')} onClick={() => setReview(false)}>{__('Change', 'advance-social-integrations')}</button></div>
+            <div className="sint-label">{__('When', 'advance-social-integrations')}</div>
           {/* The user decides about accounts connected later. Before, all accounts always included them. */}
           {allConnected && (
             <label className="sint-check-row">
               <input type="checkbox" checked={includeNew} onChange={(e) => setIncludeNew(e.target.checked)} />
-              {__('Also share to accounts that you connect later', 'social-integrations')}
+              {__('Also share to accounts that you connect later', 'advance-social-integrations')}
             </label>
           )}
-          {!publish && !editing && <p className="sint-sub" style={{ margin: 0 }}>{__('You save the campaign off. A user who can publish turns it on.', 'social-integrations')}</p>}
-          {!!editing && !c.active && <p className="sint-sub" style={{ margin: 0 }}>{__('This campaign is paused. Resume it on the Campaigns screen.', 'social-integrations')}</p>}
+          {!publish && !editing && <p className="sint-sub" style={{ margin: 0 }}>{__('You save the campaign off. A user who can publish turns it on.', 'advance-social-integrations')}</p>}
+          {!!editing && !c.active && <p className="sint-sub" style={{ margin: 0 }}>{__('This campaign is paused. Resume it on the Campaigns screen.', 'advance-social-integrations')}</p>}
           <div className="sint-field">
-            <span>{__('Share', 'social-integrations')}</span>
+            <span>{__('Share', 'advance-social-integrations')}</span>
             <span style={{ display: 'flex', gap: 8 }}>
-              <input type="number" min={0} max={365} className="sint-input" style={{ width: 90 }} aria-label={__('Delay', 'social-integrations')} value={c.delay.value} onChange={(e) => set({ delay: { ...c.delay, value: Math.max(0, Math.min(365, Number(e.target.value) || 0)) } })} />
-              <select className="sint-select" style={{ flex: 1, minWidth: 0 }} aria-label={__('Delay unit', 'social-integrations')} value={c.delay.unit} onChange={(e) => set({ delay: { ...c.delay, unit: e.target.value as Unit } })}>
-                <option value="minutes">{__('minutes', 'social-integrations')}</option>
-                <option value="hours">{__('hours', 'social-integrations')}</option>
-                <option value="days">{__('days', 'social-integrations')}</option>
+              <input type="number" min={0} max={365} className="sint-input" style={{ width: 90 }} aria-label={__('Delay', 'advance-social-integrations')} value={c.delay.value} onChange={(e) => set({ delay: { ...c.delay, value: Math.max(0, Math.min(365, Number(e.target.value) || 0)) } })} />
+              <select className="sint-select" style={{ flex: 1, minWidth: 0 }} aria-label={__('Delay unit', 'advance-social-integrations')} value={c.delay.unit} onChange={(e) => set({ delay: { ...c.delay, unit: e.target.value as Unit } })}>
+                <option value="minutes">{__('minutes', 'advance-social-integrations')}</option>
+                <option value="hours">{__('hours', 'advance-social-integrations')}</option>
+                <option value="days">{__('days', 'advance-social-integrations')}</option>
               </select>
             </span>
             {/* Even columns: two rows of two in the narrow column, one row when there is space. */}
             <span style={{ display: 'grid', gap: 6, gridTemplateColumns: 'repeat(auto-fill, minmax(96px, 1fr))' }}>
-              {[{ value: 0, unit: 'minutes' as Unit, label: __('Immediately', 'social-integrations') }, { value: 10, unit: 'minutes' as Unit, label: __('10 min', 'social-integrations') }, { value: 1, unit: 'hours' as Unit, label: __('1 hour', 'social-integrations') }, { value: 1, unit: 'days' as Unit, label: __('1 day', 'social-integrations') }].map((p) => (
+              {[{ value: 0, unit: 'minutes' as Unit, label: __('Immediately', 'advance-social-integrations') }, { value: 10, unit: 'minutes' as Unit, label: __('10 min', 'advance-social-integrations') }, { value: 1, unit: 'hours' as Unit, label: __('1 hour', 'advance-social-integrations') }, { value: 1, unit: 'days' as Unit, label: __('1 day', 'advance-social-integrations') }].map((p) => (
                 <button key={p.label} type="button" className={`sint-chip${c.delay.value === p.value && (p.value === 0 || c.delay.unit === p.unit) ? ' on' : ''}`} style={{ justifyContent: 'center' }} onClick={() => set({ delay: { value: p.value, unit: p.unit } })}>{p.label}</button>
               ))}
             </span>
@@ -285,13 +285,13 @@ export function AutoPost({ campaign, onSaved, selected, setSelected }: { campaig
           </div>
           {renderExtras('when')}
           <label className="sint-field">
-            <span id="sint-auto-name-label">{__('Name', 'social-integrations')}</span>
+            <span id="sint-auto-name-label">{__('Name', 'advance-social-integrations')}</span>
             {/* The name comes from the span only, so a screen reader does not read the error two times. */}
-            <input ref={nameRef} aria-labelledby="sint-auto-name-label" className={`sint-input${nameError ? ' invalid' : ''}`} value={c.name} maxLength={191} required aria-invalid={nameError} aria-describedby={nameError ? 'sint-auto-name-error' : undefined} placeholder={__('For example: Blog to LinkedIn', 'social-integrations')} onChange={(e) => { set({ name: e.target.value }); if (e.target.value.trim()) setNameError(false) }} />
-            {nameError && <small id="sint-auto-name-error" className="sint-field-error">{__('Enter a name for the campaign.', 'social-integrations')}</small>}
+            <input ref={nameRef} aria-labelledby="sint-auto-name-label" className={`sint-input${nameError ? ' invalid' : ''}`} value={c.name} maxLength={191} required aria-invalid={nameError} aria-describedby={nameError ? 'sint-auto-name-error' : undefined} placeholder={__('For example: Blog to LinkedIn', 'advance-social-integrations')} onChange={(e) => { set({ name: e.target.value }); if (e.target.value.trim()) setNameError(false) }} />
+            {nameError && <small id="sint-auto-name-error" className="sint-field-error">{__('Enter a name for the campaign.', 'advance-social-integrations')}</small>}
           </label>
-          <small style={{ color: 'var(--faint)', fontSize: 12 }}>{__('The plugin shares a post when you publish it for the first time, not when you update it. If a post matches more than one campaign, each account gets it one time. Editors can change the caption or the accounts for one post in the editor sidebar.', 'social-integrations')}</small>
-          {accountsError && !selected.length && <small role="alert" className="sint-field-error">{__('Select an account.', 'social-integrations')}</small>}
+          <small style={{ color: 'var(--faint)', fontSize: 12 }}>{__('The plugin shares a post when you publish it for the first time, not when you update it. If a post matches more than one campaign, each account gets it one time. Editors can change the caption or the accounts for one post in the editor sidebar.', 'advance-social-integrations')}</small>
+          {accountsError && !selected.length && <small role="alert" className="sint-field-error">{__('Select an account.', 'advance-social-integrations')}</small>}
           </div>
         </Modal>
       )}

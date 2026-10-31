@@ -43,13 +43,13 @@ final class ConnectSession {
 	 */
 	public static function begin( AbstractNetwork $network, string $method, array $context ) {
 		if ( ! in_array( $method, self::METHODS, true ) ) {
-			return new \WP_Error( 'sint_bad_method', __( 'This sign-in method is not available.', 'social-integrations' ), array( 'status' => 400 ) );
+			return new \WP_Error( 'sint_bad_method', __( 'This sign-in method is not available.', 'advance-social-integrations' ), array( 'status' => 400 ) );
 		}
 		if ( 'broker' === $method && ! Broker::supports( $network ) ) {
 			return new \WP_Error(
 				'sint_no_broker',
 				/* translators: %s: network name */
-				sprintf( __( 'The Social Integrations app cannot connect %s now. Use your own app.', 'social-integrations' ), $network->label() ),
+				sprintf( __( 'The Social Integrations app cannot connect %s now. Use your own app.', 'advance-social-integrations' ), $network->label() ),
 				array( 'status' => 400 )
 			);
 		}
@@ -57,7 +57,7 @@ final class ConnectSession {
 			return new \WP_Error(
 				'sint_no_app',
 				/* translators: %s: network name */
-				sprintf( __( 'Enter the app ID and secret of your %s app first.', 'social-integrations' ), $network->label() ),
+				sprintf( __( 'Enter the app ID and secret of your %s app first.', 'advance-social-integrations' ), $network->label() ),
 				array( 'status' => 400 )
 			);
 		}
@@ -97,7 +97,7 @@ final class ConnectSession {
 		}
 		if ( '' === $url ) {
 			delete_transient( self::STATE_PREFIX . $state );
-			return new \WP_Error( 'sint_no_url', __( 'This network did not provide a sign-in address.', 'social-integrations' ), array( 'status' => 500 ) );
+			return new \WP_Error( 'sint_no_url', __( 'This network did not provide a sign-in address.', 'advance-social-integrations' ), array( 'status' => 500 ) );
 		}
 		return $url;
 	}

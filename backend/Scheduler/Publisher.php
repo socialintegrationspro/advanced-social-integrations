@@ -63,7 +63,7 @@ final class Publisher {
 	public function add_schedule( array $schedules ): array {
 		$schedules[ self::CRON_SCHEDULE ] = array(
 			'interval' => MINUTE_IN_SECONDS,
-			'display'  => __( 'Every minute', 'social-integrations' ),
+			'display'  => __( 'Every minute', 'advance-social-integrations' ),
 		);
 		return $schedules;
 	}
@@ -124,11 +124,11 @@ final class Publisher {
 
 		try {
 			if ( ! $account || ! $network ) {
-				throw new NetworkException( 'missing', esc_html__( 'The account is no longer connected.', 'social-integrations' ) );
+				throw new NetworkException( 'missing', esc_html__( 'The account is no longer connected.', 'advance-social-integrations' ) );
 			}
 			if ( 'expired' === ( $account['status'] ?? '' ) ) {
 				/* translators: %s: network name */
-				throw new NetworkException( 'expired', esc_html( sprintf( __( '%s sign-in expired. Reconnect the account.', 'social-integrations' ), $network->label() ) ) );
+				throw new NetworkException( 'expired', esc_html( sprintf( __( '%s sign-in expired. Reconnect the account.', 'advance-social-integrations' ), $network->label() ) ) );
 			}
 
 			$credentials = $this->fresh_credentials( $network, $account );
@@ -208,10 +208,10 @@ final class Publisher {
 				// The share log shows a Reconnect button for this share.
 				$details['comment']['reconnect'] = true;
 				/* translators: %s: network name */
-				return sprintf( __( 'The post is on %s. The network did not allow the first comment. Reconnect the account to give the plugin permission for comments.', 'social-integrations' ), $network->label() );
+				return sprintf( __( 'The post is on %s. The network did not allow the first comment. Reconnect the account to give the plugin permission for comments.', 'advance-social-integrations' ), $network->label() );
 			}
 			/* translators: 1: network name, 2: reason */
-			return sprintf( __( 'The post is on %1$s. The first comment failed: %2$s', 'social-integrations' ), $network->label(), Errors::text( $e ) );
+			return sprintf( __( 'The post is on %1$s. The first comment failed: %2$s', 'advance-social-integrations' ), $network->label(), Errors::text( $e ) );
 		}
 	}
 
@@ -246,7 +246,7 @@ final class Publisher {
 		return array(
 			array(
 				'status'  => 'failed',
-				'message' => __( 'The share stopped because of an unexpected error.', 'social-integrations' ),
+				'message' => __( 'The share stopped because of an unexpected error.', 'advance-social-integrations' ),
 			),
 			array(
 				'code'      => 'exception',

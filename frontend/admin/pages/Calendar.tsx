@@ -63,8 +63,8 @@ export function CalendarPage({ openComposer }: PageProps) {
 
   // Filter `sint.calendar.views`: other plugins add views to the switcher.
   const views = applyFilters<CalendarViewDef[]>('sint.calendar.views', [
-    { value: 'week', label: __('Week', 'social-integrations') },
-    { value: 'list', label: __('List', 'social-integrations') },
+    { value: 'week', label: __('Week', 'advance-social-integrations') },
+    { value: 'list', label: __('List', 'advance-social-integrations') },
   ])
   const def = views.find((v) => v.value === view) ?? views[0]!
   // A view's period depends only on the view and the offset.
@@ -101,7 +101,7 @@ export function CalendarPage({ openComposer }: PageProps) {
   const retry = async (item: QueueItem) => {
     try {
       const r = await api.post<{ status: string; message: string }>(`queue/${item.id}/retry`)
-      toast(r.data.status === 'published' ? __('Shared.', 'social-integrations') : r.data.message, r.data.status !== 'published')
+      toast(r.data.status === 'published' ? __('Shared.', 'advance-social-integrations') : r.data.message, r.data.status !== 'published')
       load()
     } catch (e) {
       toast((e as Error).message, true)
@@ -112,7 +112,7 @@ export function CalendarPage({ openComposer }: PageProps) {
     try {
       const r = await api.post<{ result?: { status: string; message: string } }>(`queue/${item.id}`, { draft: false, scheduled_at: '' })
       const ok = r.data.result?.status === 'published'
-      toast(ok ? __('Shared.', 'social-integrations') : r.data.result?.message ?? '', !ok)
+      toast(ok ? __('Shared.', 'advance-social-integrations') : r.data.result?.message ?? '', !ok)
       load()
     } catch (e) {
       toast((e as Error).message, true)
@@ -123,14 +123,14 @@ export function CalendarPage({ openComposer }: PageProps) {
     try {
       await api.del(`queue/${item.id}`)
       queue.mutate((list) => (list ?? []).filter((i) => i.id !== item.id))
-      toast(__('Share deleted.', 'social-integrations'))
+      toast(__('Share deleted.', 'advance-social-integrations'))
       load()
     } catch (e) {
       toast((e as Error).message, true)
     }
   }
 
-  const label = (item: QueueItem) => item.post?.title || plainText(item.caption).slice(0, 80) || __('Post', 'social-integrations')
+  const label = (item: QueueItem) => item.post?.title || plainText(item.caption).slice(0, 80) || __('Post', 'advance-social-integrations')
   // The caption adds something only when the card's title is the post's.
   const snippet = (item: QueueItem) => {
     const text = plainText(item.caption).trim()
@@ -153,22 +153,22 @@ export function CalendarPage({ openComposer }: PageProps) {
     <>
       {item.status === 'draft' && can(caps.publish) && (
         <button type="button" className="sint-btn primary sm" style={{ height }} onClick={() => publish(item)}>
-          {__('Publish', 'social-integrations')}
+          {__('Publish', 'advance-social-integrations')}
         </button>
       )}
       {item.status === 'failed' && can(caps.publish) && (
         <button type="button" className="sint-btn danger sm" style={{ height }} onClick={() => retry(item)}>
-          {__('Retry', 'social-integrations')}
+          {__('Retry', 'advance-social-integrations')}
         </button>
       )}
       <span className="sint-pc-tools">
         {item.remote_url && (
-          <a className="sint-pc-tool" href={item.remote_url} target="_blank" rel="noreferrer" aria-label={__('Open the post on the network', 'social-integrations')} title={__('Open the post on the network', 'social-integrations')}>
+          <a className="sint-pc-tool" href={item.remote_url} target="_blank" rel="noreferrer" aria-label={__('Open the post on the network', 'advance-social-integrations')} title={__('Open the post on the network', 'advance-social-integrations')}>
             <Icon name="external" size={14} stroke={2} />
           </a>
         )}
         {!item.remote_url && aligned && <span className="sint-pc-tool-space" aria-hidden="true" />}
-        <button type="button" className="sint-pc-tool" aria-label={__('Duplicate', 'social-integrations')} title={__('Duplicate', 'social-integrations')} onClick={() => openComposer({ copy: item })}>
+        <button type="button" className="sint-pc-tool" aria-label={__('Duplicate', 'advance-social-integrations')} title={__('Duplicate', 'advance-social-integrations')} onClick={() => openComposer({ copy: item })}>
           <Icon name="copy" size={14} stroke={2} />
         </button>
         {item.status !== 'sending' && item.status !== 'published' ? <DeleteButton onConfirm={() => remove(item)} /> : aligned && <span className="sint-pc-tool-space" aria-hidden="true" />}
@@ -194,7 +194,7 @@ export function CalendarPage({ openComposer }: PageProps) {
           <StatusPill item={item} />
           {item.status !== 'scheduled' && <span>{fmtTime(item.scheduled_at)}</span>}
           {item.media.length > 0 && (
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }} aria-label={`${item.media.length} ${__('media', 'social-integrations')}`}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }} aria-label={`${item.media.length} ${__('media', 'advance-social-integrations')}`}>
               <Icon name="image" size={12} stroke={2} />
               {item.media.length}
             </span>
@@ -214,22 +214,22 @@ export function CalendarPage({ openComposer }: PageProps) {
 
   return (
     <>
-      <Header title={__('Calendar', 'social-integrations')}>
+      <Header title={__('Calendar', 'advance-social-integrations')}>
         <button type="button" className="sint-btn primary" onClick={() => openComposer()}>
           <Icon name="plus" size={16} stroke={2.4} />
-          {__('New campaign', 'social-integrations')}
+          {__('New campaign', 'advance-social-integrations')}
         </button>
       </Header>
       <div className="sint-cal-layout">
         <aside className="sint-cal-side">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 6px 6px' }}>
-              <span style={{ fontSize: 18, fontWeight: 700 }}>{__('Accounts', 'social-integrations')}</span>
-              {can(caps.manageAccounts) && <a href="#/accounts" style={{ fontSize: 13, fontWeight: 600 }}>{__('Manage', 'social-integrations')}</a>}
+              <span style={{ fontSize: 18, fontWeight: 700 }}>{__('Accounts', 'advance-social-integrations')}</span>
+              {can(caps.manageAccounts) && <a href="#/accounts" style={{ fontSize: 13, fontWeight: 600 }}>{__('Manage', 'advance-social-integrations')}</a>}
             </div>
             {accounts.length === 0 && (
               <div style={{ padding: '8px 6px', color: 'var(--muted)', fontSize: 13 }}>
-                {__('No accounts yet.', 'social-integrations')} {can(caps.manageAccounts) && <a href="#/accounts">{__('Connect an account', 'social-integrations')}</a>}
+                {__('No accounts yet.', 'advance-social-integrations')} {can(caps.manageAccounts) && <a href="#/accounts">{__('Connect an account', 'advance-social-integrations')}</a>}
               </div>
             )}
             {accounts.map((a) => (
@@ -239,11 +239,11 @@ export function CalendarPage({ openComposer }: PageProps) {
                   <div style={{ fontSize: 14, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.name || a.username}</div>
                   {a.status === 'expired' && !can(caps.manageAccounts) ? (
                     <div style={{ fontSize: 12, color: 'var(--warn-text)', fontWeight: 600 }}>
-                      {network(a.network)?.label} · {__('Sign-in expired', 'social-integrations')}
+                      {network(a.network)?.label} · {__('Sign-in expired', 'advance-social-integrations')}
                     </div>
                   ) : a.status === 'expired' ? (
                     <a href="#/accounts" style={{ fontSize: 12, color: 'var(--warn-text)', fontWeight: 600 }}>
-                      {network(a.network)?.label} · {__('Reconnect', 'social-integrations')}
+                      {network(a.network)?.label} · {__('Reconnect', 'advance-social-integrations')}
                     </a>
                   ) : (
                     <div style={{ fontSize: 12, color: 'var(--muted)' }}>{network(a.network)?.label}</div>
@@ -253,7 +253,7 @@ export function CalendarPage({ openComposer }: PageProps) {
             ))}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4, padding: '0 6px' }}>
-            <div className="sint-label" style={{ paddingBottom: 6 }}>{__('Post types', 'social-integrations')}</div>
+            <div className="sint-label" style={{ paddingBottom: 6 }}>{__('Post types', 'advance-social-integrations')}</div>
             {postTypes.map((t) => (
               <label key={t.name} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 13, minHeight: 32 }}>
                 <input type="checkbox" checked={!hidden.includes(t.name)} onChange={(e) => setHidden((h) => (e.target.checked ? h.filter((x) => x !== t.name) : [...h, t.name]))} />
@@ -267,24 +267,24 @@ export function CalendarPage({ openComposer }: PageProps) {
         <section className="sint-cal-main">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', border: '1px solid var(--field-border)', borderRadius: 999, background: 'var(--field)' }}>
-              <button type="button" className="sint-icon-btn" style={{ border: 0, background: 'transparent', height: 42 }} aria-label={__('Previous', 'social-integrations')} onClick={() => move(offset - 1)}>
+              <button type="button" className="sint-icon-btn" style={{ border: 0, background: 'transparent', height: 42 }} aria-label={__('Previous', 'advance-social-integrations')} onClick={() => move(offset - 1)}>
                 <Icon name="left" size={16} stroke={2} />
               </button>
               <span style={{ padding: '0 12px', fontWeight: 600, borderLeft: '1px solid var(--border)', borderRight: '1px solid var(--border)', height: 42, display: 'flex', alignItems: 'center' }}>
                 {period.title ?? `${fmtDate(days[0]!.toISOString())} – ${fmtDate(days[days.length - 1]!.toISOString())}`}
               </span>
-              <button type="button" className="sint-icon-btn" style={{ border: 0, background: 'transparent', height: 42 }} aria-label={__('Next', 'social-integrations')} onClick={() => move(offset + 1)}>
+              <button type="button" className="sint-icon-btn" style={{ border: 0, background: 'transparent', height: 42 }} aria-label={__('Next', 'advance-social-integrations')} onClick={() => move(offset + 1)}>
                 <Icon name="right" size={16} stroke={2} />
               </button>
             </div>
-            <button type="button" className="sint-btn" onClick={() => move(0)}>{__('Today', 'social-integrations')}</button>
-            <RefreshButton loading={queue.loading} onClick={() => load()} label={__('Refresh the calendar', 'social-integrations')} />
+            <button type="button" className="sint-btn" onClick={() => move(0)}>{__('Today', 'advance-social-integrations')}</button>
+            <RefreshButton loading={queue.loading} onClick={() => load()} label={__('Refresh the calendar', 'advance-social-integrations')} />
             <div style={{ marginLeft: 'auto' }}>
-              <Segmented label={__('View', 'social-integrations')} value={def.value} onChange={(v) => { setView(v); setDir(0); setOffset(0) }} options={views.map((v) => ({ value: v.value, label: v.label }))} />
+              <Segmented label={__('View', 'advance-social-integrations')} value={def.value} onChange={(v) => { setView(v); setDir(0); setOffset(0) }} options={views.map((v) => ({ value: v.value, label: v.label }))} />
             </div>
           </div>
 
-          {queue.error && <LoadError message={sprintf(__('The calendar did not load. %s', 'social-integrations'), queue.error)} onRetry={() => load()} busy={queue.loading} />}
+          {queue.error && <LoadError message={sprintf(__('The calendar did not load. %s', 'advance-social-integrations'), queue.error)} onRetry={() => load()} busy={queue.loading} />}
 
           <div className="sint-cal-body" ref={body}>
           <m.div key={`${view}-${offset}`} initial={{ opacity: 0, x: dir * 28 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3, ease: easeOut }}>
@@ -294,8 +294,8 @@ export function CalendarPage({ openComposer }: PageProps) {
             <CustomView items={visible} days={days} reload={load} openComposer={openComposer} card={card} />
           ) : view === 'list' ? (
             visible.length === 0 ? (
-              <Empty title={__('No shares this week', 'social-integrations')}>
-                <button type="button" className="sint-btn primary" onClick={() => openComposer()}>{__('New campaign', 'social-integrations')}</button>
+              <Empty title={__('No shares this week', 'advance-social-integrations')}>
+                <button type="button" className="sint-btn primary" onClick={() => openComposer()}>{__('New campaign', 'advance-social-integrations')}</button>
               </Empty>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -332,7 +332,7 @@ export function CalendarPage({ openComposer }: PageProps) {
                     <div key={key} className={`th${isToday ? ' today' : ''}`}>
                       <b>
                         {isToday && <span style={{ width: 6, height: 6, borderRadius: 999, background: 'var(--today)' }} />}
-                        {isToday ? __('Today', 'social-integrations') : d.toLocaleDateString(undefined, { weekday: 'short', timeZone: 'UTC' })}
+                        {isToday ? __('Today', 'advance-social-integrations') : d.toLocaleDateString(undefined, { weekday: 'short', timeZone: 'UTC' })}
                       </b>
                       <span>{d.getUTCDate()}</span>
                     </div>
@@ -388,7 +388,7 @@ function CellCards({ items, card }: { items: QueueItem[]; card: (i: QueueItem) =
     <>
       {items.slice(0, CELL_MAX).map(card)}
       <button type="button" className="sint-more" onClick={() => setAll(true)}>
-        {sprintf(__('%d more', 'social-integrations'), items.length - CELL_MAX)}
+        {sprintf(__('%d more', 'advance-social-integrations'), items.length - CELL_MAX)}
       </button>
     </>
   )
@@ -401,13 +401,13 @@ function editable(item: QueueItem): boolean {
 function StatusPill({ item }: { item: QueueItem }) {
   switch (item.status) {
     case 'published':
-      return <span className="sint-pill ok">{__('Published', 'social-integrations')}</span>
+      return <span className="sint-pill ok">{__('Published', 'advance-social-integrations')}</span>
     case 'failed':
-      return <span className="sint-pill bad">{__('Failed', 'social-integrations')}</span>
+      return <span className="sint-pill bad">{__('Failed', 'advance-social-integrations')}</span>
     case 'draft':
-      return <span className="sint-pill muted">{__('Draft', 'social-integrations')}</span>
+      return <span className="sint-pill muted">{__('Draft', 'advance-social-integrations')}</span>
     case 'sending':
-      return <span className="sint-pill accent">{__('In progress', 'social-integrations')}</span>
+      return <span className="sint-pill accent">{__('In progress', 'advance-social-integrations')}</span>
     default:
       return <span className="sint-pill accent">{fmtTime(item.scheduled_at)}</span>
   }
@@ -422,7 +422,7 @@ function DeleteButton({ onConfirm }: { onConfirm: () => void }) {
     return () => clearTimeout(t)
   }, [armed])
   return (
-    <button type="button" className={`sint-pc-tool${armed ? ' armed' : ''}`} aria-label={armed ? __('Click again to delete', 'social-integrations') : __('Delete', 'social-integrations')} title={armed ? __('Click again to delete', 'social-integrations') : __('Delete', 'social-integrations')} onClick={() => (armed ? onConfirm() : setArmed(true))}>
+    <button type="button" className={`sint-pc-tool${armed ? ' armed' : ''}`} aria-label={armed ? __('Click again to delete', 'advance-social-integrations') : __('Delete', 'advance-social-integrations')} title={armed ? __('Click again to delete', 'advance-social-integrations') : __('Delete', 'advance-social-integrations')} onClick={() => (armed ? onConfirm() : setArmed(true))}>
       <Icon name={armed ? 'check' : 'trash'} size={14} stroke={2} />
     </button>
   )

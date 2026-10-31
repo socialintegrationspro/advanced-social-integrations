@@ -36,8 +36,8 @@ final class Menu {
 			'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#a7aaad" d="M6 8.5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7zM18 2.5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7zM18 14.5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7zM7.8 9.9l8.4-4 .85 1.8-8.4 4zM7.8 14.1l.85-1.8 8.4 4-.85 1.8z"/></svg>'
 		);
 		add_menu_page(
-			__( 'Social Integrations', 'social-integrations' ),
-			__( 'Social Integrations', 'social-integrations' ),
+			__( 'Advance Social Integrations', 'advance-social-integrations' ),
+			__( 'Advance Social Integrations', 'advance-social-integrations' ),
 			Capabilities::VIEW,
 			self::SLUG,
 			array( $this, 'render' ),
@@ -50,7 +50,7 @@ final class Menu {
 	 * Mount point for the admin app.
 	 */
 	public function render(): void {
-		echo '<div id="sint-app" class="sint-root"><noscript>' . esc_html__( 'Social Integrations needs JavaScript.', 'social-integrations' ) . '</noscript></div>';
+		echo '<div id="sint-app" class="sint-root"><noscript>' . esc_html__( 'Advance Social Integrations needs JavaScript.', 'advance-social-integrations' ) . '</noscript></div>';
 	}
 
 	/**
@@ -77,7 +77,7 @@ final class Menu {
 	 * @param string[] $links Links.
 	 */
 	public function action_links( array $links ): array {
-		array_unshift( $links, '<a href="' . esc_url( self::url() ) . '">' . esc_html__( 'Open', 'social-integrations' ) . '</a>' );
+		array_unshift( $links, '<a href="' . esc_url( self::url() ) . '">' . esc_html__( 'Open', 'advance-social-integrations' ) . '</a>' );
 		return $links;
 	}
 

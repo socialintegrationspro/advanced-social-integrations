@@ -68,8 +68,8 @@ export function MediaWarning({ nets, media, template }: { nets: string[]; media:
   if (!miss.media.length && !miss.video.length) return null
   return (
     <div className="sint-post-field-note" role="note">
-      {miss.media.length > 0 && <div>{sprintf(template ? __('These networks need an image or a video: %s. With no media, the plugin cannot share to them.', 'social-integrations') : __('These networks need an image or a video: %s. Add media, or the share to them fails.', 'social-integrations'), names(miss.media))}</div>}
-      {miss.video.length > 0 && <div>{sprintf(template ? __('These networks need a video: %s. The plugin cannot share a post without a video to them.', 'social-integrations') : __('These networks need a video: %s. Add a video, or the share to them fails.', 'social-integrations'), names(miss.video))}</div>}
+      {miss.media.length > 0 && <div>{sprintf(template ? __('These networks need an image or a video: %s. With no media, the plugin cannot share to them.', 'advance-social-integrations') : __('These networks need an image or a video: %s. Add media, or the share to them fails.', 'advance-social-integrations'), names(miss.media))}</div>}
+      {miss.video.length > 0 && <div>{sprintf(template ? __('These networks need a video: %s. The plugin cannot share a post without a video to them.', 'advance-social-integrations') : __('These networks need a video: %s. Add a video, or the share to them fails.', 'advance-social-integrations'), names(miss.video))}</div>}
     </div>
   )
 }
@@ -121,8 +121,8 @@ export function PostFields({ nets, tab, value, onChange, base, tokens, fieldKeys
 
   const toggle = collapsible && (
     <button type="button" className="sint-post-fields-toggle" aria-expanded={!shut} onClick={() => setShut(!shut)}>
-      <span className="t">{all ? __('Options for each network', 'social-integrations') : sprintf(__('Options for %s', 'social-integrations'), network(tab)?.label ?? tab)}</span>
-      <span className="s">{[fields.slice(0, 3).map((f) => f.field.label).join(', '), all && nets.length > 1 ? sprintf(_n('%d network', '%d networks', nets.length, 'social-integrations'), nets.length) : ''].filter(Boolean).join(' · ')}</span>
+      <span className="t">{all ? __('Options for each network', 'advance-social-integrations') : sprintf(__('Options for %s', 'advance-social-integrations'), network(tab)?.label ?? tab)}</span>
+      <span className="s">{[fields.slice(0, 3).map((f) => f.field.label).join(', '), all && nets.length > 1 ? sprintf(_n('%d network', '%d networks', nets.length, 'advance-social-integrations'), nets.length) : ''].filter(Boolean).join(' · ')}</span>
       <Icon name="down" size={16} stroke={2.2} />
     </button>
   )
@@ -130,13 +130,13 @@ export function PostFields({ nets, tab, value, onChange, base, tokens, fieldKeys
 
   const box = (
     <fieldset className="sint-post-fields">
-      <legend className="sint-label">{all ? __('Post options', 'social-integrations') : sprintf(__('Post options for %s', 'social-integrations'), network(tab)?.label ?? tab)}</legend>
+      <legend className="sint-label">{all ? __('Post options', 'advance-social-integrations') : sprintf(__('Post options for %s', 'advance-social-integrations'), network(tab)?.label ?? tab)}</legend>
       <p className="sint-post-fields-intro">
         {all
           ? nets.length > 1
-            ? __('Each option applies to the networks next to its name. Select a network tab for the options of one network.', 'social-integrations')
-            : __('Select the network tab for all of its options.', 'social-integrations')
-          : __('An empty field uses the value from “All networks”.', 'social-integrations')}
+            ? __('Each option applies to the networks next to its name. Select a network tab for the options of one network.', 'advance-social-integrations')
+            : __('Select the network tab for all of its options.', 'advance-social-integrations')
+          : __('An empty field uses the value from “All networks”.', 'advance-social-integrations')}
       </p>
       {fields.map(({ field, nets: on }) => {
         const id = `sint-pf-${tab}-${field.name}`
@@ -157,11 +157,11 @@ export function PostFields({ nets, tab, value, onChange, base, tokens, fieldKeys
         const appliesTo = all && nets.length > 1 && (
           on.length > 4 ? (
             <button type="button" className="sint-post-field-nets count" aria-expanded={listed === field.name} aria-controls={`${id}-nets`} onClick={() => setListed(listed === field.name ? '' : field.name)}>
-              {on.length === nets.length ? __('All networks', 'social-integrations') : sprintf(__('%d networks', 'social-integrations'), on.length)}
+              {on.length === nets.length ? __('All networks', 'advance-social-integrations') : sprintf(__('%d networks', 'advance-social-integrations'), on.length)}
               <Icon name="down" size={12} stroke={2.4} />
             </button>
           ) : (
-            <span className="sint-post-field-nets" aria-label={sprintf(__('For %s', 'social-integrations'), names)}>
+            <span className="sint-post-field-nets" aria-label={sprintf(__('For %s', 'advance-social-integrations'), names)}>
               {on.map((n) => <NetBadge key={n} network={n} color={network(n)?.color} size={16} />)}
             </span>
           )
@@ -237,11 +237,11 @@ export function PostFields({ nets, tab, value, onChange, base, tokens, fieldKeys
             {hidden.length > 0 ? (
               <div className="sint-post-field-note" role="note">
                 {all && hidden.length > 1
-                  ? sprintf(__('The post has media, so %d networks show the media and no link card. Select “Link card only” to show the card.', 'social-integrations'), hidden.length)
-                  : sprintf(__('The post has media, so %s shows the media and no link card. Select “Link card only” to show the card.', 'social-integrations'), network(hidden[0]!)?.label ?? hidden[0])}
+                  ? sprintf(__('The post has media, so %d networks show the media and no link card. Select “Link card only” to show the card.', 'advance-social-integrations'), hidden.length)
+                  : sprintf(__('The post has media, so %s shows the media and no link card. Select “Link card only” to show the card.', 'advance-social-integrations'), network(hidden[0]!)?.label ?? hidden[0])}
                 {all && hidden.length > 1 && (
                   <details>
-                    <summary>{__('Show the networks', 'social-integrations')}</summary>
+                    <summary>{__('Show the networks', 'advance-social-integrations')}</summary>
                     {hidden.map((n) => network(n)?.label ?? n).join(', ')}
                   </details>
                 )}

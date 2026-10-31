@@ -70,7 +70,7 @@ final class SidebarPanel {
 		if ( '' !== $files['css'] ) {
 			wp_enqueue_style( self::HANDLE, $url . $files['css'], array( 'wp-components' ), SINT_VERSION . '.' . filemtime( $path . $files['css'] ) );
 		}
-		wp_set_script_translations( self::HANDLE, 'social-integrations', SINT_PATH . 'languages' );
+		wp_set_script_translations( self::HANDLE, 'advance-social-integrations', SINT_PATH . 'languages' );
 		wp_add_inline_script( self::HANDLE, 'window.sintEditor = ' . wp_json_encode( $this->config() ) . ';', 'before' );
 	}
 

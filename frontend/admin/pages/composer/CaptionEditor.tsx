@@ -62,23 +62,23 @@ export function CaptionEditor({ nets, tab, setTab, edited, text, setText, captio
 
   return (
     <>
-      <div className="sint-seg" role="tablist" aria-label={__('Caption for', 'social-integrations')} style={{ alignSelf: 'flex-start', flexWrap: 'wrap' }} onKeyDown={tabKeys}>
-        <button type="button" role="tab" data-tab="all" aria-selected={tab === 'all'} tabIndex={tab === 'all' ? 0 : -1} className={tab === 'all' ? 'on' : ''} onClick={() => setTab('all')}>{__('All networks', 'social-integrations')}</button>
+      <div className="sint-seg" role="tablist" aria-label={__('Caption for', 'advance-social-integrations')} style={{ alignSelf: 'flex-start', flexWrap: 'wrap' }} onKeyDown={tabKeys}>
+        <button type="button" role="tab" data-tab="all" aria-selected={tab === 'all'} tabIndex={tab === 'all' ? 0 : -1} className={tab === 'all' ? 'on' : ''} onClick={() => setTab('all')}>{__('All networks', 'advance-social-integrations')}</button>
         {nets.map((n) => {
           const label = network(n)?.label ?? n
           const short = compact && tab !== n
           return (
-            <button key={n} type="button" role="tab" data-tab={n} aria-selected={tab === n} tabIndex={tab === n ? 0 : -1} className={`${tab === n ? 'on' : ''}${short ? ' icon' : ''}`} aria-label={short ? (edited(n) ? sprintf(__('%s, edited', 'social-integrations'), label) : label) : undefined} title={short ? label : undefined} onClick={() => setTab(n)}>
+            <button key={n} type="button" role="tab" data-tab={n} aria-selected={tab === n} tabIndex={tab === n ? 0 : -1} className={`${tab === n ? 'on' : ''}${short ? ' icon' : ''}`} aria-label={short ? (edited(n) ? sprintf(__('%s, edited', 'advance-social-integrations'), label) : label) : undefined} title={short ? label : undefined} onClick={() => setTab(n)}>
               <NetBadge network={n} color={network(n)?.color} size={18} />
               {!short && label}
-              {edited(n) && <span className="sint-tab-dot" aria-label={short ? undefined : __('Edited', 'social-integrations')} />}
+              {edited(n) && <span className="sint-tab-dot" aria-label={short ? undefined : __('Edited', 'advance-social-integrations')} />}
             </button>
           )
         })}
       </div>
 
       <div className="sint-editor">
-        <span className="sint-sr" id="sint-caption-label">{__('Caption', 'social-integrations')}</span>
+        <span className="sint-sr" id="sint-caption-label">{__('Caption', 'advance-social-integrations')}</span>
         <Suspense fallback={<div className="sint-skeleton" style={{ minHeight: 170 }} />}>
           <CaptionInput
             key={tab}
@@ -91,13 +91,13 @@ export function CaptionEditor({ nets, tab, setTab, edited, text, setText, captio
             onSubmit={onSubmit}
             insertRef={insertAt}
             labelledBy="sint-caption-label"
-            placeholder={__('Write a caption, or select an item from your site.', 'social-integrations')}
+            placeholder={__('Write a caption, or select an item from your site.', 'advance-social-integrations')}
           />
         </Suspense>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 12px', borderTop: '1px solid var(--line)', flexWrap: 'wrap' }}>
           {tokens && (
             <>
-              <span style={{ fontSize: 12, color: 'var(--faint)', marginRight: 2 }}>{__('Insert', 'social-integrations')}</span>
+              <span style={{ fontSize: 12, color: 'var(--faint)', marginRight: 2 }}>{__('Insert', 'advance-social-integrations')}</span>
               {/* A product adds {price}, {regular_price} and {sale_price} when they have a value. */}
               {[...TOKENS, ...['price', 'regular_price', 'sale_price'].filter((k) => tokens[k]).map((k) => `{${k}}`)].map((t) => <button key={t} type="button" className="sint-tok" onClick={() => insert(t)}>{t}</button>)}
             </>
@@ -105,7 +105,7 @@ export function CaptionEditor({ nets, tab, setTab, edited, text, setText, captio
           {actions}
           <div style={{ marginLeft: 'auto', display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             {tab === 'all' && nets.length > 1 && over.length === 0 && (
-              <span className="sint-pill muted">{sprintf(__('Fits all %d networks', 'social-integrations'), nets.length)}</span>
+              <span className="sint-pill muted">{sprintf(__('Fits all %d networks', 'advance-social-integrations'), nets.length)}</span>
             )}
             {(tab === 'all' && nets.length > 1 ? over : counts).map(({ n, len, limit }) => (
               <span key={n} className={`sint-pill ${len > limit ? 'bad' : 'muted'}`}>

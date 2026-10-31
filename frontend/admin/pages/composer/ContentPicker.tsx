@@ -76,15 +76,15 @@ export function ContentPicker({ search: { type, setType, search, setSearch, resu
 
   return (
     <aside style={{ flex: '1 1 280px', borderRight: '1px solid var(--line)', padding: 18, display: 'flex', flexDirection: 'column', gap: 14, minWidth: 0 }}>
-      <div className="sint-label">{__('From your site', 'social-integrations')}</div>
+      <div className="sint-label">{__('From your site', 'advance-social-integrations')}</div>
       <label className="sint-search" style={{ minWidth: 0 }}>
         <Icon name="search" size={16} stroke={2} />
-        <span className="sint-sr">{__('Search content', 'social-integrations')}</span>
-        <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={__('Search any post type', 'social-integrations')} />
-        {loading && loaded && <Spinner size={14} label={__('Loading', 'social-integrations')} />}
+        <span className="sint-sr">{__('Search content', 'advance-social-integrations')}</span>
+        <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={__('Search any post type', 'advance-social-integrations')} />
+        {loading && loaded && <Spinner size={14} label={__('Loading', 'advance-social-integrations')} />}
       </label>
       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-        <button type="button" className={`sint-chip${type === 'any' ? ' on' : ''}`} onClick={() => setType('any')}>{__('All', 'social-integrations')}</button>
+        <button type="button" className={`sint-chip${type === 'any' ? ' on' : ''}`} onClick={() => setType('any')}>{__('All', 'advance-social-integrations')}</button>
         {postTypes.map((t) => (
           <button key={t.name} type="button" className={`sint-chip${type === t.name ? ' on' : ''}`} onClick={() => setType(t.name)}>{t.label}</button>
         ))}
@@ -95,7 +95,7 @@ export function ContentPicker({ search: { type, setType, search, setSearch, resu
           <button key={r.id} type="button" className={`sint-item${r.id === postId ? ' on' : ''}`} onClick={() => onPick(r)}>
             {r.thumbnail ? <img className="sint-thumb" src={r.thumbnail} alt="" style={{ width: 48, height: 48 }} /> : <span className="sint-thumb" style={{ width: 48, height: 48 }} />}
             <span style={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: 3 }}>
-              <span style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.3 }}>{r.title || __('(no title)', 'social-integrations')}</span>
+              <span style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.3 }}>{r.title || __('(no title)', 'advance-social-integrations')}</span>
               <span style={{ fontSize: 12, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                 <span className="sint-type-dot" style={{ background: typeColor(types, r.type) }} />
                 {postTypes.find((t) => t.name === r.type)?.singular ?? r.type}
@@ -106,22 +106,22 @@ export function ContentPicker({ search: { type, setType, search, setSearch, resu
             </span>
           </button>
         ))}
-        {error && <LoadError message={__('The posts did not load.', 'social-integrations')} onRetry={retry} busy={loading} />}
+        {error && <LoadError message={__('The posts did not load.', 'advance-social-integrations')} onRetry={retry} busy={loading} />}
         {more && !error && (
           <button type="button" className="sint-btn ghost sm sint-more" onClick={more} disabled={loading}>
             {loading && <Spinner size={14} />}
-            {__('Show more', 'social-integrations')}
+            {__('Show more', 'advance-social-integrations')}
           </button>
         )}
         {loaded && !error && results.length === 0 && (
           <p className="sint-sub" style={{ fontSize: 13, padding: '8px 4px' }}>
-            {search.trim() ? __('No posts match the search.', 'social-integrations') : __('There are no posts yet.', 'social-integrations')}
+            {search.trim() ? __('No posts match the search.', 'advance-social-integrations') : __('There are no posts yet.', 'advance-social-integrations')}
           </p>
         )}
       </div>
       {postId && (
         <button type="button" className="sint-btn ghost sm" onClick={onClear}>
-          {__('Write without a post', 'social-integrations')}
+          {__('Write without a post', 'advance-social-integrations')}
         </button>
       )}
     </aside>
@@ -129,8 +129,8 @@ export function ContentPicker({ search: { type, setType, search, setSearch, resu
 }
 
 function itemDate(item: ContentItem): string {
-  if (item.status === 'future') return sprintf(__('Scheduled for %s', 'social-integrations'), fmtDate(item.date))
-  if (item.status === 'draft') return __('Draft', 'social-integrations')
+  if (item.status === 'future') return sprintf(__('Scheduled for %s', 'advance-social-integrations'), fmtDate(item.date))
+  if (item.status === 'draft') return __('Draft', 'advance-social-integrations')
   return fmtDate(item.date)
 }
 
@@ -138,8 +138,8 @@ function itemDate(item: ContentItem): string {
 function ShareState({ item }: { item: ContentItem }) {
   const sent = item.shares.filter((x) => x.status === 'published').length
   const failed = item.shares.length - sent
-  if (failed) return <span className="sint-pill bad" style={{ alignSelf: 'flex-start' }}>{sprintf(__('%d failed', 'social-integrations'), failed)}</span>
-  if (sent) return <span className="sint-pill ok" style={{ alignSelf: 'flex-start' }}>{sprintf(__('Shared to %d', 'social-integrations'), sent)}</span>
-  if (item.status === 'publish') return <span className="sint-pill muted" style={{ alignSelf: 'flex-start' }}>{__('Not shared yet', 'social-integrations')}</span>
+  if (failed) return <span className="sint-pill bad" style={{ alignSelf: 'flex-start' }}>{sprintf(__('%d failed', 'advance-social-integrations'), failed)}</span>
+  if (sent) return <span className="sint-pill ok" style={{ alignSelf: 'flex-start' }}>{sprintf(__('Shared to %d', 'advance-social-integrations'), sent)}</span>
+  if (item.status === 'publish') return <span className="sint-pill muted" style={{ alignSelf: 'flex-start' }}>{__('Not shared yet', 'advance-social-integrations')}</span>
   return null
 }

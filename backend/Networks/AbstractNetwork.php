@@ -181,22 +181,22 @@ abstract class AbstractNetwork {
 	protected function format_field(): array {
 		return array(
 			'name'    => 'format',
-			'label'   => __( 'Post format', 'social-integrations' ),
+			'label'   => __( 'Post format', 'advance-social-integrations' ),
 			'type'    => 'select',
 			'default' => 'auto',
-			'help'    => __( 'Automatic: the media of the post. When the post has no media, a link card.', 'social-integrations' ),
+			'help'    => __( 'Automatic: the media of the post. When the post has no media, a link card.', 'advance-social-integrations' ),
 			'options' => array(
 				array(
 					'value' => 'auto',
-					'label' => __( 'Automatic', 'social-integrations' ),
+					'label' => __( 'Automatic', 'advance-social-integrations' ),
 				),
 				array(
 					'value' => 'link',
-					'label' => __( 'Link card only', 'social-integrations' ),
+					'label' => __( 'Link card only', 'advance-social-integrations' ),
 				),
 				array(
 					'value' => 'text',
-					'label' => __( 'Text only', 'social-integrations' ),
+					'label' => __( 'Text only', 'advance-social-integrations' ),
 				),
 			),
 		);
@@ -210,7 +210,7 @@ abstract class AbstractNetwork {
 	protected function title_field( int $max = 300 ): array {
 		return array(
 			'name'    => 'title',
-			'label'   => __( 'Link card title', 'social-integrations' ),
+			'label'   => __( 'Link card title', 'advance-social-integrations' ),
 			'type'    => 'text',
 			'default' => '{title}',
 			'tokens'  => true,
@@ -226,7 +226,7 @@ abstract class AbstractNetwork {
 	protected function description_field( int $max = 1000 ): array {
 		return array(
 			'name'    => 'description',
-			'label'   => __( 'Link card description', 'social-integrations' ),
+			'label'   => __( 'Link card description', 'advance-social-integrations' ),
 			'type'    => 'textarea',
 			'default' => '{excerpt}',
 			'tokens'  => true,
@@ -242,12 +242,12 @@ abstract class AbstractNetwork {
 	protected function first_comment_field( string $help = '' ): array {
 		return array(
 			'name'    => 'first_comment',
-			'label'   => __( 'First comment', 'social-integrations' ),
+			'label'   => __( 'First comment', 'advance-social-integrations' ),
 			'type'    => 'textarea',
 			'default' => '',
 			'tokens'  => true,
 			'max'     => min( 2000, $this->char_limit() ),
-			'help'    => '' !== $help ? $help : __( 'The plugin adds this comment below the post. Leave empty for no comment.', 'social-integrations' ),
+			'help'    => '' !== $help ? $help : __( 'The plugin adds this comment below the post. Leave empty for no comment.', 'advance-social-integrations' ),
 		);
 	}
 
@@ -287,12 +287,12 @@ abstract class AbstractNetwork {
 		return array(
 			array(
 				'name'  => 'client_id',
-				'label' => __( 'App ID', 'social-integrations' ),
+				'label' => __( 'App ID', 'advance-social-integrations' ),
 				'type'  => 'text',
 			),
 			array(
 				'name'  => 'client_secret',
-				'label' => __( 'App secret', 'social-integrations' ),
+				'label' => __( 'App secret', 'advance-social-integrations' ),
 				'type'  => 'password',
 			),
 		);
@@ -379,7 +379,7 @@ abstract class AbstractNetwork {
 	 * @throws NetworkException When the values do not work.
 	 */
 	public function authenticate( array $input ): array {
-		throw new NetworkException( 'unsupported', esc_html__( 'This network connects with sign-in.', 'social-integrations' ) );
+		throw new NetworkException( 'unsupported', esc_html__( 'This network connects with sign-in.', 'advance-social-integrations' ) );
 	}
 
 	/**
@@ -403,7 +403,7 @@ abstract class AbstractNetwork {
 	 * @throws NetworkException When the network refuses the code.
 	 */
 	public function exchange_code( array $app, string $code, string $redirect_uri ): array {
-		throw new NetworkException( 'unsupported', esc_html__( 'This network does not use sign-in.', 'social-integrations' ) );
+		throw new NetworkException( 'unsupported', esc_html__( 'This network does not use sign-in.', 'advance-social-integrations' ) );
 	}
 
 	/**
@@ -449,7 +449,7 @@ abstract class AbstractNetwork {
 	 * @throws NetworkException When the network refuses the comment.
 	 */
 	public function comment( array $credentials, array $post, string $text ): array {
-		throw new NetworkException( 'unsupported', esc_html__( 'This network does not take comments.', 'social-integrations' ) );
+		throw new NetworkException( 'unsupported', esc_html__( 'This network does not take comments.', 'advance-social-integrations' ) );
 	}
 
 	// phpcs:enable
@@ -632,7 +632,7 @@ abstract class AbstractNetwork {
 		}
 
 		/* translators: %s: network name */
-		throw new NetworkException( 'media', esc_html( sprintf( __( 'The plugin cannot read an image of the post. It did not send the image to %s.', 'social-integrations' ), $this->label() ) ) );
+		throw new NetworkException( 'media', esc_html( sprintf( __( 'The plugin cannot read an image of the post. It did not send the image to %s.', 'advance-social-integrations' ), $this->label() ) ) );
 	}
 
 	/**
@@ -693,7 +693,7 @@ abstract class AbstractNetwork {
 	protected function error_message( int $status, array $body ): string {
 		if ( 'expired' === $this->error_code( $status, $body ) ) {
 			/* translators: %s: network name */
-			return sprintf( __( '%s sign-in expired. Reconnect the account.', 'social-integrations' ), $this->label() );
+			return sprintf( __( '%s sign-in expired. Reconnect the account.', 'advance-social-integrations' ), $this->label() );
 		}
 		$detail = '';
 		if ( isset( $body['error']['message'] ) ) {
@@ -706,9 +706,9 @@ abstract class AbstractNetwork {
 		return trim(
 			$this->commenting
 				/* translators: 1: network name, 2: reason from the network */
-				? sprintf( __( '%1$s did not accept the comment. %2$s', 'social-integrations' ), $this->label(), $detail )
+				? sprintf( __( '%1$s did not accept the comment. %2$s', 'advance-social-integrations' ), $this->label(), $detail )
 				/* translators: 1: network name, 2: reason from the network */
-				: sprintf( __( '%1$s did not accept the post. %2$s', 'social-integrations' ), $this->label(), $detail )
+				: sprintf( __( '%1$s did not accept the post. %2$s', 'advance-social-integrations' ), $this->label(), $detail )
 		);
 	}
 }

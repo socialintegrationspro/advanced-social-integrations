@@ -43,16 +43,16 @@ final class Campaigns {
 	public static function check( array $body ): ?\WP_Error {
 		$post_id = (int) ( $body['post_id'] ?? 0 );
 		if ( $post_id && ! PostTypes::post( $post_id ) ) {
-			return new \WP_Error( 'sint_not_found', __( 'This item does not exist.', 'social-integrations' ), array( 'status' => 404 ) );
+			return new \WP_Error( 'sint_not_found', __( 'This item does not exist.', 'advance-social-integrations' ), array( 'status' => 404 ) );
 		}
 		if ( ! array_filter( (array) ( $body['accounts'] ?? array() ) ) ) {
-			return new \WP_Error( 'sint_no_accounts', __( 'Select at least one account.', 'social-integrations' ), array( 'status' => 400 ) );
+			return new \WP_Error( 'sint_no_accounts', __( 'Select at least one account.', 'advance-social-integrations' ), array( 'status' => 400 ) );
 		}
 		if ( ! Accounts::can_use( array_map( 'sanitize_key', (array) $body['accounts'] ) ) ) {
 			return self::not_allowed();
 		}
 		if ( ! empty( $body['scheduled_at'] ) && ! strtotime( (string) $body['scheduled_at'] ) ) {
-			return new \WP_Error( 'sint_bad_date', __( 'Enter a valid date and time.', 'social-integrations' ), array( 'status' => 400 ) );
+			return new \WP_Error( 'sint_bad_date', __( 'Enter a valid date and time.', 'advance-social-integrations' ), array( 'status' => 400 ) );
 		}
 		return null;
 	}
@@ -259,7 +259,7 @@ final class Campaigns {
 	 * The error for an account that the current user cannot use.
 	 */
 	public static function not_allowed(): \WP_Error {
-		return new \WP_Error( 'sint_account_not_allowed', __( 'You cannot share to one or more of the selected accounts. Select only your accounts.', 'social-integrations' ), array( 'status' => 403 ) );
+		return new \WP_Error( 'sint_account_not_allowed', __( 'You cannot share to one or more of the selected accounts. Select only your accounts.', 'advance-social-integrations' ), array( 'status' => 403 ) );
 	}
 
 	/**
@@ -343,7 +343,7 @@ final class Campaigns {
 			$status  = $on ? 'active' : 'paused';
 			$actions = array( 'edit', 'duplicate', 'delete', $on ? 'pause' : 'resume' );
 		} else {
-			$name    = '' !== $row['name'] ? (string) $row['name'] : __( '(no caption)', 'social-integrations' );
+			$name    = '' !== $row['name'] ? (string) $row['name'] : __( '(no caption)', 'advance-social-integrations' );
 			$status  = self::single_status( $by, $total );
 			$actions = array( 'edit', 'duplicate', 'delete' );
 		}

@@ -1,4 +1,4 @@
-// The block editor bundle: the Social Integrations sidebar and the "Social" control in
+// The block editor bundle: the Advance Social Integrations sidebar and the "Social" control in
 // the block toolbar. backend/Editor/SidebarPanel.php loads it.
 import './editor.css'
 import { registerBlockControl } from './BlockControl'
@@ -15,8 +15,8 @@ if (PluginSidebar) {
     icon: ShareIcon,
     render: () => (
       <Fragment>
-        {PluginSidebarMoreMenuItem && <PluginSidebarMoreMenuItem target="sidebar">{__('Social Integrations', 'social-integrations')}</PluginSidebarMoreMenuItem>}
-        <PluginSidebar name="sidebar" title={__('Social Integrations', 'social-integrations')} icon={ShareIcon}>
+        {PluginSidebarMoreMenuItem && <PluginSidebarMoreMenuItem target="sidebar">{__('Advance Social Integrations', 'advance-social-integrations')}</PluginSidebarMoreMenuItem>}
+        <PluginSidebar name="sidebar" title={__('Advance Social Integrations', 'advance-social-integrations')} icon={ShareIcon}>
           <SidebarContent />
         </PluginSidebar>
       </Fragment>

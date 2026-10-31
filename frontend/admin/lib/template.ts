@@ -84,16 +84,16 @@ export function tokenLabel(name: string, fields: { key: string; label: string }[
     return fields.find((f) => f.key === key)?.label ?? key
   }
   const labels: Record<string, string> = {
-    title: __('Title', 'social-integrations'),
-    excerpt: __('Excerpt', 'social-integrations'),
-    url: __('Link', 'social-integrations'),
-    tags: __('Tags', 'social-integrations'),
-    author: __('Author', 'social-integrations'),
-    site: __('Site name', 'social-integrations'),
-    text: __('Post text', 'social-integrations'),
-    price: __('Price', 'social-integrations'),
-    regular_price: __('Regular price', 'social-integrations'),
-    sale_price: __('Sale price', 'social-integrations'),
+    title: __('Title', 'advance-social-integrations'),
+    excerpt: __('Excerpt', 'advance-social-integrations'),
+    url: __('Link', 'advance-social-integrations'),
+    tags: __('Tags', 'advance-social-integrations'),
+    author: __('Author', 'advance-social-integrations'),
+    site: __('Site name', 'advance-social-integrations'),
+    text: __('Post text', 'advance-social-integrations'),
+    price: __('Price', 'advance-social-integrations'),
+    regular_price: __('Regular price', 'advance-social-integrations'),
+    sale_price: __('Sale price', 'advance-social-integrations'),
   }
   return labels[name] ?? name
 }
@@ -101,11 +101,11 @@ export function tokenLabel(name: string, fields: { key: string; label: string }[
 /** Short texts for the modifiers of a chip, such as ['UPPERCASE', '20 words']. */
 export function modifierBadges(mods: Modifier[]): string[] {
   return mods.map(([name, arg]) => {
-    if (name === 'upper') return __('UPPERCASE', 'social-integrations')
-    if (name === 'lower') return __('lowercase', 'social-integrations')
-    if (name === 'title') return __('Title Case', 'social-integrations')
-    if (name === 'words') return sprintf(__('%s words', 'social-integrations'), arg)
-    if (name === 'chars') return sprintf(__('%s characters', 'social-integrations'), arg)
-    return sprintf(__('if empty: %s', 'social-integrations'), arg)
+    if (name === 'upper') return __('UPPERCASE', 'advance-social-integrations')
+    if (name === 'lower') return __('lowercase', 'advance-social-integrations')
+    if (name === 'title') return __('Title Case', 'advance-social-integrations')
+    if (name === 'words') return sprintf(__('%s words', 'advance-social-integrations'), arg)
+    if (name === 'chars') return sprintf(__('%s characters', 'advance-social-integrations'), arg)
+    return sprintf(__('if empty: %s', 'advance-social-integrations'), arg)
   })
 }

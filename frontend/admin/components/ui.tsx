@@ -85,7 +85,7 @@ export function AccountAvatar({ account, network, large }: { account: Account; n
 export function AccountToggle({ account, network, on, disabled, onToggle }: { account: Account; network?: Network; on: boolean; disabled?: boolean; onToggle: () => void }) {
   const label = network?.label ?? account.network
   return (
-    <button type="button" className={account.status === 'expired' ? 'sint-pick expired' : 'sint-pick'} aria-pressed={on} disabled={disabled} title={`${account.name} · ${label}`} aria-label={account.status === 'expired' ? sprintf(__('%1$s, %2$s: sign-in expired', 'social-integrations'), account.name, label) : `${account.name}, ${label}`} onClick={onToggle}>
+    <button type="button" className={account.status === 'expired' ? 'sint-pick expired' : 'sint-pick'} aria-pressed={on} disabled={disabled} title={`${account.name} · ${label}`} aria-label={account.status === 'expired' ? sprintf(__('%1$s, %2$s: sign-in expired', 'advance-social-integrations'), account.name, label) : `${account.name}, ${label}`} onClick={onToggle}>
       {account.avatar ? <img src={account.avatar} alt="" /> : initials(account.name)}
       <NetBadge network={account.network} color={network?.color} />
     </button>
@@ -116,7 +116,7 @@ export function HelpTip({ id, side = 'top', children }: { id: string; side?: 'to
       <button
         type="button"
         className="sint-tip-btn"
-        aria-label={__('More information', 'social-integrations')}
+        aria-label={__('More information', 'advance-social-integrations')}
         aria-describedby={id}
         aria-expanded={open}
         onClick={(e) => {
@@ -312,7 +312,7 @@ export function Modal({ title, onClose, children, footer, narrow, drawer, header
         <div className="sint-modal-head">
           <h2>{title}</h2>
           {headerExtra}
-          <button type="button" className="sint-icon-btn sm" style={{ marginLeft: 'auto' }} aria-label={__('Close', 'social-integrations')} onClick={onClose}>
+          <button type="button" className="sint-icon-btn sm" style={{ marginLeft: 'auto' }} aria-label={__('Close', 'advance-social-integrations')} onClick={onClose}>
             <Icon name="close" size={16} stroke={2} />
           </button>
         </div>
@@ -338,7 +338,7 @@ export function ConfirmDialog({ title, children, confirmLabel, onConfirm, onClos
   }
   const footer = (
     <>
-      <button type="button" className="sint-btn sm" style={{ marginLeft: 'auto' }} disabled={busy} onClick={close}>{__('Cancel', 'social-integrations')}</button>
+      <button type="button" className="sint-btn sm" style={{ marginLeft: 'auto' }} disabled={busy} onClick={close}>{__('Cancel', 'advance-social-integrations')}</button>
       <button type="button" className="sint-btn danger solid sm" disabled={busy} onClick={confirm}>
         {busy && <Spinner size={14} />}
         {confirmLabel}
@@ -380,7 +380,7 @@ export function CopyField({ value, labelledBy }: { value: string; labelledBy?: s
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } else {
-      toast(__('Select the URL and copy it.', 'social-integrations'), true)
+      toast(__('Select the URL and copy it.', 'advance-social-integrations'), true)
     }
   }
   return (
@@ -388,7 +388,7 @@ export function CopyField({ value, labelledBy }: { value: string; labelledBy?: s
       <input className="sint-input" readOnly value={value} aria-labelledby={labelledBy} onFocus={(e) => e.target.select()} />
       <button type="button" className={`sint-btn sm${copied ? ' copied' : ''}`} onClick={copy} aria-live="polite">
         <Icon name={copied ? 'check' : 'copy'} size={15} stroke={2} />
-        {copied ? __('Copied', 'social-integrations') : __('Copy', 'social-integrations')}
+        {copied ? __('Copied', 'advance-social-integrations') : __('Copy', 'advance-social-integrations')}
       </button>
     </div>
   )
@@ -449,7 +449,7 @@ export function Spinner({ size = 16, label }: { size?: number; label?: string })
 }
 
 /** Loads the data of a screen again. The icon turns while the request runs. */
-export function RefreshButton({ loading, onClick, label = __('Refresh', 'social-integrations') }: { loading: boolean; onClick: () => void; label?: string }) {
+export function RefreshButton({ loading, onClick, label = __('Refresh', 'advance-social-integrations') }: { loading: boolean; onClick: () => void; label?: string }) {
   return (
     <button type="button" className={`sint-icon-btn sint-refresh${loading ? ' spinning' : ''}`} onClick={onClick} disabled={loading} aria-label={label} title={label} aria-busy={loading}>
       <Icon name="retry" size={17} stroke={2} />
@@ -468,7 +468,7 @@ export function LoadError({ message, onRetry, busy }: { message: string; onRetry
       </span>
       <button type="button" className="sint-btn sm" onClick={onRetry} disabled={busy}>
         {busy ? <Spinner size={14} /> : <Icon name="retry" size={14} stroke={2} />}
-        {__('Try again', 'social-integrations')}
+        {__('Try again', 'advance-social-integrations')}
       </button>
     </div>
   )
@@ -478,7 +478,7 @@ export function LoadError({ message, onRetry, busy }: { message: string; onRetry
 export function SkeletonTable({ rows = 5, cols = 5 }: { rows?: number; cols?: number }) {
   return (
     <div className="sint-table-wrap sint-skel-table" aria-busy="true">
-      <span className="sint-sr">{__('Loading', 'social-integrations')}</span>
+      <span className="sint-sr">{__('Loading', 'advance-social-integrations')}</span>
       {Array.from({ length: rows + 1 }, (_, r) => (
         <div key={r} className={`sint-skel-row${r === 0 ? ' head' : ''}`} style={{ gridTemplateColumns: `2fr repeat(${cols - 1}, 1fr)` }}>
           {Array.from({ length: cols }, (_, c) => <span key={c} className="sint-skeleton" />)}
@@ -492,7 +492,7 @@ export function SkeletonTable({ rows = 5, cols = 5 }: { rows?: number; cols?: nu
 export function SkeletonList({ rows = 4 }: { rows?: number }) {
   return (
     <div className="sint-skel-list" aria-busy="true">
-      <span className="sint-sr">{__('Loading', 'social-integrations')}</span>
+      <span className="sint-sr">{__('Loading', 'advance-social-integrations')}</span>
       {Array.from({ length: rows }, (_, i) => (
         <div key={i} className="sint-skel-item">
           <span className="sint-skeleton dot" />
@@ -552,20 +552,20 @@ export function Pagination({ page, pages, size, total, setPage, setSize }: Pager
   const from = (page - 1) * size + 1
   const to = Math.min(total, page * size)
   return (
-    <nav className="sint-pager" aria-label={__('Pages', 'social-integrations')}>
+    <nav className="sint-pager" aria-label={__('Pages', 'advance-social-integrations')}>
       <label className="sint-pager-size">
-        {__('Rows per page', 'social-integrations')}
+        {__('Rows per page', 'advance-social-integrations')}
         <select className="sint-select" value={size} onChange={(e) => setSize(Number(e.target.value))}>
           {PAGE_SIZES.map((n) => <option key={n} value={n}>{n}</option>)}
         </select>
       </label>
-      <span className="sint-pager-range">{sprintf(__('%1$d–%2$d of %3$d', 'social-integrations'), from, to, total)}</span>
+      <span className="sint-pager-range">{sprintf(__('%1$d–%2$d of %3$d', 'advance-social-integrations'), from, to, total)}</span>
       <span className="sint-pager-btns">
-        <button type="button" className="sint-icon-btn sm" aria-label={__('Previous page', 'social-integrations')} disabled={page <= 1} onClick={() => setPage(page - 1)}>
+        <button type="button" className="sint-icon-btn sm" aria-label={__('Previous page', 'advance-social-integrations')} disabled={page <= 1} onClick={() => setPage(page - 1)}>
           <Icon name="left" size={16} stroke={2} />
         </button>
-        <span className="sint-pager-page">{sprintf(__('Page %1$d of %2$d', 'social-integrations'), page, pages)}</span>
-        <button type="button" className="sint-icon-btn sm" aria-label={__('Next page', 'social-integrations')} disabled={page >= pages} onClick={() => setPage(page + 1)}>
+        <span className="sint-pager-page">{sprintf(__('Page %1$d of %2$d', 'advance-social-integrations'), page, pages)}</span>
+        <button type="button" className="sint-icon-btn sm" aria-label={__('Next page', 'advance-social-integrations')} disabled={page >= pages} onClick={() => setPage(page + 1)}>
           <Icon name="right" size={16} stroke={2} />
         </button>
       </span>

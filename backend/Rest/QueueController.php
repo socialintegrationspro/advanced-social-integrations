@@ -118,13 +118,13 @@ final class QueueController extends RestController {
 			return $job;
 		}
 		if ( ! in_array( $job['status'], array( 'draft', 'scheduled', 'failed' ), true ) ) {
-			return $this->error( 'sent', __( 'The plugin sent this share already.', 'social-integrations' ), 409 );
+			return $this->error( 'sent', __( 'The plugin sent this share already.', 'advance-social-integrations' ), 409 );
 		}
 
 		$body = (array) $request->get_json_params();
 		$when = empty( $body['scheduled_at'] ) ? time() : strtotime( (string) $body['scheduled_at'] );
 		if ( ! $when ) {
-			return $this->error( 'bad_date', __( 'Enter a valid date and time.', 'social-integrations' ) );
+			return $this->error( 'bad_date', __( 'Enter a valid date and time.', 'advance-social-integrations' ) );
 		}
 
 		$draft  = ! empty( $body['draft'] ) || ! current_user_can( Capabilities::PUBLISH );
@@ -143,7 +143,7 @@ final class QueueController extends RestController {
 		}
 		// The scheduler can claim the row after this request reads it.
 		if ( ! Queue::update( $job['id'], $fields, $job['status'] ) ) {
-			return $this->error( 'sending', __( 'The plugin sends this share now.', 'social-integrations' ), 409 );
+			return $this->error( 'sending', __( 'The plugin sends this share now.', 'advance-social-integrations' ), 409 );
 		}
 
 		if ( $draft ) {
@@ -152,7 +152,7 @@ final class QueueController extends RestController {
 		if ( empty( $body['scheduled_at'] ) ) {
 			$result = Publisher::send_now( $job['id'] );
 			if ( null === $result ) {
-				return $this->error( 'sending', __( 'The plugin sends this share now.', 'social-integrations' ), 409 );
+				return $this->error( 'sending', __( 'The plugin sends this share now.', 'advance-social-integrations' ), 409 );
 			}
 			return rest_ensure_response( array( 'result' => $result ) );
 		}
@@ -173,7 +173,7 @@ final class QueueController extends RestController {
 			return $job;
 		}
 		if ( 'sending' === $job['status'] ) {
-			return $this->error( 'sending', __( 'The plugin sends this share now.', 'social-integrations' ), 409 );
+			return $this->error( 'sending', __( 'The plugin sends this share now.', 'advance-social-integrations' ), 409 );
 		}
 		Queue::delete( $job['id'] );
 		do_action( Hooks::SHARE_DELETED, $job );
@@ -188,7 +188,7 @@ final class QueueController extends RestController {
 	 */
 	private function job( \WP_REST_Request $request ) {
 		$job = Queue::find( (int) $request['id'] );
-		return $job && Accounts::can_use( array( (string) $job['account_id'] ) ) ? $job : $this->not_found( __( 'This share does not exist.', 'social-integrations' ) );
+		return $job && Accounts::can_use( array( (string) $job['account_id'] ) ) ? $job : $this->not_found( __( 'This share does not exist.', 'advance-social-integrations' ) );
 	}
 
 	/**
@@ -213,11 +213,11 @@ final class QueueController extends RestController {
 			'failed'
 		);
 		if ( ! $reset ) {
-			return $this->error( 'not_failed', __( 'You can send only a failed share again.', 'social-integrations' ), 409 );
+			return $this->error( 'not_failed', __( 'You can send only a failed share again.', 'advance-social-integrations' ), 409 );
 		}
 		$result = Publisher::send_now( $job['id'] );
 		if ( null === $result ) {
-			return $this->error( 'sending', __( 'The plugin sends this share now.', 'social-integrations' ), 409 );
+			return $this->error( 'sending', __( 'The plugin sends this share now.', 'advance-social-integrations' ), 409 );
 		}
 		do_action( Hooks::SHARE_RETRIED, $job, $result );
 		return rest_ensure_response( $result );
@@ -344,7 +344,7 @@ final class QueueController extends RestController {
 	public function log_tries( \WP_REST_Request $request ) {
 		$tries = Queue::log_tries( (int) $request['id'], Accounts::allowed() );
 		if ( null === $tries ) {
-			return $this->not_found( __( 'This log entry does not exist.', 'social-integrations' ) );
+			return $this->not_found( __( 'This log entry does not exist.', 'advance-social-integrations' ) );
 		}
 		foreach ( $tries as &$try ) {
 			$try['created_at'] = \SocialIntegrations\Support\Dates::iso( $try['created_at'] );
@@ -363,7 +363,7 @@ final class QueueController extends RestController {
 	public function delete_logs( \WP_REST_Request $request ) {
 		$keys = array_slice( array_map( 'strval', (array) ( $request->get_json_params()['keys'] ?? array() ) ), 0, 100 );
 		if ( ! $keys ) {
-			return $this->error( 'no_keys', __( 'Select at least one entry.', 'social-integrations' ), 400 );
+			return $this->error( 'no_keys', __( 'Select at least one entry.', 'advance-social-integrations' ), 400 );
 		}
 		$deleted = Queue::delete_log_entries( $keys );
 		do_action( Hooks::LOGS_DELETED, $keys, $deleted );

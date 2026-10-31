@@ -34,7 +34,7 @@ describe('App', () => {
     fakeServer(routes())
     render(<App />)
 
-    const nav = screen.getByRole('navigation', { name: 'Social Integrations' })
+    const nav = screen.getByRole('navigation', { name: 'Advance Social Integrations' })
     expect(within(nav).getAllByRole('link').map((a) => a.textContent)).toEqual(['Dashboard', 'Calendar', 'Campaigns', 'Accounts', 'Share log'])
     expect(within(nav).getByRole('link', { name: 'Dashboard' })).toHaveAttribute('aria-current', 'page')
     expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute('href', '#/settings')

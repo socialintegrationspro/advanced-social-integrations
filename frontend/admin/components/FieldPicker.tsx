@@ -58,18 +58,18 @@ export function FieldPicker({ label, fields, loading, onPick }: Props) {
       {open && (
         <div className="sint-fp-panel" role="group" aria-label={label}>
           {searchable && (
-            <input ref={search} type="search" className="sint-input" placeholder={__('Search', 'social-integrations')} aria-label={sprintf(__('Search: %s', 'social-integrations'), label)} value={query} onChange={(e) => setQuery(e.target.value)} />
+            <input ref={search} type="search" className="sint-input" placeholder={__('Search', 'advance-social-integrations')} aria-label={sprintf(__('Search: %s', 'advance-social-integrations'), label)} value={query} onChange={(e) => setQuery(e.target.value)} />
           )}
-          {loading && <p className="sint-fp-empty">{__('Wait…', 'social-integrations')}</p>}
-          {!loading && fields.length === 0 && <p className="sint-fp-empty">{__('The posts of this type have no custom fields.', 'social-integrations')}</p>}
-          {!loading && fields.length > 0 && shown.length === 0 && <p className="sint-fp-empty">{__('No field matches the search.', 'social-integrations')}</p>}
+          {loading && <p className="sint-fp-empty">{__('Wait…', 'advance-social-integrations')}</p>}
+          {!loading && fields.length === 0 && <p className="sint-fp-empty">{__('The posts of this type have no custom fields.', 'advance-social-integrations')}</p>}
+          {!loading && fields.length > 0 && shown.length === 0 && <p className="sint-fp-empty">{__('No field matches the search.', 'advance-social-integrations')}</p>}
           <ul className="sint-fp-list">
             {shown.map((f) => (
               <li key={f.key}>
                 <button type="button" onClick={() => { onPick(f); setOpen(false); trigger.current?.focus() }}>
                   <span className="t">{f.label}</span>
                   <span className="sint-code">{f.key}</span>
-                  {f.sample && <span className="s">{sprintf(__('For example: %s', 'social-integrations'), f.sample)}</span>}
+                  {f.sample && <span className="s">{sprintf(__('For example: %s', 'advance-social-integrations'), f.sample)}</span>}
                 </button>
               </li>
             ))}

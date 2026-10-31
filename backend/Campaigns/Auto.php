@@ -68,7 +68,7 @@ final class Auto {
 			$labels[] = $all[ $type ]['label'] ?? $type;
 		}
 		/* translators: %s: post type names, such as "Posts, Pages". */
-		return sprintf( __( 'New %s', 'social-integrations' ), implode( ', ', $labels ) );
+		return sprintf( __( 'New %s', 'advance-social-integrations' ), implode( ', ', $labels ) );
 	}
 
 	/**
@@ -113,7 +113,7 @@ final class Auto {
 		}
 		// Its last account was disconnected. An empty list shares to every account, so the user selects accounts first.
 		if ( $active && ! empty( $campaign['no_accounts'] ) ) {
-			return new \WP_Error( 'sint_no_accounts', __( 'This campaign has no accounts. Edit the campaign and select an account.', 'social-integrations' ), array( 'status' => 409 ) );
+			return new \WP_Error( 'sint_no_accounts', __( 'This campaign has no accounts. Edit the campaign and select an account.', 'advance-social-integrations' ), array( 'status' => 409 ) );
 		}
 		$campaign['active'] = $active;
 		return self::save( $campaign, $id );

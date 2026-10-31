@@ -55,7 +55,7 @@ final class Assets {
 		wp_enqueue_media();
 
 		wp_add_inline_script( self::HANDLE, 'window.sintConfig = ' . wp_json_encode( $this->config() ) . ';', 'before' );
-		wp_set_script_translations( self::HANDLE, 'social-integrations', SINT_PATH . 'languages' );
+		wp_set_script_translations( self::HANDLE, 'advance-social-integrations', SINT_PATH . 'languages' );
 	}
 
 	/**
@@ -100,7 +100,7 @@ final class Assets {
 	 * Shown when `build/` is missing.
 	 */
 	public function missing_build_notice(): void {
-		echo '<div class="notice notice-error"><p>' . esc_html__( 'Social Integrations cannot find its built files. Run the build. Then reload this page.', 'social-integrations' ) . '</p></div>';
+		echo '<div class="notice notice-error"><p>' . esc_html__( 'Advance Social Integrations cannot find its built files. Run the build. Then reload this page.', 'advance-social-integrations' ) . '</p></div>';
 	}
 
 	/**

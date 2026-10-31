@@ -93,10 +93,10 @@ final class AccountsController extends RestController {
 	public function connect( \WP_REST_Request $request ) {
 		$network = $this->networks->get( (string) $request['network'] );
 		if ( ! $network ) {
-			return $this->error( 'unknown_network', __( 'This network is not available.', 'social-integrations' ), 404 );
+			return $this->error( 'unknown_network', __( 'This network is not available.', 'advance-social-integrations' ), 404 );
 		}
 		if ( 'oauth2' === $network->auth_type() ) {
-			return $this->error( 'use_sign_in', __( 'Connect this network with sign-in.', 'social-integrations' ) );
+			return $this->error( 'use_sign_in', __( 'Connect this network with sign-in.', 'advance-social-integrations' ) );
 		}
 
 		$input = array();
@@ -123,7 +123,7 @@ final class AccountsController extends RestController {
 	public function impact( \WP_REST_Request $request ) {
 		$id = (string) $request['id'];
 		if ( ! Accounts::get( $id ) ) {
-			return $this->not_found( __( 'This account is not connected.', 'social-integrations' ) );
+			return $this->not_found( __( 'This account is not connected.', 'advance-social-integrations' ) );
 		}
 		return rest_ensure_response(
 			array(
@@ -149,10 +149,10 @@ final class AccountsController extends RestController {
 		// Counted first: the campaigns of other plugins forget the account in the action below.
 		$campaigns = $account ? Campaigns::count_using( $id ) : 0;
 		if ( ! $account || ! Accounts::delete( $id ) ) {
-			return $this->not_found( __( 'This account is not connected.', 'social-integrations' ) );
+			return $this->not_found( __( 'This account is not connected.', 'advance-social-integrations' ) );
 		}
 		unset( $account['credentials'] );
-		$shares = Queue::cancel_unsent( $id, __( 'The account was disconnected. The plugin did not share the post.', 'social-integrations' ) );
+		$shares = Queue::cancel_unsent( $id, __( 'The account was disconnected. The plugin did not share the post.', 'advance-social-integrations' ) );
 		Campaigns::forget_account( $id );
 		do_action( Hooks::ACCOUNT_DELETED, $id, $account );
 		return rest_ensure_response(
@@ -173,14 +173,14 @@ final class AccountsController extends RestController {
 	public function save_app( \WP_REST_Request $request ) {
 		$network = $this->networks->get( (string) $request['network'] );
 		if ( ! $network || 'oauth2' !== $network->auth_type() ) {
-			return $this->error( 'unknown_network', __( 'This network does not use an app.', 'social-integrations' ), 404 );
+			return $this->error( 'unknown_network', __( 'This network does not use an app.', 'advance-social-integrations' ), 404 );
 		}
 		$fields = array();
 		foreach ( $network->app_fields() as $field ) {
 			$value = trim( (string) $request->get_param( $field['name'] ) );
 			if ( '' === $value ) {
 				/* translators: %s: field label */
-				return $this->error( 'missing_field', sprintf( __( 'Enter the %s.', 'social-integrations' ), $field['label'] ) );
+				return $this->error( 'missing_field', sprintf( __( 'Enter the %s.', 'advance-social-integrations' ), $field['label'] ) );
 			}
 			$fields[ $field['name'] ] = $value;
 		}

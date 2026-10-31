@@ -56,7 +56,7 @@ export function SidebarContent() {
         setState(s)
         setError('')
       })
-      .catch((e: unknown) => setError(errorText(e, __('The share status did not load.', 'social-integrations'))))
+      .catch((e: unknown) => setError(errorText(e, __('The share status did not load.', 'advance-social-integrations'))))
       .finally(() => setLoading(false))
   }
 
@@ -74,7 +74,7 @@ export function SidebarContent() {
 
   if (error && !state) {
     return (
-      <Notice status="error" isDismissible={false} actions={loading ? [] : [{ label: __('Try again', 'social-integrations'), onClick: load }]}>
+      <Notice status="error" isDismissible={false} actions={loading ? [] : [{ label: __('Try again', 'advance-social-integrations'), onClick: load }]}>
         {error}
         {loading && <Spinner />}
       </Notice>
@@ -105,29 +105,29 @@ function SharePanel({ state, published, disabled, onChange }: { state: EditorSta
   const closed = state.shared || published === 'publish'
   let help: string
   if (state.shared) {
-    help = __('The plugin shared this post when you published it. An update does not share it again.', 'social-integrations')
+    help = __('The plugin shared this post when you published it. An update does not share it again.', 'advance-social-integrations')
   } else if (published === 'publish') {
-    help = __('This post is published. The plugin shares a post only when you publish it for the first time.', 'social-integrations')
+    help = __('This post is published. The plugin shares a post only when you publish it for the first time.', 'advance-social-integrations')
   } else if (!state.campaigns.length) {
-    help = __('No auto-post campaign shares this post type.', 'social-integrations')
+    help = __('No auto-post campaign shares this post type.', 'advance-social-integrations')
   } else if (disabled) {
-    help = __('The plugin does not share this post when you publish it.', 'social-integrations')
+    help = __('The plugin does not share this post when you publish it.', 'advance-social-integrations')
   } else {
     const delays = Array.from(new Set(state.campaigns.map((c) => delayText(c.delay))))
-    help = sprintf(__('The plugin shares the post %1$s after you publish it. Campaigns: %2$s.', 'social-integrations'), delays.join(', '), state.campaigns.map((c) => c.name).join(', '))
+    help = sprintf(__('The plugin shares the post %1$s after you publish it. Campaigns: %2$s.', 'advance-social-integrations'), delays.join(', '), state.campaigns.map((c) => c.name).join(', '))
   }
   return (
     <PanelBody>
       <ToggleControl
         __nextHasNoMarginBottom
-        label={__('Share when I publish', 'social-integrations')}
+        label={__('Share when I publish', 'advance-social-integrations')}
         checked={!disabled && !closed && state.campaigns.length > 0}
         disabled={closed || !state.campaigns.length}
         onChange={onChange}
         help={help}
       />
       {!closed && !state.campaigns.length && state.can_manage && (
-        <ExternalLink href={`${config.pageUrl}#/campaigns`}>{__('Create an auto-post campaign', 'social-integrations')}</ExternalLink>
+        <ExternalLink href={`${config.pageUrl}#/campaigns`}>{__('Create an auto-post campaign', 'advance-social-integrations')}</ExternalLink>
       )}
     </PanelBody>
   )
@@ -136,25 +136,25 @@ function SharePanel({ state, published, disabled, onChange }: { state: EditorSta
 function AccountsPanel({ state, chosen, onChange }: { state: EditorState; chosen: string[]; onChange: (ids: string[]) => void }) {
   const toggle = (id: string, on: boolean) => onChange(on ? [...chosen, id] : chosen.filter((c) => c !== id))
   return (
-    <PanelBody title={__('Accounts', 'social-integrations')} initialOpen={chosen.length > 0}>
+    <PanelBody title={__('Accounts', 'advance-social-integrations')} initialOpen={chosen.length > 0}>
       <p className="sint-ed-help">
         {chosen.length
-          ? __('The plugin shares this post only to the accounts that you select.', 'social-integrations')
-          : __('Each campaign shares to its own accounts. Select accounts to use other accounts for this post.', 'social-integrations')}
+          ? __('The plugin shares this post only to the accounts that you select.', 'advance-social-integrations')
+          : __('Each campaign shares to its own accounts. Select accounts to use other accounts for this post.', 'advance-social-integrations')}
       </p>
-      {state.accounts.length === 0 && <p className="sint-ed-help">{__('No account is connected.', 'social-integrations')}</p>}
+      {state.accounts.length === 0 && <p className="sint-ed-help">{__('No account is connected.', 'advance-social-integrations')}</p>}
       {state.accounts.map((a) => (
         <CheckboxControl
           key={a.id}
           __nextHasNoMarginBottom
           label={`${a.name} · ${networkName(a.network)}`}
-          help={a.status === 'expired' ? sprintf(__('%s sign-in expired. Reconnect the account.', 'social-integrations'), networkName(a.network)) : undefined}
+          help={a.status === 'expired' ? sprintf(__('%s sign-in expired. Reconnect the account.', 'advance-social-integrations'), networkName(a.network)) : undefined}
           checked={chosen.includes(a.id)}
           onChange={(on: boolean) => toggle(a.id, on)}
         />
       ))}
       {chosen.length > 0 && (
-        <Button variant="link" onClick={() => onChange([])}>{__('Use the campaign accounts', 'social-integrations')}</Button>
+        <Button variant="link" onClick={() => onChange([])}>{__('Use the campaign accounts', 'advance-social-integrations')}</Button>
       )}
     </PanelBody>
   )
@@ -183,10 +183,10 @@ function FieldsPanel({ nets, fields, onChange }: { nets: string[]; fields: Field
   }
 
   return (
-    <PanelBody title={__('Post options', 'social-integrations')} initialOpen={Object.keys(values).length > 0}>
-      <p className="sint-ed-help">{__('These values replace the values of the campaign for this post. Leave a field empty to use the campaign value.', 'social-integrations')}</p>
+    <PanelBody title={__('Post options', 'advance-social-integrations')} initialOpen={Object.keys(values).length > 0}>
+      <p className="sint-ed-help">{__('These values replace the values of the campaign for this post. Leave a field empty to use the campaign value.', 'advance-social-integrations')}</p>
       {shown.map(({ field, nets: on }) => {
-        const help = `${sprintf(__('For %s.', 'social-integrations'), on.map(networkName).join(', '))}${field.tokens ? ` ${__('You can use {title}, {excerpt}, {url}, {tags} and {author}.', 'social-integrations')}` : ''}`
+        const help = `${sprintf(__('For %s.', 'advance-social-integrations'), on.map(networkName).join(', '))}${field.tokens ? ` ${__('You can use {title}, {excerpt}, {url}, {tags} and {author}.', 'advance-social-integrations')}` : ''}`
         const value = values[field.name] ?? ''
         if (field.type === 'select') {
           return (
@@ -195,7 +195,7 @@ function FieldsPanel({ nets, fields, onChange }: { nets: string[]; fields: Field
               __nextHasNoMarginBottom
               label={field.label}
               value={value}
-              options={[{ value: '', label: __('Campaign setting', 'social-integrations') }, ...(field.options ?? [])]}
+              options={[{ value: '', label: __('Campaign setting', 'advance-social-integrations') }, ...(field.options ?? [])]}
               onChange={(v: string) => set(field.name, v)}
               help={help}
             />
@@ -234,33 +234,33 @@ function CaptionPanel({ post, nets, onChange }: { post: ReturnType<typeof usePos
 
   return (
     <Fragment>
-      <PanelBody title={__('Caption', 'social-integrations')} initialOpen={caption !== ''}>
+      <PanelBody title={__('Caption', 'advance-social-integrations')} initialOpen={caption !== ''}>
         <TextareaControl
           __nextHasNoMarginBottom
           id={CAPTION_ID}
-          label={__('Caption for this post', 'social-integrations')}
+          label={__('Caption for this post', 'advance-social-integrations')}
           value={caption}
           rows={5}
           onChange={onChange}
-          help={__('Leave it empty to use the caption of the campaign. Select a token to put a value of the post in the caption.', 'social-integrations')}
+          help={__('Leave it empty to use the caption of the campaign. Select a token to put a value of the post in the caption.', 'advance-social-integrations')}
         />
         <CaptionTools postId={post.id} caption={caption} onChange={onChange} />
       </PanelBody>
-      <PanelBody title={__('Preview', 'social-integrations')} initialOpen={false}>
+      <PanelBody title={__('Preview', 'advance-social-integrations')} initialOpen={false}>
         {!preview && !previewFailed && <Spinner />}
-        {previewFailed && <p className="sint-ed-help">{__('The preview did not load. Change the post to try again.', 'social-integrations')}</p>}
+        {previewFailed && <p className="sint-ed-help">{__('The preview did not load. Change the post to try again.', 'advance-social-integrations')}</p>}
         {preview && (
           <Fragment>
-            <div className="sint-ed-preview">{preview.caption || __('The caption is empty.', 'social-integrations')}</div>
+            <div className="sint-ed-preview">{preview.caption || __('The caption is empty.', 'advance-social-integrations')}</div>
             {preview.media.length > 0 && (
               <div className="sint-ed-media">
-                {preview.media.slice(0, 4).map((m, i) => (m.type === 'video' ? <span key={i} className="sint-ed-video">{__('Video', 'social-integrations')}</span> : <img key={i} src={m.url} alt="" />))}
+                {preview.media.slice(0, 4).map((m, i) => (m.type === 'video' ? <span key={i} className="sint-ed-video">{__('Video', 'advance-social-integrations')}</span> : <img key={i} src={m.url} alt="" />))}
               </div>
             )}
             <FieldLines nets={nets} fields={Array.isArray(preview.fields) ? {} : preview.fields} />
             {preview.blocks.length > 0 && (
               <Fragment>
-                <h3 className="sint-ed-sub">{__('Blocks in the post', 'social-integrations')}</h3>
+                <h3 className="sint-ed-sub">{__('Blocks in the post', 'advance-social-integrations')}</h3>
                 <ul className="sint-ed-blocks">
                   {preview.blocks.map((b, i) => (
                     <li key={i}>
@@ -301,8 +301,8 @@ function FieldLines({ nets, fields }: { nets: string[]; fields: FieldMap }) {
 function SharesPanel({ state, loading, error, onRefresh }: { state: EditorState; loading: boolean; error: string; onRefresh: () => void }) {
   const format = wp.date.getSettings().formats.datetime
   return (
-    <PanelBody title={__('Shares', 'social-integrations')} initialOpen={state.shares.length > 0}>
-      {state.shares.length === 0 && <p className="sint-ed-help">{__('This post has no shares yet.', 'social-integrations')}</p>}
+    <PanelBody title={__('Shares', 'advance-social-integrations')} initialOpen={state.shares.length > 0}>
+      {state.shares.length === 0 && <p className="sint-ed-help">{__('This post has no shares yet.', 'advance-social-integrations')}</p>}
       <ul className="sint-ed-shares">
         {state.shares.map((s) => (
           <li key={s.id}>
@@ -314,17 +314,17 @@ function SharesPanel({ state, loading, error, onRefresh }: { state: EditorState;
               {networkName(s.network)} · {wp.date.dateI18n(format, s.scheduled_at)}
             </div>
             {s.status === 'failed' && s.message && <div className="sint-ed-error">{s.message}</div>}
-            {s.remote_url && <ExternalLink href={s.remote_url}>{__('Open the post', 'social-integrations')}</ExternalLink>}
+            {s.remote_url && <ExternalLink href={s.remote_url}>{__('Open the post', 'advance-social-integrations')}</ExternalLink>}
           </li>
         ))}
       </ul>
       {error && <Notice status="error" isDismissible={false}>{error}</Notice>}
       <div className="sint-ed-row">
         <Button variant="secondary" size="compact" onClick={onRefresh} isBusy={loading} disabled={loading}>
-          {__('Refresh', 'social-integrations')}
+          {__('Refresh', 'advance-social-integrations')}
         </Button>
         {state.can_manage && state.shares.length > 0 && (
-          <ExternalLink href={`${config.pageUrl}#/log`}>{__('Open the share log', 'social-integrations')}</ExternalLink>
+          <ExternalLink href={`${config.pageUrl}#/log`}>{__('Open the share log', 'advance-social-integrations')}</ExternalLink>
         )}
       </div>
     </PanelBody>

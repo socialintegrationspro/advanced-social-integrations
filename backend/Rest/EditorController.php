@@ -81,7 +81,7 @@ final class EditorController extends RestController {
 	public function state( \WP_REST_Request $request ) {
 		$post = PostTypes::post( (int) $request['id'] );
 		if ( ! $post ) {
-			return $this->not_found( __( 'This item does not exist.', 'social-integrations' ) );
+			return $this->not_found( __( 'This item does not exist.', 'advance-social-integrations' ) );
 		}
 
 		$names = array();
@@ -148,7 +148,7 @@ final class EditorController extends RestController {
 	public function preview( \WP_REST_Request $request ) {
 		$post = PostTypes::post( (int) $request['id'] );
 		if ( ! $post ) {
-			return $this->not_found( __( 'This item does not exist.', 'social-integrations' ) );
+			return $this->not_found( __( 'This item does not exist.', 'advance-social-integrations' ) );
 		}
 
 		// A copy of the post with the editor's text. It keeps the ID, so terms, meta and

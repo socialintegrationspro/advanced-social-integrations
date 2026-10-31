@@ -14,7 +14,7 @@ export function FieldPreview({ nets, fields, link }: { nets: string[]; fields: F
     (network(n)?.post_fields ?? []).flatMap((field) => {
       const value = map[n]?.[field.name] ?? ''
       if (value === '' || (field.type !== 'text' && field.type !== 'textarea' && value === field.default)) return []
-      const shown = field.type === 'select' ? field.options?.find((o) => o.value === value)?.label ?? value : field.type === 'toggle' ? __('On', 'social-integrations') : value
+      const shown = field.type === 'select' ? field.options?.find((o) => o.value === value)?.label ?? value : field.type === 'toggle' ? __('On', 'advance-social-integrations') : value
       return [{ key: `${n}-${field.name}`, net: n, label: field.label, shown }]
     }),
   )
@@ -24,7 +24,7 @@ export function FieldPreview({ nets, fields, link }: { nets: string[]; fields: F
     <dl className="sint-field-preview">
       {link && (
         <div>
-          <dt>{__('Link', 'social-integrations')}</dt>
+          <dt>{__('Link', 'advance-social-integrations')}</dt>
           <dd>{link}</dd>
         </div>
       )}

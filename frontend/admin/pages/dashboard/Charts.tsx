@@ -13,14 +13,14 @@ const dayLabel = (date: string, options: Intl.DateTimeFormatOptions) =>
 /** Shares by status as one labelled strip: shared, scheduled, failed, drafts. */
 export function StatusStrip({ totals }: { totals: DashboardData['totals'] }) {
   const parts = [
-    { key: 'shared', label: __('Shared', 'social-integrations'), n: totals.published },
-    { key: 'scheduled', label: __('Scheduled', 'social-integrations'), n: totals.scheduled },
-    { key: 'failed', label: __('Failed', 'social-integrations'), n: totals.failed },
-    { key: 'drafts', label: __('Drafts', 'social-integrations'), n: totals.drafts },
+    { key: 'shared', label: __('Shared', 'advance-social-integrations'), n: totals.published },
+    { key: 'scheduled', label: __('Scheduled', 'advance-social-integrations'), n: totals.scheduled },
+    { key: 'failed', label: __('Failed', 'advance-social-integrations'), n: totals.failed },
+    { key: 'drafts', label: __('Drafts', 'advance-social-integrations'), n: totals.drafts },
   ]
   const total = parts.reduce((sum, p) => sum + p.n, 0)
   return (
-    <ul className="sint-strip" aria-label={__('Shares by status', 'social-integrations')}>
+    <ul className="sint-strip" aria-label={__('Shares by status', 'advance-social-integrations')}>
       {parts.map((p) => (
         // Each part keeps a minimum width, so a small count still has room for its label.
         <li key={p.key} className={p.key} style={{ flexGrow: Math.max(p.n, total * 0.12, 1) }}>
@@ -46,7 +46,7 @@ export function DayBars({ days }: { days: DashboardData['days'] }) {
     <figure className="sint-bars-fig">
       <div className={`sint-bars${long ? ' long' : ''}`} aria-hidden="true">
         {days.map((d, i) => {
-          const tip = sprintf(__('%1$s: %2$d shared, %3$d failed', 'social-integrations'), dayLabel(d.date, { weekday: 'short', day: 'numeric', month: 'short' }), d.published, d.failed)
+          const tip = sprintf(__('%1$s: %2$d shared, %3$d failed', 'advance-social-integrations'), dayLabel(d.date, { weekday: 'short', day: 'numeric', month: 'short' }), d.published, d.failed)
           // A long period labels every fifth day, counted back from today.
           const label = !long || (days.length - 1 - i) % 5 === 0
           return (
@@ -63,16 +63,16 @@ export function DayBars({ days }: { days: DashboardData['days'] }) {
         })}
       </div>
       <figcaption className="sint-legend">
-        <span><i className="shared" />{__('Shared', 'social-integrations')}</span>
-        <span><i className="failed" />{__('Failed', 'social-integrations')}</span>
+        <span><i className="shared" />{__('Shared', 'advance-social-integrations')}</span>
+        <span><i className="failed" />{__('Failed', 'advance-social-integrations')}</span>
       </figcaption>
       <table className="sint-sr">
-        <caption>{__('Shares for each day', 'social-integrations')}</caption>
+        <caption>{__('Shares for each day', 'advance-social-integrations')}</caption>
         <thead>
           <tr>
-            <th scope="col">{__('Day', 'social-integrations')}</th>
-            <th scope="col">{__('Shared', 'social-integrations')}</th>
-            <th scope="col">{__('Failed', 'social-integrations')}</th>
+            <th scope="col">{__('Day', 'advance-social-integrations')}</th>
+            <th scope="col">{__('Shared', 'advance-social-integrations')}</th>
+            <th scope="col">{__('Failed', 'advance-social-integrations')}</th>
           </tr>
         </thead>
         <tbody>
@@ -103,7 +103,7 @@ export function SuccessRing({ shared, failed }: { shared: number; failed: number
       </svg>
       <div className="c">
         <b>{sent ? <><CountUp value={rate} />%</> : '–'}</b>
-        <span>{__('Success rate', 'social-integrations')}</span>
+        <span>{__('Success rate', 'advance-social-integrations')}</span>
       </div>
     </div>
   )
@@ -123,7 +123,7 @@ export function NetworkBars({ rows, network }: { rows: DashboardData['networks']
               <span className="n">{network(r.network)?.label ?? r.network}</span>
               <b>{n}</b>
             </div>
-            <span className="track" title={sprintf(__('%1$d shared, %2$d failed', 'social-integrations'), r.published, r.failed)}>
+            <span className="track" title={sprintf(__('%1$d shared, %2$d failed', 'advance-social-integrations'), r.published, r.failed)}>
               <m.span className="fill" style={{ width: `${(n / max) * 100}%`, originX: 0 }} initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.6, ease: easeOut, delay: 0.25 }} />
             </span>
           </li>

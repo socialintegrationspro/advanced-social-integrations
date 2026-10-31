@@ -46,7 +46,7 @@ export function AccountsPage({ params, go }: PageProps) {
     try {
       await reload()
     } catch (e) {
-      toast(sprintf(__('The accounts did not load. %s', 'social-integrations'), (e as Error).message), true)
+      toast(sprintf(__('The accounts did not load. %s', 'advance-social-integrations'), (e as Error).message), true)
     }
     setRefreshing(false)
   }
@@ -64,7 +64,7 @@ export function AccountsPage({ params, go }: PageProps) {
   useEffect(() => {
     const done = params.get('connected')
     if (done) {
-      toast(sprintf(__('%s is connected.', 'social-integrations'), network(done)?.label ?? done))
+      toast(sprintf(__('%s is connected.', 'advance-social-integrations'), network(done)?.label ?? done))
       reload()
       go('accounts')
     }
@@ -81,7 +81,7 @@ export function AccountsPage({ params, go }: PageProps) {
     try {
       const r = await api.del<{ shares?: number }>(`accounts/${account.id}`)
       const shares = r.data.shares ?? 0
-      toast(shares ? sprintf(_n('Account disconnected. The plugin stopped %d scheduled share.', 'Account disconnected. The plugin stopped %d scheduled shares.', shares, 'social-integrations'), shares) : __('Account disconnected.', 'social-integrations'))
+      toast(shares ? sprintf(_n('Account disconnected. The plugin stopped %d scheduled share.', 'Account disconnected. The plugin stopped %d scheduled shares.', shares, 'advance-social-integrations'), shares) : __('Account disconnected.', 'advance-social-integrations'))
       await reload()
     } catch (e) {
       toast((e as Error).message, true)
@@ -93,7 +93,7 @@ export function AccountsPage({ params, go }: PageProps) {
   // A closed notice shows again when another sign-in expires.
   const { expired, shown, dismiss } = useExpiredNotices(accounts)
   const closeButton = (ids: string[]) => (
-    <button type="button" className="sint-icon-btn sm" style={{ border: 0, background: 'transparent', color: 'var(--warn-text)', flex: '0 0 auto' }} aria-label={__('Close the notice', 'social-integrations')} onClick={() => dismiss(ids)}>
+    <button type="button" className="sint-icon-btn sm" style={{ border: 0, background: 'transparent', color: 'var(--warn-text)', flex: '0 0 auto' }} aria-label={__('Close the notice', 'advance-social-integrations')} onClick={() => dismiss(ids)}>
       <Icon name="close" size={16} stroke={2.2} />
     </button>
   )
@@ -102,19 +102,19 @@ export function AccountsPage({ params, go }: PageProps) {
 
   return (
     <>
-      <Header title={__('Accounts', 'social-integrations')}>
+      <Header title={__('Accounts', 'advance-social-integrations')}>
         {/* Filter `sint.accounts.actions`: other plugins add buttons next to Refresh. */}
         {applyFilters<ReactNode[]>('sint.accounts.actions', [], { go, reload })}
-        <RefreshButton loading={refreshing} onClick={refresh} label={__('Refresh the accounts', 'social-integrations')} />
+        <RefreshButton loading={refreshing} onClick={refresh} label={__('Refresh the accounts', 'advance-social-integrations')} />
       </Header>
       <div className="sint-body">
-        <p className="sint-sub">{__('The plugin keeps sign-in tokens encrypted on your site. It sends each token only to its network.', 'social-integrations')}</p>
+        <p className="sint-sub">{__('The plugin keeps sign-in tokens encrypted on your site. It sends each token only to its network.', 'advance-social-integrations')}</p>
 
         {error && (
           <div className="sint-banner bad">
             <Icon name="alert" size={20} />
             <div style={{ flex: 1 }}>{error}</div>
-            <button type="button" className="sint-btn ghost sm" onClick={() => { setError(''); go('accounts') }}>{__('Dismiss', 'social-integrations')}</button>
+            <button type="button" className="sint-btn ghost sm" onClick={() => { setError(''); go('accounts') }}>{__('Dismiss', 'advance-social-integrations')}</button>
           </div>
         )}
 
@@ -125,13 +125,13 @@ export function AccountsPage({ params, go }: PageProps) {
               <Icon name="alert" size={20} />
               <div style={{ minWidth: 0, flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <div>
-                  <div style={{ fontWeight: 700 }}>{sprintf(__('%d accounts: sign-in expired', 'social-integrations'), expired.length)}</div>
-                  <div style={{ fontSize: 13, color: 'var(--warn-text)' }}>{__('Shares to these accounts stop until you reconnect them. Scheduled shares wait.', 'social-integrations')}</div>
+                  <div style={{ fontWeight: 700 }}>{sprintf(__('%d accounts: sign-in expired', 'advance-social-integrations'), expired.length)}</div>
+                  <div style={{ fontSize: 13, color: 'var(--warn-text)' }}>{__('Shares to these accounts stop until you reconnect them. Scheduled shares wait.', 'advance-social-integrations')}</div>
                 </div>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                   {expired.map((a) => (
                     <button key={a.id} type="button" className="sint-btn warn sm" onClick={() => setConnecting(network(a.network) ?? null, a.via)}>
-                      {sprintf(__('Reconnect %1$s (%2$s)', 'social-integrations'), a.name || a.username, network(a.network)?.label ?? a.network)}
+                      {sprintf(__('Reconnect %1$s (%2$s)', 'advance-social-integrations'), a.name || a.username, network(a.network)?.label ?? a.network)}
                     </button>
                   ))}
                 </div>
@@ -144,10 +144,10 @@ export function AccountsPage({ params, go }: PageProps) {
             <div key={a.id} className="sint-banner warn">
               <Icon name="alert" size={20} />
               <div style={{ minWidth: 0 }}>
-                <div style={{ fontWeight: 700 }}>{sprintf(__('%1$s on %2$s: sign-in expired', 'social-integrations'), a.name || a.username, network(a.network)?.label ?? a.network)}</div>
-                <div style={{ fontSize: 13, color: 'var(--warn-text)' }}>{__('Shares to this account stop until you reconnect it. Scheduled shares wait.', 'social-integrations')}</div>
+                <div style={{ fontWeight: 700 }}>{sprintf(__('%1$s on %2$s: sign-in expired', 'advance-social-integrations'), a.name || a.username, network(a.network)?.label ?? a.network)}</div>
+                <div style={{ fontSize: 13, color: 'var(--warn-text)' }}>{__('Shares to this account stop until you reconnect it. Scheduled shares wait.', 'advance-social-integrations')}</div>
               </div>
-              <button type="button" className="sint-btn warn" style={{ marginLeft: 'auto' }} onClick={() => setConnecting(network(a.network) ?? null, a.via)}>{__('Reconnect', 'social-integrations')}</button>
+              <button type="button" className="sint-btn warn" style={{ marginLeft: 'auto' }} onClick={() => setConnecting(network(a.network) ?? null, a.via)}>{__('Reconnect', 'advance-social-integrations')}</button>
               {closeButton([a.id])}
             </div>
           ))
@@ -168,12 +168,12 @@ export function AccountsPage({ params, go }: PageProps) {
                     <NetBadge network={n.key} color={n.color} size={52} />
                     <div>
                       <div style={{ fontWeight: 700, fontSize: 15 }}>{n.label}</div>
-                      <div style={{ fontSize: 13, color: 'var(--muted)' }}>{__('Not connected', 'social-integrations')}</div>
+                      <div style={{ fontSize: 13, color: 'var(--muted)' }}>{__('Not connected', 'advance-social-integrations')}</div>
                     </div>
                   </div>
                   <button type="button" className="sint-btn" onClick={() => setConnecting(n)}>
                     <Icon name="plus" size={16} stroke={2.4} />
-                    {sprintf(__('Connect %s', 'social-integrations'), n.label)}
+                    {sprintf(__('Connect %s', 'advance-social-integrations'), n.label)}
                   </button>
                 </div>
               )
@@ -191,27 +191,27 @@ export function AccountsPage({ params, go }: PageProps) {
                         <div style={{ fontSize: 13, color: 'var(--muted)' }}>{n.label}</div>
                       </div>
                       {account.status === 'expired' ? (
-                        <span className="sint-pill warn" style={{ marginLeft: 'auto' }}>{__('Sign-in expired', 'social-integrations')}</span>
+                        <span className="sint-pill warn" style={{ marginLeft: 'auto' }}>{__('Sign-in expired', 'advance-social-integrations')}</span>
                       ) : (
-                        <span className="sint-pill ok" style={{ marginLeft: 'auto' }}>{__('Connected', 'social-integrations')}</span>
+                        <span className="sint-pill ok" style={{ marginLeft: 'auto' }}>{__('Connected', 'advance-social-integrations')}</span>
                       )}
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                      {account.username && <div className="sint-kv"><span>{__('Handle', 'social-integrations')}</span><span>{account.username}</span></div>}
-                      <div className="sint-kv"><span>{__('Connected', 'social-integrations')}</span><span>{fmtDate(account.connected_at)}</span></div>
-                      {n.auth_type === 'oauth2' && <div className="sint-kv"><span>{__('App', 'social-integrations')}</span><span>{account.via === 'broker' ? __('Social Integrations app', 'social-integrations') : __('Your own app', 'social-integrations')}</span></div>}
-                      <div className="sint-kv"><span>{__('Caption limit', 'social-integrations')}</span><span>{sprintf(__('%s characters', 'social-integrations'), n.char_limit.toLocaleString())}</span></div>
+                      {account.username && <div className="sint-kv"><span>{__('Handle', 'advance-social-integrations')}</span><span>{account.username}</span></div>}
+                      <div className="sint-kv"><span>{__('Connected', 'advance-social-integrations')}</span><span>{fmtDate(account.connected_at)}</span></div>
+                      {n.auth_type === 'oauth2' && <div className="sint-kv"><span>{__('App', 'advance-social-integrations')}</span><span>{account.via === 'broker' ? __('Social Integrations app', 'advance-social-integrations') : __('Your own app', 'advance-social-integrations')}</span></div>}
+                      <div className="sint-kv"><span>{__('Caption limit', 'advance-social-integrations')}</span><span>{sprintf(__('%s characters', 'advance-social-integrations'), n.char_limit.toLocaleString())}</span></div>
                     </div>
                     <div style={{ display: 'flex', gap: 8 }}>
-                      {account.status === 'expired' && <button type="button" className="sint-btn warn sm" onClick={() => setConnecting(n, account.via)}>{__('Reconnect', 'social-integrations')}</button>}
+                      {account.status === 'expired' && <button type="button" className="sint-btn warn sm" onClick={() => setConnecting(n, account.via)}>{__('Reconnect', 'advance-social-integrations')}</button>}
                       {account.profile_url && (
                         <a className="sint-btn sm" href={account.profile_url} target="_blank" rel="noreferrer">
-                          {__('Open', 'social-integrations')} <Icon name="external" size={14} />
+                          {__('Open', 'advance-social-integrations')} <Icon name="external" size={14} />
                         </a>
                       )}
                       <button type="button" className="sint-btn quiet-danger sm" style={{ marginLeft: 'auto' }} disabled={removing === account.id} onClick={() => disconnect(account)}>
                         {removing === account.id && <Spinner size={14} />}
-                        {__('Disconnect', 'social-integrations')}
+                        {__('Disconnect', 'advance-social-integrations')}
                       </button>
                     </div>
                   </div>
@@ -226,14 +226,14 @@ export function AccountsPage({ params, go }: PageProps) {
 
       {confirming && (
         <ConfirmDialog
-          title={sprintf(__('Disconnect %s?', 'social-integrations'), confirming.name || confirming.username)}
-          confirmLabel={__('Disconnect', 'social-integrations')}
+          title={sprintf(__('Disconnect %s?', 'advance-social-integrations'), confirming.name || confirming.username)}
+          confirmLabel={__('Disconnect', 'advance-social-integrations')}
           onConfirm={() => remove(confirming)}
           onClose={() => setConfirming(null)}
         >
           <div className="sint-confirm-who">
             <AccountAvatar account={confirming} network={network(confirming.network)} large />
-            <p>{__('The plugin removes the sign-in token from your site. Shares already sent stay in the share log.', 'social-integrations')}</p>
+            <p>{__('The plugin removes the sign-in token from your site. Shares already sent stay in the share log.', 'advance-social-integrations')}</p>
           </div>
           <DisconnectImpact id={confirming.id} />
         </ConfirmDialog>
@@ -250,8 +250,8 @@ function DisconnectImpact({ id }: { id: string }) {
   if (!data || (!data.campaigns && !data.shares)) return null
   return (
     <ul className="sint-confirm-list">
-      {data.shares > 0 && <li>{sprintf(_n('The plugin stops %d scheduled share to this account.', 'The plugin stops %d scheduled shares to this account.', data.shares, 'social-integrations'), data.shares)}</li>}
-      {data.campaigns > 0 && <li>{sprintf(_n('The plugin removes the account from %d campaign. A campaign without accounts stops.', 'The plugin removes the account from %d campaigns. A campaign without accounts stops.', data.campaigns, 'social-integrations'), data.campaigns)}</li>}
+      {data.shares > 0 && <li>{sprintf(_n('The plugin stops %d scheduled share to this account.', 'The plugin stops %d scheduled shares to this account.', data.shares, 'advance-social-integrations'), data.shares)}</li>}
+      {data.campaigns > 0 && <li>{sprintf(_n('The plugin removes the account from %d campaign. A campaign without accounts stops.', 'The plugin removes the account from %d campaigns. A campaign without accounts stops.', data.campaigns, 'advance-social-integrations'), data.campaigns)}</li>}
     </ul>
   )
 }
@@ -309,7 +309,7 @@ function ConnectModal({ network, via, redirectUri, onClose, onDone }: { network:
         return
       } else {
         await api.post(`accounts/${network.key}`, values)
-        toast(sprintf(__('%s is connected.', 'social-integrations'), network.label))
+        toast(sprintf(__('%s is connected.', 'advance-social-integrations'), network.label))
         onDone()
       }
     } catch (err) {
@@ -319,45 +319,45 @@ function ConnectModal({ network, via, redirectUri, onClose, onDone }: { network:
   }
 
   return (
-    <Modal title={sprintf(__('Connect %s', 'social-integrations'), network.label)} onClose={onClose} narrow>
+    <Modal title={sprintf(__('Connect %s', 'advance-social-integrations'), network.label)} onClose={onClose} narrow>
       {oauth && method === null ? (
         <div style={{ padding: 22, display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <p className="sint-sub">{sprintf(__('Select how this site signs in to %s.', 'social-integrations'), network.label)}</p>
+          <p className="sint-sub">{sprintf(__('Select how this site signs in to %s.', 'advance-social-integrations'), network.label)}</p>
           <button type="button" className="sint-method" disabled={busy} onClick={startBroker}>
             <span className="sint-method-title">
               {busy && <Spinner size={14} />}
-              {__('Connect with Social Integrations', 'social-integrations')}
+              {__('Connect with Social Integrations', 'advance-social-integrations')}
             </span>
-            <span className="sint-method-text">{sprintf(__('Sign in to %s. You do not need a developer app.', 'social-integrations'), network.label)}</span>
+            <span className="sint-method-text">{sprintf(__('Sign in to %s. You do not need a developer app.', 'advance-social-integrations'), network.label)}</span>
           </button>
           <button type="button" className="sint-method" disabled={busy} onClick={() => setMethod('app')}>
-            <span className="sint-method-title">{__('Use my own app', 'social-integrations')}</span>
-            <span className="sint-method-text">{sprintf(__('Enter the details of an app that you created on the %s developer site.', 'social-integrations'), network.label)}</span>
+            <span className="sint-method-title">{__('Use my own app', 'advance-social-integrations')}</span>
+            <span className="sint-method-text">{sprintf(__('Enter the details of an app that you created on the %s developer site.', 'advance-social-integrations'), network.label)}</span>
           </button>
           {error && <div className="sint-banner bad" style={{ padding: '10px 14px' }}>{error}</div>}
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button type="button" className="sint-btn ghost" onClick={onClose}>{__('Cancel', 'social-integrations')}</button>
+            <button type="button" className="sint-btn ghost" onClick={onClose}>{__('Cancel', 'advance-social-integrations')}</button>
           </div>
         </div>
       ) : (
       <form onSubmit={submit} style={{ padding: 22, display: 'flex', flexDirection: 'column', gap: 16 }}>
-        {oauth && method === 'broker' && <p className="sint-sub">{sprintf(__('Sign in to %s to give this site permission to post. The Social Integrations app connects the account.', 'social-integrations'), network.label)}</p>}
+        {oauth && method === 'broker' && <p className="sint-sub">{sprintf(__('Sign in to %s to give this site permission to post. The Social Integrations app connects the account.', 'advance-social-integrations'), network.label)}</p>}
         {ownApp && !appReady && (
           <>
-            <p className="sint-sub">{sprintf(__('%s connects through an app that you create on its developer site. Enter the app details. Then sign in.', 'social-integrations'), network.label)}</p>
+            <p className="sint-sub">{sprintf(__('%s connects through an app that you create on its developer site. Enter the app details. Then sign in.', 'advance-social-integrations'), network.label)}</p>
             <div className="sint-field">
-              <span id="sint-redirect-label">{__('Redirect URL for the app', 'social-integrations')}</span>
+              <span id="sint-redirect-label">{__('Redirect URL for the app', 'advance-social-integrations')}</span>
               <CopyField value={redirectUri} labelledBy="sint-redirect-label" />
-              <small>{__('Add this URL to the app as an allowed redirect URL.', 'social-integrations')}</small>
+              <small>{__('Add this URL to the app as an allowed redirect URL.', 'advance-social-integrations')}</small>
             </div>
             {network.app_setup_url && (
               <a href={network.app_setup_url} target="_blank" rel="noreferrer" style={{ fontWeight: 600 }}>
-                {sprintf(__('Create an app on %s', 'social-integrations'), network.label)} <Icon name="external" size={14} />
+                {sprintf(__('Create an app on %s', 'advance-social-integrations'), network.label)} <Icon name="external" size={14} />
               </a>
             )}
           </>
         )}
-        {ownApp && appReady && <p className="sint-sub">{sprintf(__('Sign in to %s to give this site permission to post.', 'social-integrations'), network.label)}</p>}
+        {ownApp && appReady && <p className="sint-sub">{sprintf(__('Sign in to %s to give this site permission to post.', 'advance-social-integrations'), network.label)}</p>}
         {fields.map((f) => (
           <label key={f.name} className="sint-field">
             <span>{f.label}</span>
@@ -368,14 +368,14 @@ function ConnectModal({ network, via, redirectUri, onClose, onDone }: { network:
         {error && <div className="sint-banner bad" style={{ padding: '10px 14px' }}>{error}</div>}
         <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
           {oauth && methods.length > 1 && (
-            <button type="button" className="sint-btn ghost" onClick={() => { setMethod(null); setError('') }}>{__('Back', 'social-integrations')}</button>
+            <button type="button" className="sint-btn ghost" onClick={() => { setMethod(null); setError('') }}>{__('Back', 'advance-social-integrations')}</button>
           )}
           {ownApp && appReady && (
-            <button type="button" className="sint-btn ghost" onClick={() => setAppReady(false)}>{__('Change app', 'social-integrations')}</button>
+            <button type="button" className="sint-btn ghost" onClick={() => setAppReady(false)}>{__('Change app', 'advance-social-integrations')}</button>
           )}
-          <button type="button" className="sint-btn ghost" onClick={onClose}>{__('Cancel', 'social-integrations')}</button>
+          <button type="button" className="sint-btn ghost" onClick={onClose}>{__('Cancel', 'advance-social-integrations')}</button>
           <button type="submit" className="sint-btn primary" disabled={busy}>
-            {busy ? __('Wait…', 'social-integrations') : ownApp && !appReady ? __('Save app', 'social-integrations') : oauth ? sprintf(__('Sign in to %s', 'social-integrations'), network.label) : __('Connect', 'social-integrations')}
+            {busy ? __('Wait…', 'advance-social-integrations') : ownApp && !appReady ? __('Save app', 'advance-social-integrations') : oauth ? sprintf(__('Sign in to %s', 'advance-social-integrations'), network.label) : __('Connect', 'advance-social-integrations')}
           </button>
         </div>
       </form>
@@ -397,7 +397,7 @@ function PickEntity({ network, onClose, onDone }: { network: Network; onClose: (
     setError('')
     try {
       await api.post(`oauth/${network.key}/entities`, { remote_id: e.remote_id })
-      toast(sprintf(__('%s is connected.', 'social-integrations'), e.name))
+      toast(sprintf(__('%s is connected.', 'advance-social-integrations'), e.name))
       onDone()
     } catch (err) {
       setError((err as Error).message)
@@ -405,12 +405,12 @@ function PickEntity({ network, onClose, onDone }: { network: Network; onClose: (
     setChoosing('')
   }
   return (
-    <Modal title={sprintf(__('Select where to post on %s', 'social-integrations'), network.label)} onClose={onClose} narrow>
+    <Modal title={sprintf(__('Select where to post on %s', 'advance-social-integrations'), network.label)} onClose={onClose} narrow>
       <div style={{ padding: 22, display: 'flex', flexDirection: 'column', gap: 6 }} aria-busy={!entities || !!choosing}>
         {chooseError && <div className="sint-banner bad" role="alert">{chooseError}</div>}
         {loadError && <LoadError message={loadError} onRetry={() => fetched.reload()} busy={fetched.loading} />}
         {!entities && !loadError && <SkeletonList rows={3} />}
-        {entities?.length === 0 && <p className="sint-sub">{sprintf(__('%s sent no place to post. Make sure that you gave permission for a page or an account.', 'social-integrations'), network.label)}</p>}
+        {entities?.length === 0 && <p className="sint-sub">{sprintf(__('%s sent no place to post. Make sure that you gave permission for a page or an account.', 'advance-social-integrations'), network.label)}</p>}
         {entities?.map((e) => (
           <button key={e.remote_id} type="button" className="sint-item" disabled={!!choosing} onClick={() => choose(e)}>
             {e.avatar ? <img className="sint-thumb" src={e.avatar} alt="" style={{ borderRadius: 999 }} /> : <span className="sint-thumb" style={{ borderRadius: 999 }} />}

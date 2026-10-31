@@ -38,7 +38,7 @@ class Facebook extends AbstractNetwork {
 	 * Name shown in the UI.
 	 */
 	public function label(): string {
-		return __( 'Facebook Page', 'social-integrations' );
+		return __( 'Facebook Page', 'advance-social-integrations' );
 	}
 
 	/**
@@ -68,7 +68,7 @@ class Facebook extends AbstractNetwork {
 	public function post_fields(): array {
 		return array(
 			$this->format_field(),
-			$this->first_comment_field( __( 'The plugin adds this comment below the post, as the Page. Leave empty for no comment. Accounts connected before this option need a reconnect.', 'social-integrations' ) ),
+			$this->first_comment_field( __( 'The plugin adds this comment below the post, as the Page. Leave empty for no comment. Accounts connected before this option need a reconnect.', 'advance-social-integrations' ) ),
 		);
 	}
 
@@ -147,7 +147,7 @@ class Facebook extends AbstractNetwork {
 			)
 		);
 		if ( empty( $short['access_token'] ) ) {
-			throw new NetworkException( 'oauth', esc_html__( 'Facebook did not return an access token. Connect again.', 'social-integrations' ) );
+			throw new NetworkException( 'oauth', esc_html__( 'Facebook did not return an access token. Connect again.', 'advance-social-integrations' ) );
 		}
 
 		$credentials = array( 'access_token' => (string) $short['access_token'] );
@@ -268,7 +268,7 @@ class Facebook extends AbstractNetwork {
 		$page_id = (string) ( $credentials['page_id'] ?? '' );
 		$token   = (string) ( $credentials['access_token'] ?? '' );
 		if ( '' === $page_id || '' === $token ) {
-			throw new NetworkException( 'expired', esc_html__( 'The Facebook Page is not connected. Reconnect the account.', 'social-integrations' ) );
+			throw new NetworkException( 'expired', esc_html__( 'The Facebook Page is not connected. Reconnect the account.', 'advance-social-integrations' ) );
 		}
 
 		$message = (string) ( $payload['message'] ?? '' );
@@ -301,7 +301,7 @@ class Facebook extends AbstractNetwork {
 		}
 
 		if ( '' === $post_id ) {
-			throw new NetworkException( 'unknown', esc_html__( 'Facebook did not confirm the post. Check the Page before you try again.', 'social-integrations' ) );
+			throw new NetworkException( 'unknown', esc_html__( 'Facebook did not confirm the post. Check the Page before you try again.', 'advance-social-integrations' ) );
 		}
 
 		return array(

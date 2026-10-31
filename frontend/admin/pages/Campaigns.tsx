@@ -38,13 +38,13 @@ export interface CampaignActions {
 }
 
 const STATUS: Record<string, { label: () => string; tone: string }> = {
-  active: { label: () => __('Active', 'social-integrations'), tone: 'ok' },
-  scheduled: { label: () => __('Scheduled', 'social-integrations'), tone: 'accent' },
-  draft: { label: () => __('Draft', 'social-integrations'), tone: 'muted' },
-  failed: { label: () => __('Failed', 'social-integrations'), tone: 'bad' },
-  published: { label: () => __('Shared', 'social-integrations'), tone: 'ok' },
-  paused: { label: () => __('Paused', 'social-integrations'), tone: 'warn' },
-  ended: { label: () => __('Ended', 'social-integrations'), tone: 'muted' },
+  active: { label: () => __('Active', 'advance-social-integrations'), tone: 'ok' },
+  scheduled: { label: () => __('Scheduled', 'advance-social-integrations'), tone: 'accent' },
+  draft: { label: () => __('Draft', 'advance-social-integrations'), tone: 'muted' },
+  failed: { label: () => __('Failed', 'advance-social-integrations'), tone: 'bad' },
+  published: { label: () => __('Shared', 'advance-social-integrations'), tone: 'ok' },
+  paused: { label: () => __('Paused', 'advance-social-integrations'), tone: 'warn' },
+  ended: { label: () => __('Ended', 'advance-social-integrations'), tone: 'muted' },
 }
 
 /** The most networks that a row shows before "+N". */
@@ -73,9 +73,9 @@ export function CampaignsPage({ openComposer, go }: PageProps) {
 
   // Filter `sint.campaigns.actions`: buttons for other campaign types, keyed by type.
   const handlers = applyFilters<Record<string, CampaignActions>>('sint.campaigns.actions', {
-    single: { label: __('Single post', 'social-integrations'), remove: (c) => api.del(`campaigns/${c.id}`) },
+    single: { label: __('Single post', 'advance-social-integrations'), remove: (c) => api.del(`campaigns/${c.id}`) },
     auto: {
-      label: __('Auto-post', 'social-integrations'),
+      label: __('Auto-post', 'advance-social-integrations'),
       remove: (c) => api.del(`campaigns/${c.id}`),
       pause: (c) => api.post(`campaigns/${c.id}/active`, { active: false }),
       resume: (c) => api.post(`campaigns/${c.id}/active`, { active: true }),
@@ -101,7 +101,7 @@ export function CampaignsPage({ openComposer, go }: PageProps) {
   }
   const remove = (c: CampaignItem) => {
     if (armed !== keyOf(c)) return setArmed(keyOf(c))
-    run(c, 'remove', __('Campaign deleted. Shares already sent stay in the share log.', 'social-integrations'))
+    run(c, 'remove', __('Campaign deleted. Shares already sent stay in the share log.', 'advance-social-integrations'))
   }
   const removeMany = async (list: CampaignItem[]) => {
     setBusy('bulk')
@@ -116,8 +116,8 @@ export function CampaignsPage({ openComposer, go }: PageProps) {
       }
     }
     if (gone.length) campaigns.mutate((all) => (all ?? []).filter((x) => !gone.includes(keyOf(x))))
-    if (gone.length === list.length) toast(sprintf(__('%d campaigns deleted. Shares already sent stay in the share log.', 'social-integrations'), gone.length))
-    else toast(sprintf(__('%1$d of %2$d campaigns deleted. %3$s', 'social-integrations'), gone.length, list.length, last), true)
+    if (gone.length === list.length) toast(sprintf(__('%d campaigns deleted. Shares already sent stay in the share log.', 'advance-social-integrations'), gone.length))
+    else toast(sprintf(__('%1$d of %2$d campaigns deleted. %3$s', 'advance-social-integrations'), gone.length, list.length, last), true)
     setSelected((s) => s.filter((k) => !gone.includes(k)))
     setBusy('')
     setArmed('')
@@ -145,27 +145,27 @@ export function CampaignsPage({ openComposer, go }: PageProps) {
 
   return (
     <>
-      <Header title={__('Campaigns', 'social-integrations')}>
-        <RefreshButton loading={campaigns.loading} onClick={() => load()} label={__('Refresh the campaigns', 'social-integrations')} />
+      <Header title={__('Campaigns', 'advance-social-integrations')}>
+        <RefreshButton loading={campaigns.loading} onClick={() => load()} label={__('Refresh the campaigns', 'advance-social-integrations')} />
         <button type="button" className="sint-btn primary" onClick={() => openComposer()}>
           <Icon name="plus" size={16} stroke={2.4} />
-          {__('New campaign', 'social-integrations')}
+          {__('New campaign', 'advance-social-integrations')}
         </button>
       </Header>
       <div className="sint-body">
-        {campaigns.error && <LoadError message={sprintf(__('The campaigns did not load. %s', 'social-integrations'), campaigns.error)} onRetry={() => load()} busy={campaigns.loading} />}
+        {campaigns.error && <LoadError message={sprintf(__('The campaigns did not load. %s', 'advance-social-integrations'), campaigns.error)} onRetry={() => load()} busy={campaigns.loading} />}
         {items === null ? (
           !campaigns.error && <SkeletonTable cols={6} />
         ) : items.length === 0 ? (
-          <Empty title={__('No campaigns yet', 'social-integrations')}>
-            <p className="sint-sub">{__('Share one post now or later, schedule many posts, or share new posts when you publish them.', 'social-integrations')}</p>
-            <button type="button" className="sint-btn primary" onClick={() => openComposer()}>{__('New campaign', 'social-integrations')}</button>
+          <Empty title={__('No campaigns yet', 'advance-social-integrations')}>
+            <p className="sint-sub">{__('Share one post now or later, schedule many posts, or share new posts when you publish them.', 'advance-social-integrations')}</p>
+            <button type="button" className="sint-btn primary" onClick={() => openComposer()}>{__('New campaign', 'advance-social-integrations')}</button>
           </Empty>
         ) : (
           <>
             {types.length > 1 && (
-              <div className="sint-seg" role="tablist" aria-label={__('Campaign type', 'social-integrations')} style={{ alignSelf: 'flex-start' }}>
-                <button type="button" role="tab" aria-selected={filter === 'all'} className={filter === 'all' ? 'on' : ''} onClick={() => setFilter('all')}>{__('All', 'social-integrations')}</button>
+              <div className="sint-seg" role="tablist" aria-label={__('Campaign type', 'advance-social-integrations')} style={{ alignSelf: 'flex-start' }}>
+                <button type="button" role="tab" aria-selected={filter === 'all'} className={filter === 'all' ? 'on' : ''} onClick={() => setFilter('all')}>{__('All', 'advance-social-integrations')}</button>
                 {types.map((t) => (
                   <button key={t} type="button" role="tab" aria-selected={filter === t} className={filter === t ? 'on' : ''} onClick={() => setFilter(t)}>{typeLabel(t)}</button>
                 ))}
@@ -179,7 +179,7 @@ export function CampaignsPage({ openComposer, go }: PageProps) {
                       <th className="sint-check-cell">
                         <input
                           type="checkbox"
-                          aria-label={__('Select all campaigns on this page', 'social-integrations')}
+                          aria-label={__('Select all campaigns on this page', 'advance-social-integrations')}
                           checked={picked.length === choosable.length}
                           ref={(el) => {
                             if (el) el.indeterminate = picked.length > 0 && picked.length < choosable.length
@@ -191,30 +191,30 @@ export function CampaignsPage({ openComposer, go }: PageProps) {
                     {picked.length ? (
                       // While campaigns are selected, the header row holds the bulk actions.
                       <th colSpan={6}>
-                        <span className="sint-bulk-bar" role="group" aria-label={__('Selected campaigns', 'social-integrations')}>
-                          <span className="sint-bulk-count">{sprintf(__('%d selected', 'social-integrations'), picked.length)}</span>
-                          <button type="button" className="sint-bulk-link" onClick={() => { setSelected([]); setArmed('') }}>{__('Clear', 'social-integrations')}</button>
+                        <span className="sint-bulk-bar" role="group" aria-label={__('Selected campaigns', 'advance-social-integrations')}>
+                          <span className="sint-bulk-count">{sprintf(__('%d selected', 'advance-social-integrations'), picked.length)}</span>
+                          <button type="button" className="sint-bulk-link" onClick={() => { setSelected([]); setArmed('') }}>{__('Clear', 'advance-social-integrations')}</button>
                           <button
                             type="button"
                             className={`sint-bulk-delete${armed === 'bulk' ? ' armed' : ''}`}
                             disabled={busy === 'bulk'}
-                            title={__('Shares already sent stay in the share log.', 'social-integrations')}
+                            title={__('Shares already sent stay in the share log.', 'advance-social-integrations')}
                             onClick={() => (armed === 'bulk' ? removeMany(picked) : setArmed('bulk'))}
                             onBlur={() => armed === 'bulk' && setArmed('')}
                           >
                             <Icon name="trash" size={14} stroke={2} />
-                            {busy === 'bulk' ? __('Wait…', 'social-integrations') : armed === 'bulk' ? __('Click again to delete', 'social-integrations') : __('Delete', 'social-integrations')}
+                            {busy === 'bulk' ? __('Wait…', 'advance-social-integrations') : armed === 'bulk' ? __('Click again to delete', 'advance-social-integrations') : __('Delete', 'advance-social-integrations')}
                           </button>
                         </span>
                       </th>
                     ) : (
                       <>
-                        <th>{__('Campaign', 'social-integrations')}</th>
-                        <th>{__('Accounts', 'social-integrations')}</th>
-                        <th>{__('Status', 'social-integrations')}</th>
-                        <th>{__('Next', 'social-integrations')}</th>
-                        <th>{__('Last shared', 'social-integrations')}</th>
-                        <th><span className="sint-sr">{__('Actions', 'social-integrations')}</span></th>
+                        <th>{__('Campaign', 'advance-social-integrations')}</th>
+                        <th>{__('Accounts', 'advance-social-integrations')}</th>
+                        <th>{__('Status', 'advance-social-integrations')}</th>
+                        <th>{__('Next', 'advance-social-integrations')}</th>
+                        <th>{__('Last shared', 'advance-social-integrations')}</th>
+                        <th><span className="sint-sr">{__('Actions', 'advance-social-integrations')}</span></th>
                       </>
                     )}
                   </tr>
@@ -228,12 +228,12 @@ export function CampaignsPage({ openComposer, go }: PageProps) {
                     const can = (a: string) => c.actions.includes(a) && (a === 'edit' || a === 'duplicate' || !!handlers[c.type]) && ((a !== 'pause' && a !== 'resume') || userCan(caps.publish))
                     // Every row has the same three places: Pause or Resume, Edit, and a menu of the other actions.
                     const menu: MenuItem[] = [
-                      ...(c.sent > 0 ? [{ key: 'log', label: __('Share log', 'social-integrations'), icon: 'log', onSelect: () => go(`log?campaign=${encodeURIComponent(k)}`) }] : []),
-                      ...(can('duplicate') ? [{ key: 'duplicate', label: __('Duplicate', 'social-integrations'), icon: 'copy', onSelect: () => open(c, true) }] : []),
+                      ...(c.sent > 0 ? [{ key: 'log', label: __('Share log', 'advance-social-integrations'), icon: 'log', onSelect: () => go(`log?campaign=${encodeURIComponent(k)}`) }] : []),
+                      ...(can('duplicate') ? [{ key: 'duplicate', label: __('Duplicate', 'advance-social-integrations'), icon: 'copy', onSelect: () => open(c, true) }] : []),
                       ...(can('delete')
                         ? [{
                             key: 'delete',
-                            label: armed === k ? __('Click again to delete', 'social-integrations') : __('Delete', 'social-integrations'),
+                            label: armed === k ? __('Click again to delete', 'advance-social-integrations') : __('Delete', 'advance-social-integrations'),
                             icon: 'trash',
                             danger: true,
                             disabled: busy === k,
@@ -249,21 +249,21 @@ export function CampaignsPage({ openComposer, go }: PageProps) {
                       <tr key={k} className={selected.includes(k) ? 'selected' : ''}>
                         {choosable.length > 0 && (
                           <td className="sint-check-cell">
-                            {deletable(c) && <input type="checkbox" aria-label={sprintf(__('Select %s', 'social-integrations'), c.name)} checked={selected.includes(k)} disabled={busy === 'bulk'} onChange={(ev) => pick(k, ev.target.checked)} />}
+                            {deletable(c) && <input type="checkbox" aria-label={sprintf(__('Select %s', 'advance-social-integrations'), c.name)} checked={selected.includes(k)} disabled={busy === 'bulk'} onChange={(ev) => pick(k, ev.target.checked)} />}
                           </td>
                         )}
                         <td className="name">
                           <button type="button" className="sint-camp-name" onClick={() => can('edit') && open(c, false)}>{c.name}</button>
                           <span className="sint-camp-meta">
                             <span className="sint-pill muted">{handlers[c.type]?.label ?? c.type}</span>
-                            {c.author && <span className="sint-camp-author">{sprintf(__('by %s', 'social-integrations'), c.author)}</span>}
+                            {c.author && <span className="sint-camp-author">{sprintf(__('by %s', 'advance-social-integrations'), c.author)}</span>}
                           </span>
                         </td>
                         <td className="accts">
                           {c.no_accounts ? (
-                            <span style={{ fontSize: 12, color: 'var(--bad-text)' }}>{__('No accounts', 'social-integrations')}</span>
+                            <span style={{ fontSize: 12, color: 'var(--bad-text)' }}>{__('No accounts', 'advance-social-integrations')}</span>
                           ) : c.accounts.length === 0 ? (
-                            <span style={{ fontSize: 12, color: 'var(--muted)' }}>{__('All accounts', 'social-integrations')}</span>
+                            <span style={{ fontSize: 12, color: 'var(--muted)' }}>{__('All accounts', 'advance-social-integrations')}</span>
                           ) : (
                             <span className="sint-camp-nets" title={on.map((a) => a.name).join(', ')}>
                               {/* One badge for each network, with the number of its accounts. */}
@@ -274,35 +274,35 @@ export function CampaignsPage({ openComposer, go }: PageProps) {
                                 </span>
                               ))}
                               {nets(on).length > NETS_SHOWN && <span className="sint-camp-net-more">+{nets(on).length - NETS_SHOWN}</span>}
-                              <span className="sint-sr">{sprintf(on.length === 1 ? __('%d account', 'social-integrations') : __('%d accounts', 'social-integrations'), on.length)}</span>
+                              <span className="sint-sr">{sprintf(on.length === 1 ? __('%d account', 'advance-social-integrations') : __('%d accounts', 'advance-social-integrations'), on.length)}</span>
                             </span>
                           )}
                         </td>
                         <td className="status"><span className={`sint-pill ${status.tone}`}>{status.label()}</span></td>
-                        <td className="when next" data-label={__('Next', 'social-integrations')}>
-                          {c.next_at ? <span className="d">{fmtStamp(c.next_at)}</span> : c.type === 'auto' && c.status === 'active' ? <span className="sint-camp-sub">{__('When you publish a post', 'social-integrations')}</span> : '—'}
+                        <td className="when next" data-label={__('Next', 'advance-social-integrations')}>
+                          {c.next_at ? <span className="d">{fmtStamp(c.next_at)}</span> : c.type === 'auto' && c.status === 'active' ? <span className="sint-camp-sub">{__('When you publish a post', 'advance-social-integrations')}</span> : '—'}
                         </td>
-                        <td className="when last" data-label={__('Last shared', 'social-integrations')}>
+                        <td className="when last" data-label={__('Last shared', 'advance-social-integrations')}>
                           {c.last_at ? <span className="d">{fmtStamp(c.last_at)}</span> : '—'}
-                          {c.sent > 0 && <span className="sint-camp-sub">{sprintf(__('%d sent', 'social-integrations'), c.sent)}</span>}
+                          {c.sent > 0 && <span className="sint-camp-sub">{sprintf(__('%d sent', 'advance-social-integrations'), c.sent)}</span>}
                         </td>
                         <td className="acts">
                           <span className="sint-camp-actions">
                             {can('pause') ? (
-                              <button type="button" className="sint-btn ghost sm sint-camp-toggle" disabled={busy === k} onClick={() => run(c, 'pause', __('Campaign paused.', 'social-integrations'))}>{__('Pause', 'social-integrations')}</button>
+                              <button type="button" className="sint-btn ghost sm sint-camp-toggle" disabled={busy === k} onClick={() => run(c, 'pause', __('Campaign paused.', 'advance-social-integrations'))}>{__('Pause', 'advance-social-integrations')}</button>
                             ) : can('resume') ? (
-                              <button type="button" className="sint-btn ghost sm sint-camp-toggle" disabled={busy === k} onClick={() => run(c, 'resume', __('Campaign resumed.', 'social-integrations'))}>{__('Resume', 'social-integrations')}</button>
+                              <button type="button" className="sint-btn ghost sm sint-camp-toggle" disabled={busy === k} onClick={() => run(c, 'resume', __('Campaign resumed.', 'advance-social-integrations'))}>{__('Resume', 'advance-social-integrations')}</button>
                             ) : (
                               toggles && <span className="sint-camp-toggle" aria-hidden="true" />
                             )}
                             {can('edit') && (
-                              <button type="button" className="sint-btn ghost sm sint-camp-edit" aria-label={sprintf(__('Edit %s', 'social-integrations'), c.name)} onClick={() => open(c, false)}>
+                              <button type="button" className="sint-btn ghost sm sint-camp-edit" aria-label={sprintf(__('Edit %s', 'advance-social-integrations'), c.name)} onClick={() => open(c, false)}>
                                 <Icon name="edit" size={14} />
-                                <span>{__('Edit', 'social-integrations')}</span>
+                                <span>{__('Edit', 'advance-social-integrations')}</span>
                               </button>
                             )}
                             {menu.length > 0 ? (
-                              <Menu label={sprintf(__('More actions for %s', 'social-integrations'), c.name)} items={menu} onClose={() => armed === k && setArmed('')} />
+                              <Menu label={sprintf(__('More actions for %s', 'advance-social-integrations'), c.name)} items={menu} onClose={() => armed === k && setArmed('')} />
                             ) : (
                               <span className="sint-pc-tool-space" aria-hidden="true" />
                             )}

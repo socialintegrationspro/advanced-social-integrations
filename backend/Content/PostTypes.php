@@ -97,6 +97,6 @@ final class PostTypes {
 		if ( isset( $known[ $post_type->name ] ) ) {
 			return $known[ $post_type->name ];
 		}
-		return __( 'Custom', 'social-integrations' );
+		return __( 'Custom', 'advance-social-integrations' );
 	}
 }

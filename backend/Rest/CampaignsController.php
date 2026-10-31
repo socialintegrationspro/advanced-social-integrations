@@ -49,7 +49,7 @@ final class CampaignsController extends RestController {
 	 */
 	private function campaign( \WP_REST_Request $request ) {
 		$campaign = Campaigns::get( (int) $request['id'] );
-		return $campaign && Campaigns::visible( $campaign ) ? $campaign : $this->not_found( __( 'This campaign does not exist.', 'social-integrations' ) );
+		return $campaign && Campaigns::visible( $campaign ) ? $campaign : $this->not_found( __( 'This campaign does not exist.', 'advance-social-integrations' ) );
 	}
 
 	/**
@@ -80,7 +80,7 @@ final class CampaignsController extends RestController {
 			return $error;
 		}
 		$result = Campaigns::update( (int) $request['id'], $body );
-		return $result ? rest_ensure_response( $result ) : $this->not_found( __( 'This campaign does not exist.', 'social-integrations' ) );
+		return $result ? rest_ensure_response( $result ) : $this->not_found( __( 'This campaign does not exist.', 'advance-social-integrations' ) );
 	}
 
 	/**
@@ -108,7 +108,7 @@ final class CampaignsController extends RestController {
 	public function save_auto( \WP_REST_Request $request ) {
 		$body = (array) $request->get_json_params();
 		if ( '' === trim( sanitize_text_field( (string) ( $body['name'] ?? '' ) ) ) ) {
-			return $this->error( 'name_required', __( 'Enter a name for the campaign.', 'social-integrations' ), 400 );
+			return $this->error( 'name_required', __( 'Enter a name for the campaign.', 'advance-social-integrations' ), 400 );
 		}
 		if ( $request['id'] ) {
 			$current = $this->campaign( $request );
@@ -120,7 +120,7 @@ final class CampaignsController extends RestController {
 		// An empty list shares to every account, so a user with an account limit selects accounts.
 		// `no_accounts`: the user cleared the list, or its last account was disconnected.
 		if ( ! $accounts && ( null !== Accounts::allowed() || ! empty( $body['no_accounts'] ) ) ) {
-			return $this->error( 'no_accounts', __( 'Select at least one account.', 'social-integrations' ), 400 );
+			return $this->error( 'no_accounts', __( 'Select at least one account.', 'advance-social-integrations' ), 400 );
 		}
 		if ( ! Accounts::can_use( $accounts ) ) {
 			return Campaigns::not_allowed();
@@ -131,7 +131,7 @@ final class CampaignsController extends RestController {
 		}
 		$campaign = Auto::save( $body, (int) $request['id'] );
 		if ( ! $campaign ) {
-			return $this->not_found( __( 'This campaign does not exist.', 'social-integrations' ) );
+			return $this->not_found( __( 'This campaign does not exist.', 'advance-social-integrations' ) );
 		}
 		do_action( Hooks::CAMPAIGN_SAVED, (int) $campaign['id'], 'auto', ! empty( $campaign['active'] ), ! $request['id'] );
 		return rest_ensure_response( $campaign );
@@ -153,7 +153,7 @@ final class CampaignsController extends RestController {
 			return $campaign;
 		}
 		if ( ! $campaign ) {
-			return $this->not_found( __( 'This campaign does not exist.', 'social-integrations' ) );
+			return $this->not_found( __( 'This campaign does not exist.', 'advance-social-integrations' ) );
 		}
 		do_action( Hooks::CAMPAIGN_ACTIVE, (int) $request['id'], $current['type'], ! empty( $campaign['active'] ) );
 		return rest_ensure_response( $campaign );

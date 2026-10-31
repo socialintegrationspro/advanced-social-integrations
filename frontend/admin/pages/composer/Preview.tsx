@@ -40,15 +40,15 @@ export function Preview({ nets, preview, canSwitch, setPreview, captionFor, acco
   return (
     <aside className={`sint-preview-col${busy ? ' sint-loading' : ''}`} aria-busy={busy || undefined} style={{ flex: '1 1 330px', maxWidth: 380, borderLeft: '1px solid var(--line)', padding: 18, display: 'flex', flexDirection: 'column', gap: 14, background: 'var(--side)', minWidth: 0 }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-        <span className="sint-label" style={{ paddingTop: 6, minWidth: 0 }}>{label ?? __('Preview', 'social-integrations')}</span>
+        <span className="sint-label" style={{ paddingTop: 6, minWidth: 0 }}>{label ?? __('Preview', 'advance-social-integrations')}</span>
         {canSwitch && nets.length > 4 && (
           // Many networks: a list with names is easier to read than a row of logos.
-          <select className="sint-select sm" style={{ marginLeft: 'auto', maxWidth: 210 }} aria-label={__('Preview network', 'social-integrations')} value={preview} onChange={(e) => setPreview(e.target.value)}>
+          <select className="sint-select sm" style={{ marginLeft: 'auto', maxWidth: 210 }} aria-label={__('Preview network', 'advance-social-integrations')} value={preview} onChange={(e) => setPreview(e.target.value)}>
             {nets.map((n) => <option key={n} value={n}>{network(n)?.label ?? n}</option>)}
           </select>
         )}
         {canSwitch && nets.length <= 4 && (
-          <span style={{ marginLeft: 'auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 6, minWidth: 0 }} role="group" aria-label={__('Preview network', 'social-integrations')}>
+          <span style={{ marginLeft: 'auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 6, minWidth: 0 }} role="group" aria-label={__('Preview network', 'advance-social-integrations')}>
             {nets.map((n) => (
               <button key={n} type="button" className="sint-prev-net" aria-pressed={n === preview} aria-label={network(n)?.label} onClick={() => setPreview(n)}>
                 <NetBadge network={n} color={network(n)?.color} size={22} />
@@ -73,7 +73,7 @@ export function Preview({ nets, preview, canSwitch, setPreview, captionFor, acco
             {captionFor(net.key) ? (
               hasMarks(captionFor(net.key)) ? <CaptionText text={captionFor(net.key)} format={net.text_format ?? 'unicode'} /> : [...captionFor(net.key)].slice(0, net.char_limit).join('')
             ) : (
-              <span style={{ color: '#65676b' }}>{__('Your caption appears here.', 'social-integrations')}</span>
+              <span style={{ color: '#65676b' }}>{__('Your caption appears here.', 'advance-social-integrations')}</span>
             )}
           </div>
           {chosenMedia.length > 0 && (
@@ -104,7 +104,7 @@ export function Preview({ nets, preview, canSwitch, setPreview, captionFor, acco
           )}
         </div>
       ) : (
-        <p className="sint-sub">{__('Select an account to see a preview.', 'social-integrations')}</p>
+        <p className="sint-sub">{__('Select an account to see a preview.', 'advance-social-integrations')}</p>
       )}
       {net && !notice && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 12, color: 'var(--text-2)' }}>
@@ -112,7 +112,7 @@ export function Preview({ nets, preview, canSwitch, setPreview, captionFor, acco
           {nets.length > 1 && tooLong.length === 0 ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{ color: 'var(--ok)' }}><Icon name="check" size={14} stroke={2.6} /></span>
-              {sprintf(__('The caption fits all %d networks.', 'social-integrations'), nets.length)}
+              {sprintf(__('The caption fits all %d networks.', 'advance-social-integrations'), nets.length)}
             </div>
           ) : (
             (nets.length > 1 ? tooLong : nets).map((n) => <FitCheck key={n} network={n} caption={captionFor(n)} />)
@@ -120,7 +120,7 @@ export function Preview({ nets, preview, canSwitch, setPreview, captionFor, acco
           {fewer.length > 0 && (
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
               <span style={{ color: 'var(--warn-text)', paddingTop: 1 }}><Icon name="alert" size={14} stroke={2.6} /></span>
-              {sprintf(__('These networks take fewer images and get the first ones: %s.', 'social-integrations'), fewer.map((n) => `${network(n)?.label ?? n} (${network(n)?.max_images ?? 1})`).join(', '))}
+              {sprintf(__('These networks take fewer images and get the first ones: %s.', 'advance-social-integrations'), fewer.map((n) => `${network(n)?.label ?? n} (${network(n)?.max_images ?? 1})`).join(', '))}
             </div>
           )}
         </div>
@@ -138,7 +138,7 @@ function FitCheck({ network: key, caption }: { network: string; caption: string 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
       <span style={{ color: ok ? 'var(--ok)' : 'var(--bad)' }}><Icon name={ok ? 'check' : 'alert'} size={14} stroke={2.6} /></span>
-      {ok ? sprintf(__('%s caption fits', 'social-integrations'), net?.label ?? key) : sprintf(__('%1$s caption is %2$d characters too long', 'social-integrations'), net?.label ?? key, len - (net?.char_limit ?? 0))}
+      {ok ? sprintf(__('%s caption fits', 'advance-social-integrations'), net?.label ?? key) : sprintf(__('%1$s caption is %2$d characters too long', 'advance-social-integrations'), net?.label ?? key, len - (net?.char_limit ?? 0))}
     </div>
   )
 }

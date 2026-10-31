@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Social Integrations – Auto Post & Social Media Scheduler
+ * Plugin Name:       Advance Social Integrations – Auto Post & Social Media Scheduler
  * Plugin URI:        https://socialintegrations.com
  * Description:       Share your WordPress content to social networks when you publish, with caption templates, a content calendar and a share log.
  * Version:           0.1.0
@@ -9,7 +9,7 @@
  * Author:            Social Integrations
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       social-integrations
+ * Text Domain:       advance-social-integrations
  * Domain Path:       /languages
  *
  * @package SocialIntegrations

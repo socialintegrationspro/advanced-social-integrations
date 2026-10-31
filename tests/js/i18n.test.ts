@@ -7,12 +7,12 @@ describe('i18n', () => {
   })
 
   it('returns the text when wp.i18n is not loaded', () => {
-    expect(__('Share', 'social-integrations')).toBe('Share')
+    expect(__('Share', 'advance-social-integrations')).toBe('Share')
   })
 
   it('uses wp.i18n when it is loaded', () => {
     window.wp = { i18n: { __: (text, domain) => `${domain}:${text}` } }
-    expect(__('Share', 'social-integrations')).toBe('social-integrations:Share')
+    expect(__('Share', 'advance-social-integrations')).toBe('advance-social-integrations:Share')
   })
 
   it('fills placeholders in order and by position', () => {

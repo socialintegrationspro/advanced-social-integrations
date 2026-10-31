@@ -26,7 +26,7 @@ require $tests_dir . '/includes/functions.php';
 tests_add_filter(
 	'muplugins_loaded',
 	static function () use ( $root ) {
-		require $root . '/social-integrations.php';
+		require $root . '/advance-social-integrations.php';
 		foreach ( array_filter( explode( ',', (string) getenv( 'SINT_TEST_PLUGINS' ) ) ) as $file ) {
 			require $file;
 		}

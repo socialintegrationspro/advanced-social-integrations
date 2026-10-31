@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Social Integrations">
-	<file>./social-integrations.php</file>
+<ruleset name="Advance Social Integrations">
+	<file>./advance-social-integrations.php</file>
 	<file>./uninstall.php</file>
 	<file>./backend</file>
 	<arg name="extensions" value="php"/>
@@ -13,7 +13,7 @@
 	</rule>
 	<rule ref="WordPress.WP.I18n">
 		<properties>
-			<property name="text_domain" type="array" value="social-integrations"/>
+			<property name="text_domain" type="array" value="advance-social-integrations"/>
 		</properties>
 	</rule>
 	<rule ref="PHPCompatibilityWP"/>

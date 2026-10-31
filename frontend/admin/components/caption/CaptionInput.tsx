@@ -42,11 +42,11 @@ export interface CaptionInputProps {
 }
 
 const STYLES: { format: TextFormatType; label: () => string; glyph: string; className: string }[] = [
-  { format: 'bold', label: () => __('Bold', 'social-integrations'), glyph: 'B', className: 'b' },
-  { format: 'italic', label: () => __('Italic', 'social-integrations'), glyph: 'I', className: 'i' },
-  { format: 'underline', label: () => __('Underline', 'social-integrations'), glyph: 'U', className: 'u' },
-  { format: 'strikethrough', label: () => __('Strikethrough', 'social-integrations'), glyph: 'S', className: 's' },
-  { format: 'code', label: () => __('Monospace', 'social-integrations'), glyph: 'M', className: 'm' },
+  { format: 'bold', label: () => __('Bold', 'advance-social-integrations'), glyph: 'B', className: 'b' },
+  { format: 'italic', label: () => __('Italic', 'advance-social-integrations'), glyph: 'I', className: 'i' },
+  { format: 'underline', label: () => __('Underline', 'advance-social-integrations'), glyph: 'U', className: 'u' },
+  { format: 'strikethrough', label: () => __('Strikethrough', 'advance-social-integrations'), glyph: 'S', className: 's' },
+  { format: 'code', label: () => __('Monospace', 'advance-social-integrations'), glyph: 'M', className: 'm' },
 ]
 
 /**
@@ -91,7 +91,7 @@ function StyleToolbar({ tools }: { tools?: ReactNode }) {
     [editor],
   )
   return (
-    <div className="sint-cap-tools" role="toolbar" aria-label={__('Text styles', 'social-integrations')}>
+    <div className="sint-cap-tools" role="toolbar" aria-label={__('Text styles', 'advance-social-integrations')}>
       {STYLES.map((st) => (
         <button
           key={st.format}

@@ -1,5 +1,5 @@
 {
-  "name": "socialintegrations/social-integrations",
+  "name": "socialintegrations/advance-social-integrations",
   "description": "Share WordPress content to social networks, with AI captions and a content calendar.",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",
@@ -31,7 +31,7 @@
   "scripts": {
     "lint": "phpcs",
     "lint:fix": "phpcbf",
-    "compat": "phpcs -p includes social-integrations.php uninstall.php --standard=PHPCompatibilityWP --runtime-set testVersion 7.4-",
+    "compat": "phpcs -p backend advance-social-integrations.php uninstall.php --standard=PHPCompatibilityWP --runtime-set testVersion 7.4-",
     "test": "phpunit"
   }
 }

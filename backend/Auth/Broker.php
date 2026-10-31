@@ -110,7 +110,7 @@ final class Broker {
 		);
 		$url  = (string) ( $body['authorize_url'] ?? '' );
 		if ( '' === $url ) {
-			throw new NetworkException( 'broker', esc_html__( 'The Social Integrations app did not return a sign-in address. Try again.', 'social-integrations' ) );
+			throw new NetworkException( 'broker', esc_html__( 'The Social Integrations app did not return a sign-in address. Try again.', 'advance-social-integrations' ) );
 		}
 		return $url;
 	}
@@ -124,7 +124,7 @@ final class Broker {
 	public static function claim( string $handoff ): array {
 		$body = self::signed( '/v1/claim', array( 'handoff' => $handoff ) );
 		if ( empty( $body['credentials'] ) || ! is_array( $body['credentials'] ) ) {
-			throw new NetworkException( 'broker', esc_html__( 'The sign-in expired. Connect again.', 'social-integrations' ) );
+			throw new NetworkException( 'broker', esc_html__( 'The sign-in expired. Connect again.', 'advance-social-integrations' ) );
 		}
 		return $body['credentials'];
 	}
@@ -182,7 +182,7 @@ final class Broker {
 				delete_option( self::OPTION );
 			}
 		}
-		throw new NetworkException( 'broker', esc_html__( 'The Social Integrations app did not accept this site. Try again.', 'social-integrations' ) );
+		throw new NetworkException( 'broker', esc_html__( 'The Social Integrations app did not accept this site. Try again.', 'advance-social-integrations' ) );
 	}
 
 	/**
@@ -220,7 +220,7 @@ final class Broker {
 		}
 
 		if ( empty( $body['site_id'] ) || empty( $body['site_secret'] ) ) {
-			throw new NetworkException( 'broker', esc_html__( 'The Social Integrations app did not register this site. Try again.', 'social-integrations' ) );
+			throw new NetworkException( 'broker', esc_html__( 'The Social Integrations app did not register this site. Try again.', 'advance-social-integrations' ) );
 		}
 		$site = array(
 			'id'     => (string) $body['site_id'],
@@ -247,7 +247,7 @@ final class Broker {
 			)
 		);
 		if ( is_wp_error( $response ) ) {
-			throw new NetworkException( 'network', esc_html__( 'The plugin cannot reach the Social Integrations app. Try again, or use your own app.', 'social-integrations' ) );
+			throw new NetworkException( 'network', esc_html__( 'The plugin cannot reach the Social Integrations app. Try again, or use your own app.', 'advance-social-integrations' ) );
 		}
 
 		$status = (int) wp_remote_retrieve_response_code( $response );
@@ -260,7 +260,7 @@ final class Broker {
 		$code    = sanitize_key( (string) ( $body['error']['code'] ?? '' ) );
 		$message = sanitize_text_field( (string) ( $body['error']['message'] ?? '' ) );
 		if ( '' === $message ) {
-			$message = __( 'The Social Integrations app had a problem. Try again, or use your own app.', 'social-integrations' );
+			$message = __( 'The Social Integrations app had a problem. Try again, or use your own app.', 'advance-social-integrations' );
 		}
 		// The code and the status are for the plugin, not output. The message is escaped.
 		throw new NetworkException( '' !== $code ? $code : 'broker', esc_html( $message ), $status ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped

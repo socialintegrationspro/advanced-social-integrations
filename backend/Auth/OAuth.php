@@ -219,7 +219,7 @@ final class OAuth {
 		$key     = sanitize_key( (string) $request['network'] );
 		$pending = $this->pending( $key );
 		if ( null === $pending ) {
-			return new \WP_Error( 'sint_no_pending', __( 'The sign-in expired. Connect again.', 'social-integrations' ), array( 'status' => 404 ) );
+			return new \WP_Error( 'sint_no_pending', __( 'The sign-in expired. Connect again.', 'advance-social-integrations' ), array( 'status' => 404 ) );
 		}
 
 		$entities = array();
@@ -244,7 +244,7 @@ final class OAuth {
 		$remote_id = (string) $request['remote_id'];
 		$pending   = $this->pending( $key );
 		if ( null === $pending ) {
-			return new \WP_Error( 'sint_no_pending', __( 'The sign-in expired. Connect again.', 'social-integrations' ), array( 'status' => 404 ) );
+			return new \WP_Error( 'sint_no_pending', __( 'The sign-in expired. Connect again.', 'advance-social-integrations' ), array( 'status' => 404 ) );
 		}
 
 		foreach ( $pending as $entity ) {
@@ -253,7 +253,7 @@ final class OAuth {
 			}
 			$credentials = json_decode( Encryption::decrypt( (string) $entity['credentials'] ), true );
 			if ( ! is_array( $credentials ) || empty( $credentials ) ) {
-				return new \WP_Error( 'sint_bad_pending', __( 'The plugin cannot read the sign-in. Connect again.', 'social-integrations' ), array( 'status' => 400 ) );
+				return new \WP_Error( 'sint_bad_pending', __( 'The plugin cannot read the sign-in. Connect again.', 'advance-social-integrations' ), array( 'status' => 400 ) );
 			}
 
 			$account = Accounts::save(
@@ -272,7 +272,7 @@ final class OAuth {
 			return rest_ensure_response( $account );
 		}
 
-		return new \WP_Error( 'sint_unknown_entity', __( 'That choice is not part of this sign-in.', 'social-integrations' ), array( 'status' => 400 ) );
+		return new \WP_Error( 'sint_unknown_entity', __( 'That choice is not part of this sign-in.', 'advance-social-integrations' ), array( 'status' => 400 ) );
 	}
 
 	/**
@@ -292,10 +292,10 @@ final class OAuth {
 		}
 
 		if ( ! current_user_can( Capabilities::MANAGE_ACCOUNTS ) ) {
-			$this->finish( 'error', __( 'You are not allowed to connect accounts.', 'social-integrations' ) );
+			$this->finish( 'error', __( 'You are not allowed to connect accounts.', 'advance-social-integrations' ) );
 		}
 		if ( null === $session || (int) ( $session['context']['user_id'] ?? 0 ) !== get_current_user_id() ) {
-			$this->finish( 'error', __( 'The plugin cannot verify the sign-in, or the sign-in took too long. Connect again.', 'social-integrations' ) );
+			$this->finish( 'error', __( 'The plugin cannot verify the sign-in, or the sign-in took too long. Connect again.', 'advance-social-integrations' ) );
 		}
 
 		$network = $this->oauth_network( (string) $session['network'] );
@@ -307,9 +307,9 @@ final class OAuth {
 		if ( '' !== $error || '' === $code ) {
 			$message = '' !== $error
 				/* translators: 1: network name, 2: reason from the network */
-				? sprintf( __( 'The %1$s sign-in did not complete: %2$s', 'social-integrations' ), $network->label(), $error )
+				? sprintf( __( 'The %1$s sign-in did not complete: %2$s', 'advance-social-integrations' ), $network->label(), $error )
 				/* translators: %s: network name */
-				: sprintf( __( '%s did not return a sign-in code. Connect again.', 'social-integrations' ), $network->label() );
+				: sprintf( __( '%s did not return a sign-in code. Connect again.', 'advance-social-integrations' ), $network->label() );
 			$this->finish( 'error', $message );
 		}
 
@@ -324,7 +324,7 @@ final class OAuth {
 			$profile = $network->fetch_profile( $credentials );
 			if ( empty( $profile['remote_id'] ) ) {
 				/* translators: %s: network name */
-				$this->finish( 'error', sprintf( __( '%s did not return the account profile. Connect again.', 'social-integrations' ), $network->label() ) );
+				$this->finish( 'error', sprintf( __( '%s did not return the account profile. Connect again.', 'advance-social-integrations' ), $network->label() ) );
 			}
 			Accounts::save( $key, $profile, $credentials, $session['method'] );
 		} catch ( NetworkException $e ) {
@@ -346,8 +346,8 @@ final class OAuth {
 		$handled = apply_filters( Hooks::OAUTH_CALLBACK, false, $session, $code, $error );
 		if ( ! $handled ) {
 			wp_die(
-				esc_html__( 'This sign-in link is not valid.', 'social-integrations' ),
-				esc_html__( 'Sign-in', 'social-integrations' ),
+				esc_html__( 'This sign-in link is not valid.', 'advance-social-integrations' ),
+				esc_html__( 'Sign-in', 'advance-social-integrations' ),
 				array( 'response' => 400 )
 			);
 		}
@@ -402,7 +402,7 @@ final class OAuth {
 		}
 		if ( empty( $stored ) ) {
 			/* translators: %s: network name */
-			$this->finish( 'error', sprintf( __( 'This %s sign-in has no Page to post to. Make sure that you manage a Page. Then give access to the Page when you sign in.', 'social-integrations' ), $network->label() ) );
+			$this->finish( 'error', sprintf( __( 'This %s sign-in has no Page to post to. Make sure that you manage a Page. Then give access to the Page when you sign in.', 'advance-social-integrations' ), $network->label() ) );
 		}
 		set_transient( $this->pending_key( $network->key() ), $stored, self::PENDING_TTL );
 		$this->finish( 'pick', $network->key() );
@@ -448,7 +448,7 @@ final class OAuth {
 	private function oauth_network( string $key ) {
 		$network = $this->registry->get( sanitize_key( $key ) );
 		if ( null === $network || 'oauth2' !== $network->auth_type() ) {
-			return new \WP_Error( 'sint_unknown_network', __( 'This network does not connect with sign-in.', 'social-integrations' ), array( 'status' => 404 ) );
+			return new \WP_Error( 'sint_unknown_network', __( 'This network does not connect with sign-in.', 'advance-social-integrations' ), array( 'status' => 404 ) );
 		}
 		return $network;
 	}

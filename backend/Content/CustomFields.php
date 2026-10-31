@@ -138,7 +138,7 @@ final class CustomFields {
 	 */
 	public static function text( $value ): string {
 		if ( is_bool( $value ) ) {
-			return $value ? __( 'Yes', 'social-integrations' ) : __( 'No', 'social-integrations' );
+			return $value ? __( 'Yes', 'advance-social-integrations' ) : __( 'No', 'advance-social-integrations' );
 		}
 		if ( is_scalar( $value ) ) {
 			return html_entity_decode( wp_strip_all_tags( (string) $value ), ENT_QUOTES, 'UTF-8' );

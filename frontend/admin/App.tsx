@@ -37,12 +37,12 @@ function Shell() {
 
   // Filter `sint.routes`: other plugins add or replace screens.
   const all = applyFilters<RouteDef[]>('sint.routes', [
-    { path: 'dashboard', label: __('Dashboard', 'social-integrations'), icon: 'dashboard', component: DashboardPage },
-    { path: 'calendar', label: __('Calendar', 'social-integrations'), icon: 'calendar', component: CalendarPage },
-    { path: 'campaigns', label: __('Campaigns', 'social-integrations'), icon: 'campaign', component: CampaignsPage },
-    { path: 'accounts', label: __('Accounts', 'social-integrations'), icon: 'accounts', component: AccountsPage, cap: caps.manageAccounts },
-    { path: 'log', label: __('Share log', 'social-integrations'), icon: 'log', component: LogPage },
-    { path: 'settings', label: __('Settings', 'social-integrations'), icon: 'settings', component: SettingsPage, bottom: true, cap: caps.manageSettings },
+    { path: 'dashboard', label: __('Dashboard', 'advance-social-integrations'), icon: 'dashboard', component: DashboardPage },
+    { path: 'calendar', label: __('Calendar', 'advance-social-integrations'), icon: 'calendar', component: CalendarPage },
+    { path: 'campaigns', label: __('Campaigns', 'advance-social-integrations'), icon: 'campaign', component: CampaignsPage },
+    { path: 'accounts', label: __('Accounts', 'advance-social-integrations'), icon: 'accounts', component: AccountsPage, cap: caps.manageAccounts },
+    { path: 'log', label: __('Share log', 'advance-social-integrations'), icon: 'log', component: LogPage },
+    { path: 'settings', label: __('Settings', 'advance-social-integrations'), icon: 'settings', component: SettingsPage, bottom: true, cap: caps.manageSettings },
   ])
   const routes = all.filter((r) => !r.cap || can(r.cap))
   const current = routes.find((r) => r.path === path) ?? routes[0]!
@@ -63,18 +63,18 @@ function Shell() {
   return (
     <div className="sint-shell">
       <header className="sint-top">
-        <span className="sint-brand" title={__('Social Integrations', 'social-integrations')}>
+        <span className="sint-brand" title={__('Advance Social Integrations', 'advance-social-integrations')}>
           <span className="mark" aria-hidden="true">
             <Icon name="share" size={18} stroke={2.2} />
           </span>
-          <span className="label">{__('Social Integrations', 'social-integrations')}</span>
+          <span className="label">{__('Advance Social Integrations', 'advance-social-integrations')}</span>
         </span>
-        <nav className="sint-nav" aria-label={__('Social Integrations', 'social-integrations')}>
+        <nav className="sint-nav" aria-label={__('Advance Social Integrations', 'advance-social-integrations')}>
           {listed.filter((r) => !r.bottom).map(link)}
         </nav>
         <div className="sint-tools">
           {listed.filter((r) => r.bottom).map(link)}
-          <button type="button" className="sint-theme" onClick={toggleTheme} aria-label={theme === 'dark' ? __('Switch to day mode', 'social-integrations') : __('Switch to night mode', 'social-integrations')} title={theme === 'dark' ? __('Day mode', 'social-integrations') : __('Night mode', 'social-integrations')}>
+          <button type="button" className="sint-theme" onClick={toggleTheme} aria-label={theme === 'dark' ? __('Switch to day mode', 'advance-social-integrations') : __('Switch to night mode', 'advance-social-integrations')} title={theme === 'dark' ? __('Day mode', 'advance-social-integrations') : __('Night mode', 'advance-social-integrations')}>
             <AnimatePresence mode="wait" initial={false}>
               <m.span key={theme} style={{ display: 'inline-flex' }} initial={{ opacity: 0, rotate: -60, scale: 0.6 }} animate={{ opacity: 1, rotate: 0, scale: 1 }} exit={{ opacity: 0, rotate: 60, scale: 0.6 }} transition={{ duration: 0.2 }}>
                 <Icon name={theme === 'dark' ? 'sun' : 'moon'} size={20} />

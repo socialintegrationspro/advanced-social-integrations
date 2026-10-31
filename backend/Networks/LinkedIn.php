@@ -35,7 +35,7 @@ class LinkedIn extends AbstractNetwork {
 	 * Name shown in the UI.
 	 */
 	public function label(): string {
-		return __( 'LinkedIn', 'social-integrations' );
+		return __( 'LinkedIn', 'advance-social-integrations' );
 	}
 
 	/**
@@ -78,17 +78,17 @@ class LinkedIn extends AbstractNetwork {
 	protected function visibility_field(): array {
 		return array(
 			'name'    => 'visibility',
-			'label'   => __( 'Who can see the post', 'social-integrations' ),
+			'label'   => __( 'Who can see the post', 'advance-social-integrations' ),
 			'type'    => 'select',
 			'default' => 'PUBLIC',
 			'options' => array(
 				array(
 					'value' => 'PUBLIC',
-					'label' => __( 'Anyone', 'social-integrations' ),
+					'label' => __( 'Anyone', 'advance-social-integrations' ),
 				),
 				array(
 					'value' => 'CONNECTIONS',
-					'label' => __( 'Connections only', 'social-integrations' ),
+					'label' => __( 'Connections only', 'advance-social-integrations' ),
 				),
 			),
 		);
@@ -128,12 +128,12 @@ class LinkedIn extends AbstractNetwork {
 		return array(
 			array(
 				'name'  => 'client_id',
-				'label' => __( 'Client ID', 'social-integrations' ),
+				'label' => __( 'Client ID', 'advance-social-integrations' ),
 				'type'  => 'text',
 			),
 			array(
 				'name'  => 'client_secret',
-				'label' => __( 'Client secret', 'social-integrations' ),
+				'label' => __( 'Client secret', 'advance-social-integrations' ),
 				'type'  => 'password',
 			),
 		);
@@ -256,7 +256,7 @@ class LinkedIn extends AbstractNetwork {
 		$token  = (string) ( $credentials['access_token'] ?? '' );
 		$author = '' !== $token ? $this->author_urn( $credentials ) : '';
 		if ( '' === $author ) {
-			throw new NetworkException( 'expired', esc_html__( 'The LinkedIn account is not connected. Reconnect the account.', 'social-integrations' ) );
+			throw new NetworkException( 'expired', esc_html__( 'The LinkedIn account is not connected. Reconnect the account.', 'advance-social-integrations' ) );
 		}
 
 		$post    = array(
@@ -295,7 +295,7 @@ class LinkedIn extends AbstractNetwork {
 		// LinkedIn answers 201 with an empty body; the post URN is in a header.
 		$post_id = $this->last_header( 'x-restli-id' );
 		if ( '' === $post_id ) {
-			throw new NetworkException( 'unknown', esc_html__( 'LinkedIn did not confirm the post. Check the account before you try again.', 'social-integrations' ) );
+			throw new NetworkException( 'unknown', esc_html__( 'LinkedIn did not confirm the post. Check the account before you try again.', 'advance-social-integrations' ) );
 		}
 
 		return array(
@@ -436,7 +436,7 @@ class LinkedIn extends AbstractNetwork {
 		$urn        = (string) ( $start['value']['image'] ?? '' );
 		$upload_url = (string) ( $start['value']['uploadUrl'] ?? '' );
 		if ( '' === $urn || '' === $upload_url ) {
-			throw new NetworkException( 'media', esc_html__( 'LinkedIn did not accept the image upload. Try again later.', 'social-integrations' ) );
+			throw new NetworkException( 'media', esc_html__( 'LinkedIn did not accept the image upload. Try again later.', 'advance-social-integrations' ) );
 		}
 
 		$this->request(
@@ -471,7 +471,7 @@ class LinkedIn extends AbstractNetwork {
 			)
 		);
 		if ( empty( $data['access_token'] ) ) {
-			throw new NetworkException( 'oauth', esc_html__( 'LinkedIn did not return an access token. Connect again.', 'social-integrations' ) );
+			throw new NetworkException( 'oauth', esc_html__( 'LinkedIn did not return an access token. Connect again.', 'advance-social-integrations' ) );
 		}
 
 		$credentials = $this->with_expiry( array( 'access_token' => (string) $data['access_token'] ), $data );
